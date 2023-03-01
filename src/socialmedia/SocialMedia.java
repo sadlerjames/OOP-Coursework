@@ -6,7 +6,7 @@ import java.io.IOException;
  * BadSocialMedia is a minimally compiling, but non-functioning implementor of
  * the SocialMediaPlatform interface.
  * 
- * @author Diogo Pacheco
+ * @author James Sadler, Joel Sawyer
  * @version 1.0
  */
 public class SocialMedia implements SocialMediaPlatform {
@@ -14,6 +14,11 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
 		// TODO Auto-generated method stub
+
+			// new account 
+
+			// throw 
+
 		return 0;
 	}
 

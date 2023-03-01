@@ -24,4 +24,12 @@ public class Post {
     public void deletePost(int id) {
         //to do
     }
+
+    public String showIndividualPost(int id) {
+        return "To-Do";
+    }
+
+    public String showPostChildrenDetails(int id) {
+        return "To-Do";
+    }
 }
