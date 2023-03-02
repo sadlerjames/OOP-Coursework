@@ -18,29 +18,49 @@ public class Account {
 
     // Constructor to allow for testing - WILL BE DELETED
     public Account() {
-        System.out.println("Below");
+        System.out.println("Constructor Initalised");
     }
 
-    public int createAccount(String handle) {
+    // Getter Method for Accounts data
+    public static ArrayList<HashMap> getAccounts() {
+        return accounts;
+    }
 
-        //Check if handle is a key in list of hashmaps
-        for (int i=0; i < accounts.size(); i++) {
-
-            if(accounts.get(i).get("handle") == handle) {
-                //TODO: Throw exception 
-            }
-        }
+    // Check if string more than 30 characters, if whitespace, or if empty (invalid)
+    public boolean checkHandleValid(String handle) {
 
         //Check if handle is greater than 30 characters
         if(handle.length() > 30) {
-            //TODO: Throw InvalidHandleException
-            System.out.println("Greater than 30");
+            return false;
         }
 
         //Check if handle contains whitespace
-        if(handle.contains(" ")) {
-            //TODO: Throw InvalidHandleException
-            System.out.println("Contains whitespace");
+        else if(handle.contains(" ")) {
+            return false;
+        }
+
+        //Check if handle is empty
+        else if(handle.length() == 0) {
+            return false;
+        }
+
+        //Handle is valid
+        else {
+            return true;
+        }
+    }
+ 
+
+    public int createAccount(String handle) {
+
+        //Check if handle is legal (not pre-existing)
+        if (Platform.checkHandleLegal(handle) == false) {
+            System.out.println("Throw illegalHandleException");
+        }
+
+        // Check if handle is valid (less than 30 characters, no whitespace and not empty)
+        if (checkHandleValid(handle) == false) {
+            System.out.println("Throw invalidHandleException");
         }
 
         //Adds user to Array
@@ -57,24 +77,15 @@ public class Account {
     } 
 
     public int createAccount(String handle, String description) {
-        //Check if handle is a key in list of hashmaps
-        for (int i=0; i < accounts.size(); i++) {
-
-            if(accounts.get(i).get("handle") == handle) {
-                //TODO: Throw exception 
-            }
+       
+       //Check if handle is legal (not pre-existing)
+        if (Platform.checkHandleLegal(handle) == false) {
+            System.out.println("Throw illegalHandleException");
         }
 
-        //Check if handle is greater than 30 characters
-        if(handle.length() > 30) {
-            //TODO: Throw InvalidHandleException
-            System.out.println("Greater than 30");
-        }
-
-        //Check if handle contains whitespace
-        if(handle.contains(" ")) {
-            //TODO: Throw InvalidHandleException
-            System.out.println("Contains whitespace");
+        // Check if handle is valid (less than 30 characters, no whitespace and not empty)
+        if (checkHandleValid(handle) == false) {
+            System.out.println("Throw invalidHandleException");
         }
 
         //Adds user to Array
@@ -87,11 +98,14 @@ public class Account {
         
         accounts.add(accountHmap); //Add accountHmap to accounts arrayList
 
+        //DELETEEEEEEEEEE
+        System.out.println(accounts);
+
         return (accountIDCounter - 1); //To fix!
     }
 
     public void removeAccount(int handle) {
-        //todo
+        // to do
     }
 
     public void removeAccount(String handle) {
@@ -99,11 +113,39 @@ public class Account {
     }
 
     public void changeAccountHandle(String oldHandle, String newHandle) {
-        //to do
+
+        if (Platform.checkHandleLegal(oldHandle) == true) {
+            System.out.println("Handle not recognised exception");
+        } 
+
+        if (Platform.checkHandleLegal(newHandle) == false) {
+            System.out.println("Illegal handle exception");
+        }
+
+        if (checkHandleValid(newHandle) == false) {
+            System.out.println("Invalid handle exception");
+        }
+
+        for (int i=0; i < accounts.size(); i++) { //Loop through list of hashmap's 
+            if(accounts.get(i).get("handle") == oldHandle) { //Get list item with matching old handle 
+                accounts.get(i).put("handle", newHandle); //Update handle
+                break;
+            } 
+        }
     }
 
     public void updateAccountDescription(String handle, String description) {
-        //to do
+        if (Platform.checkHandleLegal(handle) == true) {
+            System.out.println("Handle not recognised exception");
+        } 
+
+        for (int i=0; i < accounts.size(); i++) { //Loop through list of hashmap's 
+            if(accounts.get(i).get("handle") == handle) { //Get list item with matching old handle 
+                accounts.get(i).put("description", description); //Update handle
+                break;
+            } 
+        }
+
     }
 
     public String showAccount(String handle) {

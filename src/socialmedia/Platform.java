@@ -2,6 +2,19 @@ package socialmedia;
 
 public class Platform {
 
+    public static boolean checkHandleLegal(String handle) {
+        //Check if handle is a key in list of hashmaps
+        for (int i=0; i < Account.getAccounts().size(); i++) {
+            
+            if (Account.getAccounts().get(i).get("handle") == handle) { //Handle already exists
+                return false; //as handle exists
+            } 
+        }
+
+        return true; //Handle does not already exist
+        
+    }
+ 
  
     public int getTotalOriginalPosts() {
         return 4;

@@ -7,7 +7,7 @@ import java.io.IOException;
  * the SocialMediaPlatform interface.
  * 
  * @author James Sadler, Joel Sawyer
- * @version 1.0
+ * @version 1.0 
  */
 public class SocialMedia implements SocialMediaPlatform {
 
@@ -18,6 +18,10 @@ public class SocialMedia implements SocialMediaPlatform {
 			// new account 
 
 			// throw 
+
+			
+			// throw InvalidHandleException("This handle is already present, please choose a different one");
+
 
 		return 0;
 	}
