@@ -3,8 +3,7 @@ package socialmedia;
 import java.io.IOException;
 
 /**
- * BadSocialMedia is a minimally compiling, but non-functioning implementor of
- * the SocialMediaPlatform interface.
+ * SocialMedia is an implementor of the SocialMediaPlatform interface.
  * 
  * @author James Sadler, Joel Sawyer
  * @version 1.0 
@@ -12,23 +11,25 @@ import java.io.IOException;
 public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
-	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
+	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {//CHANGE THROWS
 		// TODO Auto-generated method stub
 
-			// new account 
+		Account platformUser = new Account("JoelMSawyer"); //Create account object
+		Account.getAccounts().add(platformUser); //Add account object to ArrayList
 
-			// throw 
-
-			
-			// throw InvalidHandleException("This handle is already present, please choose a different one");
-
-
-		return 0;
+		return platformUser.getID(); //Return 'id' of generated account
 	}
 
 	@Override
 	public int createAccount(String handle, String description) throws IllegalHandleException, InvalidHandleException {
 		// TODO Auto-generated method stub
+
+		//Use account constructor to setup instance attributes, prep object for saving 
+		//Then execute createaccount method (could change name?) to save created account obj into arraylist
+
+		//See here https://www.geeksforgeeks.org/how-objects-can-an-arraylist-hold-in-java/ example 2, shows how to access stored obj's 
+
+
 		return 0;
 	}
 

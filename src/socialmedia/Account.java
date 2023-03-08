@@ -2,11 +2,12 @@ package socialmedia;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 public class Account {
 
     //Class attributes
 
-    private static ArrayList<HashMap> accounts = new ArrayList<HashMap>(); //Create accounts list
+    private static ArrayList<Account> accounts = new ArrayList<Account>(); //Create accounts list
     private static int accountIDCounter = 0;
 
 
@@ -16,15 +17,72 @@ public class Account {
     private String handle;
     private String description;
 
-    // Constructor to allow for testing - WILL BE DELETED
-    public Account() {
-        System.out.println("Constructor Initalised");
+
+    //Class methods
+    
+    // Getter Method for Accounts data 
+    public static ArrayList<Account> getAccounts() {
+        return accounts; //Implement safety checks?
     }
 
-    // Getter Method for Accounts data
-    public static ArrayList<HashMap> getAccounts() {
-        return accounts;
+
+    //Instance methods
+
+   //Getter method for id
+
+    public int getID() {
+        return id;
     }
+
+    public String getHandle() {
+        return handle;
+    }
+
+    //REMOVE - TEMP
+    public String getDescription() {
+        return description;
+    }
+
+
+    //Constructor using Handle
+    public Account(String handle) throws IllegalHandleException, InvalidHandleException{
+
+        //Check if handle is legal (not pre-existing)
+        if (Platform.checkHandleLegal(handle) == false) {
+            throw new IllegalHandleException("This handle already exists in the system, please choose another.");
+        }
+
+        // Check if handle is valid (less than 30 characters, no whitespace and not empty)
+        if (checkHandleValid(handle) == false) {
+            throw new InvalidHandleException("Please ensure your handle is valid (less than 30 characters, no whitespace and not empty).");
+        }
+
+        this.id = accountIDCounter; //Assign ID
+        accountIDCounter++; //Increment counter
+
+        this.handle = handle; //Assign handle
+    }
+
+    //Constructor using Handle and Description
+    public Account(String handle, String description) throws IllegalHandleException, InvalidHandleException{
+
+        //Check if handle is legal (not pre-existing)
+        if (Platform.checkHandleLegal(handle) == false) {
+            throw new IllegalHandleException("This handle already exists in the system, please choose another.");
+        }
+
+        // Check if handle is valid (less than 30 characters, no whitespace and not empty)
+        if (checkHandleValid(handle) == false) {
+            throw new InvalidHandleException("Please ensure your handle is valid (less than 30 characters, no whitespace and not empty).");
+        }
+
+        this.id = accountIDCounter; //Assign ID
+        accountIDCounter++; //Increment counter
+
+        this.handle = handle; //Assign handle    
+        this.description = description; //Assign description
+    }
+
 
     // Check if string more than 30 characters, if whitespace, or if empty (invalid)
     public boolean checkHandleValid(String handle) {
@@ -50,60 +108,6 @@ public class Account {
         }
     }
  
-
-    public int createAccount(String handle) {
-
-        //Check if handle is legal (not pre-existing)
-        if (Platform.checkHandleLegal(handle) == false) {
-            System.out.println("Throw illegalHandleException");
-        }
-
-        // Check if handle is valid (less than 30 characters, no whitespace and not empty)
-        if (checkHandleValid(handle) == false) {
-            System.out.println("Throw invalidHandleException");
-        }
-
-        //Adds user to Array
-        HashMap<String, Object> accountHmap = new HashMap<String, Object>(); //Create account hashmap
-        accountHmap.put("id", accountIDCounter); //Create ID 
-        accountHmap.put("handle", handle); //Create Handle
-        accountHmap.put("description", ""); //Create Description
-        
-        accountIDCounter++; //Increment Account ID Counter
-        
-        accounts.add(accountHmap); //Add accountHmap to accounts arrayList
-
-        return (accountIDCounter - 1); //To fix!
-    } 
-
-    public int createAccount(String handle, String description) {
-       
-       //Check if handle is legal (not pre-existing)
-        if (Platform.checkHandleLegal(handle) == false) {
-            System.out.println("Throw illegalHandleException");
-        }
-
-        // Check if handle is valid (less than 30 characters, no whitespace and not empty)
-        if (checkHandleValid(handle) == false) {
-            System.out.println("Throw invalidHandleException");
-        }
-
-        //Adds user to Array
-        HashMap<String, Object> accountHmap = new HashMap<String, Object>(); //Create account hashmap
-        accountHmap.put("id", accountIDCounter); //Create ID 
-        accountHmap.put("handle", handle); //Create Handle
-        accountHmap.put("description", description); //Create Description
-        
-        accountIDCounter++; //Increment Account ID Counter
-        
-        accounts.add(accountHmap); //Add accountHmap to accounts arrayList
-
-        //DELETEEEEEEEEEE
-        System.out.println(accounts);
-
-        return (accountIDCounter - 1); //To fix!
-    }
-
     public void removeAccount(int handle) {
         // to do
     }
@@ -112,45 +116,35 @@ public class Account {
         // to do
     }
 
-    public void changeAccountHandle(String oldHandle, String newHandle) {
+    public void changeAccountHandle(String oldHandle, String newHandle) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException {
 
         if (Platform.checkHandleLegal(oldHandle) == true) {
-            System.out.println("Handle not recognised exception");
+            throw new HandleNotRecognisedException("This handle does not exist in the system!");
         } 
 
         if (Platform.checkHandleLegal(newHandle) == false) {
-            System.out.println("Illegal handle exception");
+            throw new IllegalHandleException("This handle already exists in the system, please choose another.");
         }
 
         if (checkHandleValid(newHandle) == false) {
-            System.out.println("Invalid handle exception");
-        }
-
-        for (int i=0; i < accounts.size(); i++) { //Loop through list of hashmap's 
-            if(accounts.get(i).get("handle") == oldHandle) { //Get list item with matching old handle 
-                accounts.get(i).put("handle", newHandle); //Update handle
-                break;
-            } 
-        }
+            throw new InvalidHandleException("Please ensure your handle is valid (less than 30 characters, no whitespace and not empty).");
+        } 
+        
+        //update the object's handle attribute 
+        this.handle = newHandle;
+        
     }
 
-    public void updateAccountDescription(String handle, String description) {
+    public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
         if (Platform.checkHandleLegal(handle) == true) {
-            System.out.println("Handle not recognised exception");
+            throw new HandleNotRecognisedException("This handle does not exist in the system!");
         } 
 
-        for (int i=0; i < accounts.size(); i++) { //Loop through list of hashmap's 
-            if(accounts.get(i).get("handle") == handle) { //Get list item with matching old handle 
-                accounts.get(i).put("description", description); //Update handle
-                break;
-            } 
-        }
-
+        this.description = description;
     }
 
     public String showAccount(String handle) {
         // to do
         return "hello there";
     }
-
 }

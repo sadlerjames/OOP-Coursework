@@ -9,11 +9,9 @@ SocialMedia.java is the code for the methods in the interface files.
 Everything we write (e.g. classes) will be called from the `SocialMedia.java` file.
 
 TODO: 
-
 - Check/audit static methods 
-- Change accounts to store objects, utilise instance attributes 
+- Potentially modify Post constructor to use Account objects
+- Check getter methods required 
+- Consider moving posts ArrayList from BasePost.java to Post.java
 
 Question list:
-    - Java >8?
-    - Does platform data need to be persistent? 
-    - What is the correct way to handle exceptions? 
