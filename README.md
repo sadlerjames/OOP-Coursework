@@ -13,5 +13,7 @@ TODO:
 - Potentially modify Post constructor to use Account objects
 - Check getter methods required 
 - Consider moving posts ArrayList from BasePost.java to Post.java
+- Cannot access parentID attribute of comment post 
 
 Question list:
+- If you try to comment on an endorsement do you need to move the comment on the origianl post as you can't comment on an endorsement

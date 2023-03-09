@@ -1,10 +1,30 @@
 package socialmedia;
-import java.util.ArrayList;
 
 public class Post extends BasePost{
-    //Instance attributes
 
-    private ArrayList<Integer> endorsements = new ArrayList<Integer>(); //Only 'normal' posts may have endorsements
+    //Class methods 
+    //Update 'comments' or 'endorsements' arrayList with child id
+    public static void addChild(int parentID, int type) {
+        //Locate parent 
+        for (int i=0; i < getPosts().size(); i++) {    
+            if (getPosts().get(i).getID() == parentID) { 
+                if (type == 1) { //add to comments arrayList
+                    getPosts().get(i).getComments().add(parentID);
+                } else { //add to endorsements arrayList
+                    getPosts().get(i).getEndorsements().add(parentID);
+                }
+            } 
+        }
+    }
+
+
+    //Create generic empty post 
+    public Post(int postType) {
+
+        setID(0); //Assign ID 0 
+        setPostType(3); //Set post type to 'empty post'
+        setMessage("The original content was removed from the system and is no longer available.");
+    }
 
 
     public Post(String handle, String message) throws HandleNotRecognisedException, InvalidPostException {
@@ -18,26 +38,11 @@ public class Post extends BasePost{
             throw new InvalidPostException("Please ensure your post is valid (less than 30 characters and not empty)");
         }
 
-        int postIDCounter = getPostIDCounter();
+        int postIDCounter = getPostIDCounter(); //Get current value of counter
         setID(postIDCounter); //Assign ID
-        setPostIDCounter(postIDCounter++);
-
+        incrementPostIDCounter(); //Increment counter
+        setPostType(0); //Set post type to 'normal'
         setMessage(message); 
         setAuthor(handle);
     }
-
-
-    public void deletePost(int id) {
-        //to do
-    }
-
-    public String showIndividualPost(int id) {
-        return "To-Do";
-    }
-
-    public String showPostChildrenDetails(int id) {
-        return "To-Do";
-    }
-
-
 }

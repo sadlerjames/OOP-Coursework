@@ -67,7 +67,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException {
 		// TODO Auto-generated method stub
-		return 0;
+		return 0; 
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void deletePost(int id) throws PostIDNotRecognisedException {
 		// TODO Auto-generated method stub
-
+ 
 	}
 
 	@Override

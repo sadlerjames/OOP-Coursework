@@ -2,7 +2,7 @@ package socialmedia;
 
 public class TempTest {
 
-    public static void main(String[] args) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException, InvalidPostException {
+    public static void main(String[] args) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException, InvalidPostException, NotActionablePostException, PostIDNotRecognisedException {
         //Will be moved to SocialMedia class 
 		Account platformUser = new Account("JoelMSawyer", "We don't");
         Account platformUser2 = new Account("James"); //Create account object
@@ -30,15 +30,30 @@ public class TempTest {
 
 
         BasePost platformPost = new Post("James", "We do love a bit of java");
+        BasePost platformPostNumber2 = new Post("JoelMSawyer", "We do love a bit of java and python");
 
         BasePost.getPosts().add(platformPost);
+        BasePost.getPosts().add(platformPostNumber2);
 
-        //Check if handle is an attribute in ArrayList of objects
+        BasePost platformComment = new CommentPost("James", 1, "Hello");
+        BasePost.getPosts().add(platformComment);
+
+     //Check if handle is an attribute in ArrayList of objects
         for (int i=0; i < BasePost.getPosts().size(); i++) {    
-            System.out.println(BasePost.getPosts().get(i).getID());
-            System.out.println(BasePost.getPosts().get(i).getAuthor());
-            System.out.println(BasePost.getPosts().get(i).getMessage());
+
+            BasePost aPost = BasePost.getPosts().get(i); //Stores post at index pos 
+
+            System.out.println(aPost.getID());
+            System.out.println(aPost.getComments());
+            System.out.println(aPost.getAuthor());
         }
+
+
+        
+        
+
+
+   
 
 
     }
