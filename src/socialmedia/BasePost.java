@@ -10,7 +10,7 @@ public class BasePost {
     //Instance attributes 
     private int id;
     private int postType; //Track if post is 'normal' (0), 'comment' (1), or 'endorsement' (2)
-    private int parentID;
+    private Integer parentID;
     private String message; //100 character limit
     private String author; //Object account? 
 
@@ -141,7 +141,7 @@ public class BasePost {
         return id;
     }
 
-    public int getParentID() {
+    public Integer getParentID() {
         return parentID;
     }
 

@@ -28,6 +28,10 @@ public class TempTest {
         //     System.out.println(Account.getAccounts().get(i).getDescription());
         // }
 
+        //Create empty post 
+
+        BasePost emptyPost = new Post(3);
+
 
         BasePost platformPost = new Post("James", "We do love a bit of java");
         BasePost platformPostNumber2 = new Post("JoelMSawyer", "We do love a bit of java and python");
@@ -46,6 +50,8 @@ public class TempTest {
             System.out.println(aPost.getID());
             System.out.println(aPost.getComments());
             System.out.println(aPost.getAuthor());
+            System.out.println(aPost.getParentID());
+
         }
 
         BasePost.deletePost(1);
@@ -58,6 +64,7 @@ public class TempTest {
             System.out.println(aPost.getID());
             System.out.println(aPost.getComments());
             System.out.println(aPost.getAuthor());
+            System.out.println(aPost.getParentID());
         }
 
 
