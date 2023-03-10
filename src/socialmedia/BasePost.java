@@ -116,7 +116,7 @@ public class BasePost {
         //Check if post exists with matching 'id'attribute in ArrayList of objects
         for (int i=0; i < posts.size(); i++) {    
             if (posts.get(i).id == id) { //Post is desired post
-                if (posts.get(i).postType == 1 || posts.get(i).postType == 2) {
+                if (posts.get(i).postType == 0 || posts.get(i).postType == 1) {
                     return true;
                 }
             } 
