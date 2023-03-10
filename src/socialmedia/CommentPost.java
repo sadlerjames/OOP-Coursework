@@ -34,6 +34,6 @@ public class CommentPost extends BasePost{
         setParentID(parentID); //Assign id of parent post/comment
         
         //Add comment's 'id' to parent's 'comments' arrayList
-        Post.addChild(parentID, 1);  
+        Post.addChild(postIDCounter, parentID, 1);  
     }
 }

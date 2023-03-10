@@ -48,9 +48,9 @@ public class BasePost {
 
                 //update the parent ID attribute of the comments of the post to be deleted
                 if (posts.get(i).comments.size() != 0) {
-                    for (int l=0; i < posts.get(i).endorsements.size(); l++) {
+                    for (int l=0; l < posts.get(i).comments.size(); l++) {
                         int orphanCommentID = posts.get(i).comments.get(l);
-
+                        
                         for (int m=0; i < posts.size(); m++) {    
                             if (posts.get(m).id == orphanCommentID) { //Locate orphan comment in post array
                                 posts.get(m).parentID = 0; //Update parentID to empty post's ID (0)

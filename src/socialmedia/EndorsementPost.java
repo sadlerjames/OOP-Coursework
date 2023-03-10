@@ -28,7 +28,7 @@ public class EndorsementPost extends BasePost {
         setParentID(parentID); //Assign id of parent post/comment
         
         //Add comment's 'id' to parent's 'comments' arrayList
-        Post.addChild(parentID, 2);  
+        Post.addChild(postIDCounter, parentID, 2);  
 
 
     }

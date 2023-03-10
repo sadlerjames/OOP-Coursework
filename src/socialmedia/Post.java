@@ -4,14 +4,14 @@ public class Post extends BasePost{
 
     //Class methods 
     //Update 'comments' or 'endorsements' arrayList with child id
-    public static void addChild(int parentID, int type) {
+    public static void addChild(int id, int parentID, int type) {
         //Locate parent 
         for (int i=0; i < getPosts().size(); i++) {    
             if (getPosts().get(i).getID() == parentID) { 
                 if (type == 1) { //add to comments arrayList
-                    getPosts().get(i).getComments().add(parentID);
+                    getPosts().get(i).getComments().add(id);
                 } else { //add to endorsements arrayList
-                    getPosts().get(i).getEndorsements().add(parentID);
+                    getPosts().get(i).getEndorsements().add(id);
                 }
             } 
         }

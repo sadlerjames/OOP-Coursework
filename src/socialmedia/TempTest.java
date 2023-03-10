@@ -48,6 +48,18 @@ public class TempTest {
             System.out.println(aPost.getAuthor());
         }
 
+        BasePost.deletePost(1);
+
+        System.out.println("Deleted post");
+        for (int i=0; i < BasePost.getPosts().size(); i++) {    
+
+            BasePost aPost = BasePost.getPosts().get(i); //Stores post at index pos 
+
+            System.out.println(aPost.getID());
+            System.out.println(aPost.getComments());
+            System.out.println(aPost.getAuthor());
+        }
+
 
         
         
