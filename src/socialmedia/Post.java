@@ -4,7 +4,7 @@ public class Post extends BasePost{
 
     //Class methods 
     //Update 'comments' or 'endorsements' arrayList with child id
-    public static void addChild(int id, int parentID, int type) {
+    public static void addChild(int id, Integer parentID, int type) {
         //Locate parent 
         for (int i=0; i < getPosts().size(); i++) {    
             if (getPosts().get(i).getID() == parentID) { 
@@ -17,7 +17,6 @@ public class Post extends BasePost{
         }
     }
 
-
     //Create generic empty post 
     public Post(int postType) {
 
@@ -25,7 +24,6 @@ public class Post extends BasePost{
         setPostType(3); //Set post type to 'empty post'
         setMessage("The original content was removed from the system and is no longer available.");
     }
-
 
     public Post(String handle, String message) throws HandleNotRecognisedException, InvalidPostException {
 

@@ -2,7 +2,7 @@ package socialmedia;
 
 public class CommentPost extends BasePost{
 
-    public CommentPost(String handle, int parentID, String message) throws HandleNotRecognisedException, 
+    public CommentPost(String handle, Integer parentID, String message) throws HandleNotRecognisedException, 
         PostIDNotRecognisedException, NotActionablePostException, InvalidPostException{
     
         //Check author's handle exists

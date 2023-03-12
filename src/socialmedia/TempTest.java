@@ -34,11 +34,19 @@ public class TempTest {
 
 
         BasePost platformPost = new Post("James", "We do love a bit of java");
-        BasePost platformPostNumber2 = new Post("JoelMSawyer", "We do love a bit of java and python");
-
         BasePost.getPosts().add(platformPost);
-        BasePost.getPosts().add(platformPostNumber2);
 
+        BasePost platformEndorsement = new EndorsementPost("James", 1);
+        BasePost.getPosts().add(platformEndorsement);
+
+
+
+        System.out.println(BasePost.getPosts());
+
+        // System.out.println(BasePost.getPosts().get(1).getPostType()); //Stores post at index pos 
+
+
+        //Creating a commment 
         BasePost platformComment = new CommentPost("James", 1, "Hello");
         BasePost.getPosts().add(platformComment);
 
@@ -50,22 +58,25 @@ public class TempTest {
             System.out.println(aPost.getID());
             System.out.println(aPost.getComments());
             System.out.println(aPost.getAuthor());
-            System.out.println(aPost.getParentID());
+            System.out.println(aPost.getMessage());
+
 
         }
 
-        BasePost.deletePost(1);
 
-        System.out.println("Deleted post");
-        for (int i=0; i < BasePost.getPosts().size(); i++) {    
+        
+        // BasePost.deletePost(1);
 
-            BasePost aPost = BasePost.getPosts().get(i); //Stores post at index pos 
+        // System.out.println("Deleted post");
+        // for (int i=0; i < BasePost.getPosts().size(); i++) {    
 
-            System.out.println(aPost.getID());
-            System.out.println(aPost.getComments());
-            System.out.println(aPost.getAuthor());
-            System.out.println(aPost.getParentID());
-        }
+        //     BasePost aPost = BasePost.getPosts().get(i); //Stores post at index pos 
+
+        //     System.out.println(aPost.getID());
+        //     System.out.println(aPost.getComments());
+        //     System.out.println(aPost.getAuthor());
+        //     System.out.println(aPost.getParentID());
+        // }
 
 
         

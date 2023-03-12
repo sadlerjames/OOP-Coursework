@@ -76,7 +76,7 @@ public class SocialMedia implements SocialMediaPlatform {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+ 
 	@Override
 	public int commentPost(String handle, int id, String message) throws HandleNotRecognisedException,
 			PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
@@ -93,7 +93,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public String showIndividualPost(int id) throws PostIDNotRecognisedException {
 		// TODO Auto-generated method stub
-		return null;
+		return null; 
 	}
 
 	@Override

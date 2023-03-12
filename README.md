@@ -16,4 +16,4 @@ TODO:
 - Cannot access parentID attribute of comment post 
 
 Question list:
-- If you try to comment on an endorsement do you need to move the comment on the origianl post as you can't comment on an endorsement
+- showIndividualPost - should it show only the number of direct comments on that post? 

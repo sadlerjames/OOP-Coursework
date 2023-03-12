@@ -103,6 +103,7 @@ public class BasePost {
         //Check if post exists with matching 'id'attribute in ArrayList of objects
         for (int i=0; i < posts.size(); i++) {    
             if (posts.get(i).id == id) { //ID already exists
+                System.out.println("running check post id");
                 return false; //as ID exists
             } 
         }
@@ -113,10 +114,13 @@ public class BasePost {
     //Check if parent is actionable (normal or comment)
     //Returns true if normal or comment (0 or 1 type)
     public static boolean checkPostActionable(int id) {
+        System.out.println("Running check post actionable with input:");
+        System.out.println(id);
         //Check if post exists with matching 'id'attribute in ArrayList of objects
         for (int i=0; i < posts.size(); i++) {    
             if (posts.get(i).id == id) { //Post is desired post
                 if (posts.get(i).postType == 0 || posts.get(i).postType == 1) {
+                    System.out.println("hello");
                     return true;
                 }
             } 
@@ -141,7 +145,7 @@ public class BasePost {
         return id;
     }
 
-    public Integer getParentID() {
+    public int getParentID() {
         return parentID;
     }
 
@@ -167,7 +171,7 @@ public class BasePost {
         this.id = id;
     }
 
-    public void setParentID(int parentID) {
+    public void setParentID(Integer parentID) {
         this.parentID = parentID;
     }
 
@@ -183,9 +187,18 @@ public class BasePost {
         this.postType = postType;
     } 
 
+    //TODO - MOVE TO STATIC SECTION 
 
     public String showIndividualPost(int id) {
+        for (int i=0; i < getPosts().size(); i++) {    
+            if (getPosts().get(i).getID() == id) { 
+                parentHandle = getPosts().get(i).getAuthor();
+                parentMessage = getPosts().get(i).getMessage();
+            } 
+        }
+
         return "To-Do";
+
     }
 
     public String showPostChildrenDetails(int id) {

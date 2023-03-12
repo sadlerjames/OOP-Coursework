@@ -138,7 +138,7 @@ public class Account {
         if (Platform.checkHandleLegal(handle) == true) {
             throw new HandleNotRecognisedException("This handle does not exist in the system!");
         } 
-
+        
         this.description = description;
     }
 
