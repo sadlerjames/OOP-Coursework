@@ -56,7 +56,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
 		// TODO Auto-generated method stub
 
-	}
+	} 
 
 	@Override
 	public String showAccount(String handle) throws HandleNotRecognisedException {
@@ -99,7 +99,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public StringBuilder showPostChildrenDetails(int id)
 			throws PostIDNotRecognisedException, NotActionablePostException {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub 
 		return null;
 	}
 

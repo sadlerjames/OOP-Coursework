@@ -1,15 +1,16 @@
 package socialmedia;
 import java.util.ArrayList;
+import java.io.Serializable;
 
 
-public class BasePost {
+public class BasePost implements Serializable {
     //Class attributes
     private static int postIDCounter = 1; //Generic empty post has id 0 
     private static ArrayList<BasePost> posts = new ArrayList<BasePost>(); //Create list of posts 
 
     //Instance attributes 
     private int id;
-    private int postType; //Track if post is 'normal' (0), 'comment' (1), or 'endorsement' (2)
+    private int postType; //Track if post is 'normal' (0), 'comment' (1), 'endorsement' (2), 'generic empty post' (3)
     private Integer parentID;
     private String message; //100 character limit
     private String author; //Object account? 
@@ -24,7 +25,7 @@ public class BasePost {
     public static void deletePost(int id) throws PostIDNotRecognisedException {
 
         //Check post exists
-        if (BasePost.checkPostIDLegal(id) == true) {
+        if (checkPostIDLegal(id) == true) {
             throw new PostIDNotRecognisedException("The post to delete does not exist in the system");
         }
 
@@ -34,10 +35,10 @@ public class BasePost {
 
                 //delete the endorsement post of the post to be deleted
                 if (posts.get(i).endorsements.size() != 0) { //Endorsements exist
-                    for (int j=0; i < posts.get(i).endorsements.size(); j++) { //Interate through endorsement id's 
+                    for (int j=0; j < posts.get(i).endorsements.size(); j++) { //Interate through endorsement id's 
                         int orphanEndorsementID = posts.get(i).endorsements.get(j); //Get id of orphan endorsement post
                             
-                        for (int k=0; i < posts.size(); k++) {    
+                        for (int k=0; k < posts.size(); k++) {    
                             if (posts.get(k).id == orphanEndorsementID) { //Locate orphan
                                 posts.remove(k); //Remove orphan (endorsement) post object 
                             }
@@ -51,7 +52,7 @@ public class BasePost {
                     for (int l=0; l < posts.get(i).comments.size(); l++) {
                         int orphanCommentID = posts.get(i).comments.get(l);
                         
-                        for (int m=0; i < posts.size(); m++) {    
+                        for (int m=0; m < posts.size(); m++) {    
                             if (posts.get(m).id == orphanCommentID) { //Locate orphan comment in post array
                                 posts.get(m).parentID = 0; //Update parentID to empty post's ID (0)
                                 break;
@@ -62,9 +63,35 @@ public class BasePost {
 
                 posts.remove(i); //removes the requested post
             }
+        }  
+    }
+
+    public static String showIndividualPost(int id) throws PostIDNotRecognisedException {
+
+        //Check parent exists 
+        if (checkPostIDLegal(id) == true) {
+            throw new PostIDNotRecognisedException("The post does not exist in the system");
         }
 
+        String message = "";
+
+        for (int i=0; i < posts.size(); i++) {    
+            if (posts.get(i).id == id) { 
+                String parentHandle = posts.get(i).author;
+                int numComments = posts.get(i).comments.size();
+                int numEndorsements = posts.get(i).endorsements.size();
+                String parentMessage = posts.get(i).message;
+
+                message = String.format("ID: %s \n" +
+                "Account: %s \n" +
+                "No. endorsements: %s | No. comments: %s \n" +
+                "%s",
+                id, parentHandle, numEndorsements, numComments, parentMessage);
+                break;
+            }
+        }
         
+        return message;
     }
         
     // Getter Method for Posts data 
@@ -103,7 +130,6 @@ public class BasePost {
         //Check if post exists with matching 'id'attribute in ArrayList of objects
         for (int i=0; i < posts.size(); i++) {    
             if (posts.get(i).id == id) { //ID already exists
-                System.out.println("running check post id");
                 return false; //as ID exists
             } 
         }
@@ -114,13 +140,10 @@ public class BasePost {
     //Check if parent is actionable (normal or comment)
     //Returns true if normal or comment (0 or 1 type)
     public static boolean checkPostActionable(int id) {
-        System.out.println("Running check post actionable with input:");
-        System.out.println(id);
         //Check if post exists with matching 'id'attribute in ArrayList of objects
         for (int i=0; i < posts.size(); i++) {    
             if (posts.get(i).id == id) { //Post is desired post
                 if (posts.get(i).postType == 0 || posts.get(i).postType == 1) {
-                    System.out.println("hello");
                     return true;
                 }
             } 
@@ -187,20 +210,12 @@ public class BasePost {
         this.postType = postType;
     } 
 
-    //TODO - MOVE TO STATIC SECTION 
-
-    public String showIndividualPost(int id) {
-        for (int i=0; i < getPosts().size(); i++) {    
-            if (getPosts().get(i).getID() == id) { 
-                parentHandle = getPosts().get(i).getAuthor();
-                parentMessage = getPosts().get(i).getMessage();
-            } 
-        }
-
-        return "To-Do";
-
+    public static void setPostIDCounter(int ID) {
+        postIDCounter = ID;
     }
 
+
+    //Static?
     public String showPostChildrenDetails(int id) {
         return "To-Do";
     }

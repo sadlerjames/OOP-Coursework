@@ -25,7 +25,7 @@ public class EndorsementPost extends BasePost {
         int postIDCounter = getPostIDCounter();
         setID(postIDCounter); //Assign ID 
         incrementPostIDCounter(); //Increment the Post ID Counter
-        setPostType(2); //Set post type to 'comment'
+        setPostType(2); //Set post type to 'endorsement'
 
         //Get parent handle and parent message
         for (int i=0; i < getPosts().size(); i++) {    

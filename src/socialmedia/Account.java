@@ -1,8 +1,9 @@
 package socialmedia;
 import java.util.ArrayList;
+import java.io.Serializable;
 
 
-public class Account {
+public class Account implements Serializable {
 
     //Class attributes
 
@@ -18,12 +19,61 @@ public class Account {
 
 
     //Class methods
+
     
     // Getter Method for Accounts data 
     public static ArrayList<Account> getAccounts() {
         return accounts; //Implement safety checks?
     }
 
+
+    public static boolean checkIDLegal(int id) {
+        //Check if ID is an attribute in ArrayList of objects
+        for (int i=0; i < accounts.size(); i++) {    
+            if (accounts.get(i).id == id) { //Handle already exists
+                return false; //as id exists
+            } 
+        }
+        return true; //ID does not already exist
+    }
+
+
+    public static  String showAccount(String handle) throws HandleNotRecognisedException {
+
+        if (Platform.checkHandleLegal(handle) == true) {
+            throw new HandleNotRecognisedException("This handle does not exist in the system!");
+        } 
+        
+        String account_summary = "";
+
+        for (int i=0; i < accounts.size(); i++) {    
+            if (accounts.get(i).handle == handle) { 
+
+                int accountID = accounts.get(i).id;
+                String accountDesciption = accounts.get(i).description;
+                
+                int postCounter = 0;
+                int endorsedCounter = 0;
+
+                //Get no. of posts (authored by account)
+                for (int j=0; j < BasePost.getPosts().size(); j++) {
+                    if (BasePost.getPosts().get(j).getAuthor() == handle) {
+                        postCounter ++;
+                        endorsedCounter = endorsedCounter + BasePost.getPosts().get(j).getEndorsements().size(); //Count endorsement posts
+
+                        account_summary = String.format("ID: %s \n" +
+                        "Handle: %s \n" +
+                        "Description: %s \n" +
+                        "Post count: %s \n" +
+                        "Endorse count: %s",
+                        accountID, handle, accountDesciption, postCounter, endorsedCounter);
+                    }
+                }
+                break;   
+            }
+        }
+        return account_summary;
+    }
 
     //Instance methods
 
@@ -40,6 +90,11 @@ public class Account {
     //REMOVE - TEMP
     public String getDescription() {
         return description;
+    }
+
+    //Setter method for accountIDCounter
+    public static void setAccountIDCounter(int ID){
+        accountIDCounter = ID;
     }
 
 
@@ -107,8 +162,34 @@ public class Account {
         }
     }
  
-    public void removeAccount(int handle) {
-        // to do
+    public static void removeAccount(int id) throws AccountIDNotRecognisedException, PostIDNotRecognisedException{
+
+        //Throw exception if account does not exist
+        if (checkIDLegal(id) == true) {
+            throw new AccountIDNotRecognisedException("This id already exists in the system, please choose another.");
+        }
+
+        for (int i=0; i < accounts.size(); i++) {    
+            if (accounts.get(i).id == id) { //Matching id 
+                String accountHandle = accounts.get(i).handle; //Get acccount handle 
+
+                for (int j=0; j < BasePost.getPosts().size(); j++) { //loop through posts
+                    System.out.println("Looped through the array: " + j);
+                    if (BasePost.getPosts().get(j).getAuthor() == accountHandle) { //Account to delete authors post
+                        int postID = BasePost.getPosts().get(j).getID(); //Get ID of post to delete
+
+                        System.out.println("ID of post to be deleted: " + postID);
+
+                       BasePost.deletePost(postID); //Delete post and changing all comments of that post to the generic empty post
+                    }
+                }
+
+                accounts.remove(i); //Remove account obj from ArrayList
+                
+                break;
+            }
+        }
+        //Loop through posts, call delete post method on all posts with matching handle 
     }
 
     public void removeAccount(String handle) {
@@ -140,10 +221,5 @@ public class Account {
         } 
         
         this.description = description;
-    }
-
-    public String showAccount(String handle) {
-        // to do
-        return "hello there";
     }
 }

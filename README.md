@@ -14,6 +14,18 @@ TODO:
 - Check getter methods required 
 - Consider moving posts ArrayList from BasePost.java to Post.java
 - Cannot access parentID attribute of comment post 
+- Should numComments be double or int type?
+- Audit use of getter and setter methods? 
+- Add assertions throughout codebase
+- Correctly handling deleting comments vs normal posts? Should comments be set to the generic empty post
+- ShowIndividualPost on an endorsement? Can be shown, just no comments or endorsements (0). 
+- getMostEndorsedPost sometimes set to empty post? Correct behaviour? Some for getMostEndorsedAccount. Sometimes returns null?
+- fix showIndividualPost formatting 
+- Possibility of reducing the number of static objects? Reloading saved objects to enable?
 
 Question list:
 - showIndividualPost - should it show only the number of direct comments on that post? 
+- showIndividualPost - how to deal with message = "" being needed, however redundant 
+- Check type in showPostChildrenDetails
+
+
