@@ -22,6 +22,7 @@ TODO:
 - getMostEndorsedPost sometimes set to empty post? Correct behaviour? Some for getMostEndorsedAccount. Sometimes returns null?
 - fix showIndividualPost formatting 
 - Possibility of reducing the number of static objects? Reloading saved objects to enable?
+- Improve removeAccount methods
 
 Question list:
 - showIndividualPost - should it show only the number of direct comments on that post? 

@@ -31,10 +31,10 @@ public class TempTest {
         BasePost emptyPost = new Post(3);
 
 
-        BasePost platformPost = new Post("James", "We do love a bit of java");
+        BasePost platformPost = new Post("James", "We do love a bit of javaaa");
         BasePost.getPosts().add(platformPost);
 
-        BasePost platform2Post = new Post("JoelMSawyer", "We do love a bit of java");
+        BasePost platform2Post = new Post("JoelMSawyer", "We do love a bit of java!!!");
         BasePost.getPosts().add(platform2Post);
 
         BasePost platformEndorsement = new EndorsementPost("James", 2);
@@ -49,7 +49,7 @@ public class TempTest {
         // System.out.println(BasePost.getPosts().get(1).getPostType()); //Stores post at index pos 
 
 
-        Account.removeAccount(0);
+        Account.removeAccount("JoelMSawyer");
 
         for (int i=0; i < Account.getAccounts().size(); i++) {    
             System.out.println(Account.getAccounts().get(i).getHandle());
@@ -77,8 +77,6 @@ public class TempTest {
 
 
         }
-
-
         
         // BasePost.deletePost(1);
 
@@ -92,13 +90,6 @@ public class TempTest {
         //     System.out.println(aPost.getAuthor());
         //     System.out.println(aPost.getParentID());
         // }
-
-
-        
-        
-
-
-   
 
 
     }

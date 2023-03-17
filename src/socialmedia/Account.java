@@ -162,7 +162,9 @@ public class Account implements Serializable {
         }
     }
  
-    public static void removeAccount(int id) throws AccountIDNotRecognisedException, PostIDNotRecognisedException{
+    public static void removeAccount(int id) throws AccountIDNotRecognisedException {
+
+        ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //List of post (to be deleted) id's 
 
         //Throw exception if account does not exist
         if (checkIDLegal(id) == true) {
@@ -174,26 +176,63 @@ public class Account implements Serializable {
                 String accountHandle = accounts.get(i).handle; //Get acccount handle 
 
                 for (int j=0; j < BasePost.getPosts().size(); j++) { //loop through posts
-                    System.out.println("Looped through the array: " + j);
+
                     if (BasePost.getPosts().get(j).getAuthor() == accountHandle) { //Account to delete authors post
                         int postID = BasePost.getPosts().get(j).getID(); //Get ID of post to delete
 
-                        System.out.println("ID of post to be deleted: " + postID);
+                        delPostIDs.add(postID); //Add to list of ID's to delete
 
-                       BasePost.deletePost(postID); //Delete post and changing all comments of that post to the generic empty post
+                        //Add endorsement's of all posts to list to also be deleted
                     }
                 }
 
-                accounts.remove(i); //Remove account obj from ArrayList
+                for (int j=0; j < delPostIDs.size(); j++) {
+                    
+                    try {
+                        BasePost.deletePost(delPostIDs.get(j));
                 
-                break;
+                    } catch (Exception e) { //Post deleted as a child 
+                    }
+                }    
+                accounts.remove(i); //Remove account object
+                break; //Deleted account
             }
         }
-        //Loop through posts, call delete post method on all posts with matching handle 
     }
 
-    public void removeAccount(String handle) {
-        // to do
+    public static void removeAccount(String handle) throws HandleNotRecognisedException {
+        ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //List of post (to be deleted) id's 
+
+        //Throw exception if handle does not exist
+        if (Platform.checkHandleLegal(handle) == true) {
+            throw new HandleNotRecognisedException("This handle does not exist in the system!");
+        } 
+
+        for (int i=0; i < accounts.size(); i++) {    
+            if (accounts.get(i).handle == handle) { //Matching id 
+
+                for (int j=0; j < BasePost.getPosts().size(); j++) { //loop through posts
+
+                    if (BasePost.getPosts().get(j).getAuthor() == handle) { //Account to delete authors post
+                        int postID = BasePost.getPosts().get(j).getID(); //Get ID of post to delete
+
+                        delPostIDs.add(postID); //Add to list of ID's to delete
+                        //Add endorsement's of all posts to list to also be deleted
+                    }
+                }
+
+                for (int j=0; j < delPostIDs.size(); j++) {
+                    
+                    try {
+                        BasePost.deletePost(delPostIDs.get(j));
+                
+                    } catch (Exception e) { //Post deleted as a child 
+                    }
+                }    
+                accounts.remove(i); //Remove account object
+                break; //Deleted account
+            }
+        }
     }
 
     public void changeAccountHandle(String oldHandle, String newHandle) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException {

@@ -46,6 +46,7 @@ public class BasePost implements Serializable {
                         
                     }
                 }
+                
 
                 //update the parent ID attribute of the comments of the post to be deleted
                 if (posts.get(i).comments.size() != 0) {
