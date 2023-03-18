@@ -10,7 +10,6 @@ public class Account implements Serializable {
     private static ArrayList<Account> accounts = new ArrayList<Account>(); //Create accounts list
     private static int accountIDCounter = 0;
 
-
     //Instance attributes
 
     private int id;
@@ -38,7 +37,7 @@ public class Account implements Serializable {
     }
 
 
-    public static  String showAccount(String handle) throws HandleNotRecognisedException {
+    public static String showAccount(String handle) throws HandleNotRecognisedException {
 
         if (Platform.checkHandleLegal(handle) == true) {
             throw new HandleNotRecognisedException("This handle does not exist in the system!");
@@ -75,7 +74,7 @@ public class Account implements Serializable {
         return account_summary;
     }
 
-    //Instance methods
+   //Instance methods
 
    //Getter method for id
 
@@ -136,6 +135,25 @@ public class Account implements Serializable {
         this.handle = handle; //Assign handle    
         this.description = description; //Assign description
     }
+
+    //Constructor to re-initilise ID 
+    public Account(String handle, Boolean reloadAccount) throws IllegalHandleException {
+
+        //Check if handle is legal (not pre-existing)
+        if (Platform.checkHandleLegal(handle) == true) {
+            throw new IllegalHandleException("This handle does not exist in the system, so the account cannot be re-loaded");   
+        }
+
+        for (int i=0; i < accounts.size(); i++) {    
+            if (accounts.get(i).handle == handle) { //Matching id 
+                //Re-initialise object
+                this.id = accounts.get(i).id;
+                this.handle = handle;
+                this.description = accounts.get(i).description;
+            }
+        }
+    } 
+
 
 
     // Check if string more than 30 characters, if whitespace, or if empty (invalid)

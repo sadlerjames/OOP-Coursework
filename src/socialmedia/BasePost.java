@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 
-public class BasePost implements Serializable {
+public class BasePost {
     //Class attributes
     private static int postIDCounter = 1; //Generic empty post has id 0 
     private static ArrayList<BasePost> posts = new ArrayList<BasePost>(); //Create list of posts 
@@ -215,10 +215,48 @@ public class BasePost implements Serializable {
         postIDCounter = ID;
     }
 
+    //Static? - shouldn't be!
+    public static String showPostChildrenDetails(int id) throws PostIDNotRecognisedException, NotActionablePostException {
+        
+        //Check parent exists 
+        if (checkPostIDLegal(id) == true) {
+            throw new PostIDNotRecognisedException("The post does not exist in the system");
+        }
 
-    //Static?
-    public String showPostChildrenDetails(int id) {
-        return "To-Do";
+        //Check parent actionable (not endorsement)
+        if (BasePost.checkPostActionable(id) == false) {
+            throw new NotActionablePostException("The parent post is an endorsement, and does not have children");
+        }
+
+        StringBuilder postDetails = new StringBuilder(); //Create stringbuilder
+
+        //Need to get - handle, num endorsements, num comments, post message 
+
+        for (int i=0; i < posts.size(); i++) {    
+            if (posts.get(i).id == id) { //Locate original post ID 
+                
+                if (posts.get(i).getComments().size() != 0) { //Check if original post has comments
+                    postDetails.append(showIndividualPost(id) + System.lineSeparator() + "|"); //Add details of original post to string output
+                    
+                    for (int j=0; j < posts.get(i).getComments().size(); j++) { //Loop through comments, calling on each  
+                        
+                        String childString = showPostChildrenDetails(posts.get(i).getComments().get(j)).indent(1); //Indent() indents recursive return (each below parent)
+
+                        String preIDChildString = childString.substring(0, childString.indexOf(System.getProperty("line.separator"))); //Get string before first 'line.separator' which will be the ID
+                        String afterIDChildString = childString.substring(childString.indexOf(System.getProperty("line.separator"))+1); //Get string after first 'line.separator' 
+
+            
+                        postDetails.append(System.lineSeparator() + "| >" + preIDChildString + System.lineSeparator()); //Adds the | > ID to the StringBuilder postDetails
+                        postDetails.append(afterIDChildString.indent(3)); //Indent() indents recursive return 
+
+                    }
+                    
+                } else {
+                    postDetails.append(showIndividualPost(id)); //Add details of original post to string output
+                }
+            }
+        }
+        return postDetails.toString(); //Return string
     }
 
 }

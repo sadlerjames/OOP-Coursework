@@ -12,25 +12,19 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {//CHANGE THROWS
-		// TODO Auto-generated method stub
-
-		Account platformUser = new Account("JoelMSawyer"); //Create account object
-		Account.getAccounts().add(platformUser); //Add account object to ArrayList
+		Account platformUser = new Account(handle); //Create account object
+		Account.getAccounts().add(platformUser); //Store account object
 
 		return platformUser.getID(); //Return 'id' of generated account
 	}
 
 	@Override
 	public int createAccount(String handle, String description) throws IllegalHandleException, InvalidHandleException {
-		// TODO Auto-generated method stub
 
-		//Use account constructor to setup instance attributes, prep object for saving 
-		//Then execute createaccount method (could change name?) to save created account obj into arraylist
+		Account platformUser = new Account(handle, description); //Create account object
+		Account.getAccounts().add(platformUser); //Add account object to ArrayList
 
-		//See here https://www.geeksforgeeks.org/how-objects-can-an-arraylist-hold-in-java/ example 2, shows how to access stored obj's 
-
-
-		return 0;
+		return platformUser.getID();
 	}
 
 	@Override
@@ -48,8 +42,11 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void changeAccountHandle(String oldHandle, String newHandle)
 			throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
-		// TODO Auto-generated method stub
 
+			//Call method in Account.java to re-initilise desired account object 
+			Account platformUser = new Account(oldHandle, true);
+
+			platformUser.changeAccountHandle(oldHandle, newHandle);
 	}
 
 	@Override
@@ -101,7 +98,7 @@ public class SocialMedia implements SocialMediaPlatform {
 			throws PostIDNotRecognisedException, NotActionablePostException {
 		// TODO Auto-generated method stub 
 		return null;
-	}
+	} 
 
 	@Override
 	public int getNumberOfAccounts() {

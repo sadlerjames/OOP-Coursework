@@ -28,55 +28,80 @@ public class TempTest {
 
         //Create empty post 
 
-        BasePost emptyPost = new Post(3);
+        // BasePost emptyPost = new Post(3);
 
 
-        BasePost platformPost = new Post("James", "We do love a bit of javaaa");
-        BasePost.getPosts().add(platformPost);
+		//Call method in Account.java to re-initilise desired account object 
+		Account platformUserReload = new Account("JoelMSawyer", true);
+        System.out.println(platformUserReload.getHandle());
 
-        BasePost platform2Post = new Post("JoelMSawyer", "We do love a bit of java!!!");
-        BasePost.getPosts().add(platform2Post);
+		platformUserReload.changeAccountHandle("James", "Diego");
+        Account.getAccounts().update(platformUserReload);
 
-        BasePost platformEndorsement = new EndorsementPost("James", 2);
-        BasePost.getPosts().add(platformEndorsement);
+        //NEED TO RESAVE ACCOUNT OBJECT AFTER RE-LOAD, NEED INDEX OF OLD OBJECT
 
-        BasePost platform2Endorsement = new EndorsementPost("JoelMSawyer", 1);
-        BasePost.getPosts().add(platform2Endorsement);
 
-        BasePost platform3Endorsement = new EndorsementPost("JoelMSawyer", 2);
-        BasePost.getPosts().add(platform3Endorsement);
+
+
+        // BasePost platformPost = new Post("James", "We do love a bit of javaaa");
+        // BasePost.getPosts().add(platformPost);
+
+        // BasePost platform2Post = new Post("JoelMSawyer", "We do love a bit of java!!!");
+        // BasePost.getPosts().add(platform2Post);
+
+        // BasePost platformEndorsement = new EndorsementPost("James", 2);
+        // BasePost.getPosts().add(platformEndorsement);
+
 
         // System.out.println(BasePost.getPosts().get(1).getPostType()); //Stores post at index pos 
 
 
-        Account.removeAccount("JoelMSawyer");
+        // Account.removeAccount("JoelMSawyer");
 
-        for (int i=0; i < Account.getAccounts().size(); i++) {    
-            System.out.println(Account.getAccounts().get(i).getHandle());
-        }
+        // for (int i=0; i < Account.getAccounts().size(); i++) {    
+        //     System.out.println(Account.getAccounts().get(i).getHandle());
+        // }
 
 
-        // //Creating a commment 
+        // // //Creating a commment 
         // BasePost platformComment = new CommentPost("James", 1, "Hello");
         // BasePost.getPosts().add(platformComment);
+
+        // BasePost platformComment2 = new CommentPost("James", 1, "Hi there");
+        // BasePost.getPosts().add(platformComment2);
+
+        // BasePost platformComment3 = new CommentPost("JoelMSawyer", 4, "sup");
+        // BasePost.getPosts().add(platformComment3);
+
+        // BasePost platformComment4 = new CommentPost("JoelMSawyer", 6, "hi thereee");
+        // BasePost.getPosts().add(platformComment4);
+
+        // BasePost platformComment5 = new CommentPost("James", 1, "Hello");
+        // BasePost.getPosts().add(platformComment5);
+
+
+        // System.out.println(BasePost.showPostChildrenDetails(1));
 
         // Platform platformObj = new Platform();
 
         // System.out.println(platformObj.getMostEndorsedAccount());
 
      //Check if handle is an attribute in ArrayList of objects
-        System.out.println("Remaining Posts: ");
+        // System.out.println("Remaining Posts: ");
 
-        for (int i=0; i < BasePost.getPosts().size(); i++) {    
+        // for (int i=0; i < BasePost.getPosts().size(); i++) {    
 
-            BasePost aPost = BasePost.getPosts().get(i); //Stores post at index pos 
+        //     BasePost aPost = BasePost.getPosts().get(i); //Stores post at index pos 
 
-            System.out.println(aPost.getAuthor());
-            System.out.println(aPost.getMessage());
+        //     System.out.println(aPost.getAuthor());
+        //     System.out.println(aPost.getMessage());
 
 
 
-        }
+        // }
+
+
+        
         
         // BasePost.deletePost(1);
 
