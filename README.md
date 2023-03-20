@@ -24,6 +24,8 @@ TODO:
 - Possibility of reducing the number of static objects? Reloading saved objects to enable?
 - Improve removeAccount methods
 - Add @override where needed
+- May be posible to optimise OO nature of some Account methods after modifying posts
+- Create the empty post when platform initialised 
 
 Question list:
 - showIndividualPost - should it show only the number of direct comments on that post? 

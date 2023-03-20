@@ -37,43 +37,6 @@ public class Account implements Serializable {
     }
 
 
-    public static String showAccount(String handle) throws HandleNotRecognisedException {
-
-        if (Platform.checkHandleLegal(handle) == true) {
-            throw new HandleNotRecognisedException("This handle does not exist in the system!");
-        } 
-        
-        String account_summary = "";
-
-        for (int i=0; i < accounts.size(); i++) {    
-            if (accounts.get(i).handle == handle) { 
-
-                int accountID = accounts.get(i).id;
-                String accountDesciption = accounts.get(i).description;
-                
-                int postCounter = 0;
-                int endorsedCounter = 0;
-
-                //Get no. of posts (authored by account)
-                for (int j=0; j < BasePost.getPosts().size(); j++) {
-                    if (BasePost.getPosts().get(j).getAuthor() == handle) {
-                        postCounter ++;
-                        endorsedCounter = endorsedCounter + BasePost.getPosts().get(j).getEndorsements().size(); //Count endorsement posts
-
-                        account_summary = String.format("ID: %s \n" +
-                        "Handle: %s \n" +
-                        "Description: %s \n" +
-                        "Post count: %s \n" +
-                        "Endorse count: %s",
-                        accountID, handle, accountDesciption, postCounter, endorsedCounter);
-                    }
-                }
-                break;   
-            }
-        }
-        return account_summary;
-    }
-
    //Instance methods
 
    //Getter method for id
@@ -136,12 +99,12 @@ public class Account implements Serializable {
         this.description = description; //Assign description
     }
 
-    //Constructor to re-initilise ID 
-    public Account(String handle, Boolean reloadAccount) throws IllegalHandleException {
+    //Constructor to re-initilise (by handle)  
+    public Account(String handle, Boolean reloadAccount) throws HandleNotRecognisedException {
 
         //Check if handle is legal (not pre-existing)
         if (Platform.checkHandleLegal(handle) == true) {
-            throw new IllegalHandleException("This handle does not exist in the system, so the account cannot be re-loaded");   
+            throw new HandleNotRecognisedException("This handle does not exist in the system, so the account cannot be re-loaded");   
         }
 
         for (int i=0; i < accounts.size(); i++) {    
@@ -150,27 +113,47 @@ public class Account implements Serializable {
                 this.id = accounts.get(i).id;
                 this.handle = handle;
                 this.description = accounts.get(i).description;
+
+                accounts.remove(i); //Remove existing account 
             }
         }
     } 
 
+    //Constructor to re-initilise (by ID)  
+    public Account(int id, Boolean reloadAccount) throws AccountIDNotRecognisedException {
 
+        //Throw exception if account does not exist
+        if (checkIDLegal(id) == true) {
+            throw new AccountIDNotRecognisedException("An account with this ID does not exist in the system, so the account cannot be re-loaded.");
+        }
+
+        for (int i=0; i < accounts.size(); i++) {    
+            if (accounts.get(i).id == id) { //Matching id 
+                //Re-initialise object
+                this.id = id;
+                this.handle = accounts.get(i).handle;
+                this.description = accounts.get(i).description;
+
+                accounts.remove(i); //Remove existing account 
+            }
+        }
+    } 
 
     // Check if string more than 30 characters, if whitespace, or if empty (invalid)
     public boolean checkHandleValid(String handle) {
 
         //Check if handle is greater than 30 characters
-        if(handle.length() > 30) {
+        if (handle.length() > 30) {
             return false;
         }
 
         //Check if handle contains whitespace
-        else if(handle.contains(" ")) {
+        else if (handle.contains(" ")) {
             return false;
         }
 
         //Check if handle is empty
-        else if(handle.length() == 0) {
+        else if (handle.length() == 0) {
             return false;
         }
 
@@ -180,84 +163,63 @@ public class Account implements Serializable {
         }
     }
  
-    public static void removeAccount(int id) throws AccountIDNotRecognisedException {
+    public String showAccount(String handle) {
+
+        //if (Platform.checkHandleLegal(handle) == true) {
+        //    throw new HandleNotRecognisedException("This handle does not exist in the system!");
+       // } 
+
+        String accountSummary = "";
+
+        int postCounter = 0;
+        int endorsedCounter = 0;
+
+        //Get no. of posts (authored by account)
+        for (int j=0; j < BasePost.getPosts().size(); j++) {
+            if (BasePost.getPosts().get(j).getAuthor() == handle) {
+                postCounter ++;
+                endorsedCounter = endorsedCounter + BasePost.getPosts().get(j).getEndorsements().size(); //Count endorsement posts
+
+            }
+        }
+
+        accountSummary = String.format("ID: %s \n" +
+        "Handle: %s \n" +
+        "Description: %s \n" +
+        "Post count: %s \n" +
+        "Endorse count: %s",
+        id, handle, description, postCounter, endorsedCounter);
+
+        return accountSummary;
+    }
+
+
+    public void removeAccount() {
 
         ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //List of post (to be deleted) id's 
 
-        //Throw exception if account does not exist
-        if (checkIDLegal(id) == true) {
-            throw new AccountIDNotRecognisedException("This id already exists in the system, please choose another.");
-        }
+        for (int j=0; j < BasePost.getPosts().size(); j++) { //loop through posts
 
-        for (int i=0; i < accounts.size(); i++) {    
-            if (accounts.get(i).id == id) { //Matching id 
-                String accountHandle = accounts.get(i).handle; //Get acccount handle 
+            if (BasePost.getPosts().get(j).getAuthor() == handle) { //Account to delete authors post
+                int postID = BasePost.getPosts().get(j).getID(); //Get ID of post to delete
 
-                for (int j=0; j < BasePost.getPosts().size(); j++) { //loop through posts
-
-                    if (BasePost.getPosts().get(j).getAuthor() == accountHandle) { //Account to delete authors post
-                        int postID = BasePost.getPosts().get(j).getID(); //Get ID of post to delete
-
-                        delPostIDs.add(postID); //Add to list of ID's to delete
-
-                        //Add endorsement's of all posts to list to also be deleted
-                    }
-                }
-
-                for (int j=0; j < delPostIDs.size(); j++) {
-                    
-                    try {
-                        BasePost.deletePost(delPostIDs.get(j));
-                
-                    } catch (Exception e) { //Post deleted as a child 
-                    }
-                }    
-                accounts.remove(i); //Remove account object
-                break; //Deleted account
+                delPostIDs.add(postID); //Add to list of ID's to delete
             }
         }
-    }
 
-    public static void removeAccount(String handle) throws HandleNotRecognisedException {
-        ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //List of post (to be deleted) id's 
-
-        //Throw exception if handle does not exist
-        if (Platform.checkHandleLegal(handle) == true) {
-            throw new HandleNotRecognisedException("This handle does not exist in the system!");
-        } 
-
-        for (int i=0; i < accounts.size(); i++) {    
-            if (accounts.get(i).handle == handle) { //Matching id 
-
-                for (int j=0; j < BasePost.getPosts().size(); j++) { //loop through posts
-
-                    if (BasePost.getPosts().get(j).getAuthor() == handle) { //Account to delete authors post
-                        int postID = BasePost.getPosts().get(j).getID(); //Get ID of post to delete
-
-                        delPostIDs.add(postID); //Add to list of ID's to delete
-                        //Add endorsement's of all posts to list to also be deleted
-                    }
-                }
-
-                for (int j=0; j < delPostIDs.size(); j++) {
-                    
-                    try {
-                        BasePost.deletePost(delPostIDs.get(j));
-                
-                    } catch (Exception e) { //Post deleted as a child 
-                    }
-                }    
-                accounts.remove(i); //Remove account object
-                break; //Deleted account
+        for (int j=0; j < delPostIDs.size(); j++) {
+            
+            try {
+                BasePost.deletePost(delPostIDs.get(j));
+        
+            } catch (Exception e) { //Post deleted as a child 
             }
-        }
+        }    
+        
     }
 
-    public void changeAccountHandle(String oldHandle, String newHandle) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException {
+    public void changeAccountHandle(String newHandle) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException {
 
-        if (Platform.checkHandleLegal(oldHandle) == true) {
-            throw new HandleNotRecognisedException("This handle does not exist in the system!");
-        } 
 
         if (Platform.checkHandleLegal(newHandle) == false) {
             throw new IllegalHandleException("This handle already exists in the system, please choose another.");
@@ -272,11 +234,11 @@ public class Account implements Serializable {
         
     }
 
-    public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
-        if (Platform.checkHandleLegal(handle) == true) {
-            throw new HandleNotRecognisedException("This handle does not exist in the system!");
-        } 
-        
+    public void updateAccountDescription(String description) {
+        //if (Platform.checkHandleLegal(handle) == true) {
+         //   throw new HandleNotRecognisedException("This handle does not exist in the system!");
+       // } 
+
         this.description = description;
     }
 }

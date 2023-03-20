@@ -29,42 +29,49 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void removeAccount(int id) throws AccountIDNotRecognisedException {
-		// TODO Auto-generated method stub
+		Account platformUserReload = new Account(id, true); //Reload account
+		platformUserReload.removeAccount(); //Correct posts
+
 
 	}
 
 	@Override
 	public void removeAccount(String handle) throws HandleNotRecognisedException {
-		// TODO Auto-generated method stub
-
+		Account platformUserReload = new Account(handle, true); //Reload account
+		platformUserReload.removeAccount(); //Correct posts
 	}
 
 	@Override
 	public void changeAccountHandle(String oldHandle, String newHandle)
 			throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
 
-			//Call method in Account.java to re-initilise desired account object 
-			Account platformUser = new Account(oldHandle, true);
-
-			platformUser.changeAccountHandle(oldHandle, newHandle);
+		Account platformUserReload = new Account(oldHandle, true); //Reload account
+		platformUserReload.changeAccountHandle(newHandle); //Change handle
+		Account.getAccounts().add(platformUserReload); //Save account
+		
 	}
 
 	@Override
 	public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
-		// TODO Auto-generated method stub
-
+		Account platformUserReload = new Account(handle, true); //Reload account
+		platformUserReload.updateAccountDescription(description); //Change description
+		Account.getAccounts().add(platformUserReload); //Save account
 	} 
 
 	@Override
 	public String showAccount(String handle) throws HandleNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		Account platformUserReload = new Account(handle, true); //Reload account
+		String accountSummary = platformUserReload.showAccount(handle); //Load description
+		Account.getAccounts().add(platformUserReload); //Save account
+
+		return accountSummary;
 	}
 
 	@Override
 	public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException {
-		// TODO Auto-generated method stub
-		return 0; 
+        BasePost platformPost = new Post(handle, message); //Create post, initialise 
+        BasePost.getPosts().add(platformPost); //Save post 
+		return platformPost.getID(); //Return ID of post
 	}
 
 	@Override
