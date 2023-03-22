@@ -26,6 +26,10 @@ TODO:
 - Add @override where needed
 - May be posible to optimise OO nature of some Account methods after modifying posts
 - Create the empty post when platform initialised 
+- Check whether need to validate account description 
+- Intead of using for loops to access object variables, reload the object itself
+- Update deletePost to use new method 
+- Move methods back out to classes where possible (showIndividualPost?)
 
 Question list:
 - showIndividualPost - should it show only the number of direct comments on that post? 

@@ -3,12 +3,27 @@ package socialmedia;
 public class TempTest {
 
     public static void main(String[] args) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException, InvalidPostException, NotActionablePostException, PostIDNotRecognisedException, AccountIDNotRecognisedException {
-        //Will be moved to SocialMedia class 
-		Account platformUser = new Account("JoelMSawyer", "We don't");
-        Account platformUser2 = new Account("James"); //Create account object
-		Account.getAccounts().add(platformUser); //Add account object to arrayList  
-        Account.getAccounts().add(platformUser2);  
 
+        SocialMedia socialMediaObj = new SocialMedia(); //Create a platform
+
+        socialMediaObj.createAccount("JamesS");
+        socialMediaObj.createPost("JamesS", "This is a post!");
+        socialMediaObj.updateAccountDescription("JamesS", "We love Java...");
+
+        socialMediaObj.removeAccount(0);
+
+        System.out.println(socialMediaObj.showIndividualPost(1));
+
+        //socialMediaObj.showAccount("JamesS");
+
+		//Account platformUser = new Account("JoelMSawyer", "We don't");
+        //Account platformUser2 = new Account("James"); //Create account object
+		//socialPlatformObj.getAccounts().add(platformUser); //Add account object to arrayList  
+        //socialPlatformObj.getAccounts().add(platformUser2);  
+
+   
+
+        
 
         
         //Change handle (to -> SocialMedia class) 
@@ -30,24 +45,20 @@ public class TempTest {
 
         // BasePost emptyPost = new Post(3);
 
-
-		//Call method in Account.java to re-initilise desired account object 
-		Account platformUserReload = new Account("JoelMSawyer", true);
-        System.out.println(platformUserReload.getHandle());
-
-		platformUserReload.changeAccountHandle("James", "Diego");
-        Account.getAccounts().update(platformUserReload);
-
-        //NEED TO RESAVE ACCOUNT OBJECT AFTER RE-LOAD, NEED INDEX OF OLD OBJECT
+        // BasePost platform2Post = new Post("JoelMSawyer", "We do love a bit of java!!!");
+        // BasePost.getPosts().add(platform2Post);
 
 
+        // //Delete account 
+
+		// Account platformUserReload5 = new Account(0, true); //Reload account
+		// platformUserReload5.removeAccount();
 
 
         // BasePost platformPost = new Post("James", "We do love a bit of javaaa");
         // BasePost.getPosts().add(platformPost);
 
-        // BasePost platform2Post = new Post("JoelMSawyer", "We do love a bit of java!!!");
-        // BasePost.getPosts().add(platform2Post);
+
 
         // BasePost platformEndorsement = new EndorsementPost("James", 2);
         // BasePost.getPosts().add(platformEndorsement);
@@ -58,9 +69,9 @@ public class TempTest {
 
         // Account.removeAccount("JoelMSawyer");
 
-        // for (int i=0; i < Account.getAccounts().size(); i++) {    
-        //     System.out.println(Account.getAccounts().get(i).getHandle());
-        // }
+        //for (int i=0; i < Account.getAccounts().size(); i++) {    
+           // System.out.println(Account.getAccounts().get(i).getHandle());
+       // }
 
 
         // // //Creating a commment 
@@ -119,13 +130,3 @@ public class TempTest {
 
     }
 }
-
-    //     //Prints account ID
-    //     System.out.println(testUser.createAccount("James"));
-    //     System.out.println(secondTestUser.createAccount("Joel", "jksjflkds"));
-        
-    //     testUser.updateAccountDescription("sdfjdslk", "skjfjaslke");
-    // 
-
-
-    

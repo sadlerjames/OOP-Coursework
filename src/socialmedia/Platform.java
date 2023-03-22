@@ -1,19 +1,152 @@
 package socialmedia;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-public class Platform {
+public class Platform implements Serializable {
 
-    public static boolean checkHandleLegal(String handle) {
+    //Platform instance attributes
+    //Accounts
+    private ArrayList<Account> accounts = new ArrayList<Account>(); //Create accounts list
+    private int accountIDCounter = 0;
+
+    //Posts
+    private ArrayList<BasePost> posts = new ArrayList<BasePost>(); //Create list of posts 
+    private int postIDCounter = 1; //Generic empty post has ID 0 
+
+
+    // Getter Method for Accounts data 
+    public ArrayList<Account> getAccounts() {
+        return accounts; //Implement safety checks?
+    }
+
+    public int getAccountIDCounter() {
+        return accountIDCounter;
+    }
+    
+    //Setter method for accountIDCounter
+    public void setAccountIDCounter(int ID){
+        accountIDCounter = ID;
+    }
+
+    //Setter method for postIDCounter
+    public void setPostIDCounter(int ID){
+        postIDCounter = ID;
+    }
+
+
+    // Getter Method for Posts data 
+    public ArrayList<BasePost> getPosts() {
+        return posts; //Implement safety checks?
+    }
+    
+    public void incrementPostIDCounter() {
+        postIDCounter++;
+    }
+
+    public int getPostIDCounter() {
+        return postIDCounter;
+    }
+
+
+    //Platform check methods 
+
+	public boolean checkIDLegal(int id) {
+		//Check if ID is an attribute in ArrayList of objects
+		for (int i=0; i < accounts.size(); i++) {    
+			if (accounts.get(i).getID() == id) { //Handle already exists
+				return false; //as id exists
+			} 
+		}
+		return true; //ID does not already exist
+	}
+
+
+    public boolean checkHandleLegal(String handle) {
         //Check if handle is an attribute in ArrayList of objects
-        for (int i=0; i < Account.getAccounts().size(); i++) {    
-            if (Account.getAccounts().get(i).getHandle() == handle) { //Handle already exists
+        for (int i=0; i < accounts.size(); i++) {    
+            if (accounts.get(i).getHandle() == handle) { //Handle already exists
                 return false; //as handle exists
             } 
         }
         return true; //Handle does not already exist
     }
  
+    // Check if string more than 30 characters, if whitespace, or if empty (invalid)
+    public boolean checkHandleValid(String handle) {
+
+        //Check if handle is greater than 30 characters
+        if (handle.length() > 30) {
+            return false;
+        }
+
+        //Check if handle contains whitespace
+        else if (handle.contains(" ")) {
+            return false;
+        }
+
+        //Check if handle is empty
+        else if (handle.length() == 0) {
+            return false;
+        }
+
+        //Handle is valid
+        else {
+            return true;
+        }
+    }
+
+    // Check if string more than 100 characters, or if empty (invalid)
+    public boolean checkPostValid(String handle) {
+
+        //Check if post is greater than 30 characters
+        if(handle.length() > 100) {
+            return false;
+        }
+
+        //Check if post is empty
+        else if(handle.length() == 0) {
+            return false;
+        }
+
+        //Post is valid
+        else {
+            return true;
+        }
+    }
+
+
+    // Check if postID exists (return true if post if post ID exists)
+    //Returns true if post id doesn't exist (legal to create)
+    public boolean checkPostIDLegal(int id) {
+
+        //Check if post exists with matching 'id'attribute in ArrayList of objects
+        for (int i=0; i < posts.size(); i++) {    
+            if (posts.get(i).getID() == id) { //ID already exists
+                return false; //as ID exists
+            } 
+        }
+        //Post ID not in system
+        return true;
+    }
+
+    //Check if parent is actionable (normal or comment)
+    //Returns true if normal or comment (0 or 1 type)
+    public boolean checkPostActionable(int id) {
+        //Check if post exists with matching 'id'attribute in ArrayList of objects
+        for (int i=0; i < posts.size(); i++) {    
+            if (posts.get(i).getID() == id) { //Post is desired post
+                if (posts.get(i).getPostType() == 0 || posts.get(i).getPostType() == 1) {
+                    return true;
+                }
+            } 
+        }
+        return false;
+    }
+
+    //Platform getter methods 
+    
     public int getNumberOfAccounts() {
-        int numAccounts = Account.getAccounts().size();
+        int numAccounts = accounts.size();
 
         return numAccounts;
     }
@@ -21,8 +154,8 @@ public class Platform {
     public int getTotalOriginalPosts() {
         int numPosts = 0; //Counter for number of original posts
 
-        for (int i=0; i < BasePost.getPosts().size(); i++) {    
-            if (BasePost.getPosts().get(i).getPostType() == 0) { //Oringinal posts have type '1'
+        for (int i=0; i < posts.size(); i++) {    
+            if (posts.get(i).getPostType() == 0) { //Oringinal posts have type '1'
                 numPosts++;
             }
         }
@@ -32,8 +165,8 @@ public class Platform {
     public int getTotalEndorsmentPost() {
         int numEndorsements = 0; //Counter for number of original posts
 
-        for (int i=0; i < BasePost.getPosts().size(); i++) {    
-            if (BasePost.getPosts().get(i).getPostType() == 2) { //Endorsements posts have type '2'
+        for (int i=0; i < posts.size(); i++) {    
+            if (posts.get(i).getPostType() == 2) { //Endorsements posts have type '2'
             numEndorsements++;
             }
         }
@@ -43,8 +176,8 @@ public class Platform {
     public int getTotalCommentPosts() {
         int numComments = 0; //Counter for number of original posts
 
-        for (int i=0; i < BasePost.getPosts().size(); i++) {    
-            if (BasePost.getPosts().get(i).getPostType() == 1) { //Endorsements posts have type '2'
+        for (int i=0; i < posts.size(); i++) {    
+            if (posts.get(i).getPostType() == 1) { //Endorsements posts have type '2'
             numComments++;
             }
         }
@@ -55,12 +188,12 @@ public class Platform {
         int maxNumEndorsements = 0; //Counter for number of original posts
         int idMaxPost = 0; //ID. of the post with max no. of endorsements 
 
-        for (int i=0; i < BasePost.getPosts().size(); i++) {   
-            int numEndorsements = BasePost.getPosts().get(i).getEndorsements().size();
+        for (int i=0; i < posts.size(); i++) {   
+            int numEndorsements = posts.get(i).getEndorsements().size();
             
             if (numEndorsements >= maxNumEndorsements) { //Endorsements posts have type '2'
             maxNumEndorsements = numEndorsements;
-            idMaxPost = BasePost.getPosts().get(i).getID();
+            idMaxPost = posts.get(i).getID();
             }
         }
         return idMaxPost;
@@ -70,15 +203,15 @@ public class Platform {
         int idMaxAccountEndorsements = 0; //ID of account with most endorsements
         int maxNumEndorsements = 0; //Counter 
 
-        for (int i=0; i < Account.getAccounts().size(); i++) { //Iterate through authors (accounts)
+        for (int i=0; i < accounts.size(); i++) { //Iterate through authors (accounts)
 
-            String authorHandle = Account.getAccounts().get(i).getHandle(); //Get handle of current obj
-            int authorId = Account.getAccounts().get(i).getID(); //Get id of current obj
+            String authorHandle = accounts.get(i).getHandle(); //Get handle of current obj
+            int authorId = accounts.get(i).getID(); //Get id of current obj
 
             int accountEndorsements = 0; //Counter - counts account's number of endorsements 
-            for (int j=0; j < BasePost.getPosts().size(); j++) { //Iterate through posts (with matching author/handle)
+            for (int j=0; j < posts.size(); j++) { //Iterate through posts (with matching author/handle)
 
-                if (BasePost.getPosts().get(j).getAuthor() == authorHandle && BasePost.getPosts().get(j).getPostType() == 2) { //Only count endorsements 
+                if (posts.get(j).getAuthor() == authorHandle && posts.get(j).getPostType() == 2) { //Only count endorsements 
                     accountEndorsements++; //Increment account's endorsements total
                 }
             }
@@ -92,31 +225,6 @@ public class Platform {
 
         return idMaxAccountEndorsements;
     }
-
-    public void erasePlatform() {
- 
-        //Accounts array/counter
-        
-        Account.getAccounts().clear(); 
-        Account.setAccountIDCounter(0); //Reset Account's ID counter
-
-        //Posts array/counter
-
-        Post.getPosts().clear();
-        BasePost.setPostIDCounter(1);
-    }
-
-    public void savePlatform(String filename) {
-        //TODO
-        
-
-
-    }
-
-    public void loadPlatform(String filename) {
-        //TODO
-    }
-
 
 
 }
