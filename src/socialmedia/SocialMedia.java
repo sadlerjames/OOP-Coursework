@@ -34,7 +34,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		Account platformUser = new Account(handle, accountIDCounter); //Create account object, set ID 
 		socialPlatform.getAccounts().add(platformUser); //Store account object
-		socialPlatform.setAccountIDCounter(accountIDCounter++); //Increment counter
+		socialPlatform.incrementAccountIDCounter(); //Increment counter
 
 		return platformUser.getID(); //Return 'id' of generated account
 	}
@@ -55,15 +55,13 @@ public class SocialMedia implements SocialMediaPlatform {
 		int accountIDCounter = socialPlatform.getAccountIDCounter();
 		Account platformUser = new Account(handle, accountIDCounter, description); //Create account object (with decription), set ID 
 		socialPlatform.getAccounts().add(platformUser); //Store account object
-		socialPlatform.setAccountIDCounter(accountIDCounter++); //Increment counter
+		socialPlatform.incrementAccountIDCounter(); //Increment counter
 
 		return platformUser.getID(); //Return 'id' of generated account
 	}
 
 
 	public Account reloadAccount(String handle) throws HandleNotRecognisedException {
-
-		
 
 		//Check if handle is legal (not pre-existing)
 		if (socialPlatform.checkHandleLegal(handle) == true) {
@@ -490,7 +488,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	public void erasePlatform() {
         //Accounts arrayList/counters
         socialPlatform.getAccounts().clear(); 
-        socialPlatform.setAccountIDCounter(0); //Reset Account's ID counter
+        socialPlatform.resetAccountIDCounter(); //Reset Account's ID counter
 
         //Posts arrayList/counters
         socialPlatform.getPosts().clear();
@@ -508,6 +506,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
 		Object obj = ois.readObject(); //Write platform object
+		ois.close();
 
 		if (obj instanceof Platform) {
 			socialPlatform = (Platform) obj; //Overwrite socialPlatform with de-serialised object 

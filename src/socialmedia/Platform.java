@@ -39,9 +39,14 @@ public class Platform implements Serializable {
 
     //Platform setter methods
 
-    //Setter method for accountIDCounter
-    public void setAccountIDCounter(int ID){
-        accountIDCounter = ID;
+    //Increment method for accountIDCounter
+    public void incrementAccountIDCounter() {
+        accountIDCounter++;
+    }
+
+    //Reset accounts counter to 0
+    public void resetAccountIDCounter() {
+        accountIDCounter = 0;
     }
 
     //Setter method for postIDCounter

@@ -6,6 +6,9 @@ public class TempTest {
     public static void main(String[] args) throws ClassNotFoundException, IOException, IllegalHandleException, InvalidHandleException, HandleNotRecognisedException, InvalidPostException, NotActionablePostException, PostIDNotRecognisedException, AccountIDNotRecognisedException {
 
         SocialMedia socialMediaObj = new SocialMedia(); //Create a platform 
+        socialMediaObj.createAccount("JamesS");
+        socialMediaObj.createAccount("JoelMSawyer");
+
 
         //socialMediaObj.createAccount("JoelMSawyer");
         //socialMediaObj.createAccount("JamesS");
@@ -15,11 +18,12 @@ public class TempTest {
 
         //socialMediaObj.updateAccountDescription("JamesS", "We love Java...");
 
-        socialMediaObj.loadPlatform("testSave.ser");
+        //socialMediaObj.loadPlatform("testSave.ser");
 
         //System.out.println(socialMediaObj.socialPlatform.getAccounts().get(0).getHandle());
 
         System.out.println(socialMediaObj.showAccount("JamesS"));
+        System.out.println(socialMediaObj.showAccount("JoelMSawyer"));
 
         //System.out.println(socialMediaObj.socialPlatform.getAccounts().get(0).getHandle());
 
