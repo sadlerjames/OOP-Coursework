@@ -1,25 +1,35 @@
 package socialmedia;
+import java.io.IOException;
 
 public class TempTest {
 
-    public static void main(String[] args) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException, InvalidPostException, NotActionablePostException, PostIDNotRecognisedException, AccountIDNotRecognisedException {
+    public static void main(String[] args) throws ClassNotFoundException, IOException, IllegalHandleException, InvalidHandleException, HandleNotRecognisedException, InvalidPostException, NotActionablePostException, PostIDNotRecognisedException, AccountIDNotRecognisedException {
 
-        SocialMedia socialMediaObj = new SocialMedia(); //Create a platform
+        SocialMedia socialMediaObj = new SocialMedia(); //Create a platform 
 
-        socialMediaObj.createAccount("JamesS");
-        socialMediaObj.createPost("JamesS", "This is a post!");
-        socialMediaObj.updateAccountDescription("JamesS", "We love Java...");
+        //socialMediaObj.createAccount("JoelMSawyer");
+        //socialMediaObj.createAccount("JamesS");
+        
 
-        socialMediaObj.removeAccount(0);
+        //socialMediaObj.commentPost("JoelMSawyer", 1, "This is a test comment");
 
-        System.out.println(socialMediaObj.showIndividualPost(1));
+        //socialMediaObj.updateAccountDescription("JamesS", "We love Java...");
 
-        //socialMediaObj.showAccount("JamesS");
+        socialMediaObj.loadPlatform("testSave.ser");
 
-		//Account platformUser = new Account("JoelMSawyer", "We don't");
-        //Account platformUser2 = new Account("James"); //Create account object
-		//socialPlatformObj.getAccounts().add(platformUser); //Add account object to arrayList  
-        //socialPlatformObj.getAccounts().add(platformUser2);  
+        //System.out.println(socialMediaObj.socialPlatform.getAccounts().get(0).getHandle());
+
+        System.out.println(socialMediaObj.showAccount("JamesS"));
+
+        //System.out.println(socialMediaObj.socialPlatform.getAccounts().get(0).getHandle());
+
+        //socialMediaObj.removeAccount(0);
+
+        // System.out.println(socialMediaObj.showIndividualPost(1));
+
+        //System.out.println(socialMediaObj.showPostChildrenDetails(1));
+
+
 
    
 

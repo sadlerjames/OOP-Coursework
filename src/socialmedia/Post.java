@@ -2,7 +2,6 @@ package socialmedia;
 
 public class Post extends BasePost {
 
-
     //Create generic empty post 
     public Post(int postType) {
 

@@ -1,7 +1,8 @@
 package socialmedia;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BasePost {
+public class BasePost implements Serializable {
 
     //Instance attributes 
     private int id;
@@ -32,7 +33,6 @@ public class BasePost {
     public int getParentID() {
         return parentID;
     }
-
 
     public String getAuthor() {
         return author;
@@ -66,6 +66,4 @@ public class BasePost {
     public void setPostType(int postType){
         this.postType = postType;
     } 
-
-
 }

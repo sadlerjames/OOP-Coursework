@@ -30,6 +30,9 @@ TODO:
 - Intead of using for loops to access object variables, reload the object itself
 - Update deletePost to use new method 
 - Move methods back out to classes where possible (showIndividualPost?)
+- Change all ==, !=
+- Move showIndividualPost to Post class
+- Check through all 'for' loops, are they necessary? 
 
 Question list:
 - showIndividualPost - should it show only the number of direct comments on that post? 

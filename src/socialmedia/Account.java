@@ -1,7 +1,7 @@
 package socialmedia;
+import java.io.Serializable;
 
-public class Account {
-
+public class Account implements Serializable {
 
     //Instance attributes
 

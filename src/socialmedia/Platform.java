@@ -64,7 +64,7 @@ public class Platform implements Serializable {
     public boolean checkHandleLegal(String handle) {
         //Check if handle is an attribute in ArrayList of objects
         for (int i=0; i < accounts.size(); i++) {    
-            if (accounts.get(i).getHandle() == handle) { //Handle already exists
+            if (accounts.get(i).getHandle().equals(handle)) { //Handle already exists
                 return false; //as handle exists
             } 
         }
@@ -211,7 +211,7 @@ public class Platform implements Serializable {
             int accountEndorsements = 0; //Counter - counts account's number of endorsements 
             for (int j=0; j < posts.size(); j++) { //Iterate through posts (with matching author/handle)
 
-                if (posts.get(j).getAuthor() == authorHandle && posts.get(j).getPostType() == 2) { //Only count endorsements 
+                if (posts.get(j).getAuthor().equals(authorHandle) && posts.get(j).getPostType() == 2) { //Only count endorsements 
                     accountEndorsements++; //Increment account's endorsements total
                 }
             }
@@ -225,6 +225,4 @@ public class Platform implements Serializable {
 
         return idMaxAccountEndorsements;
     }
-
-
 }

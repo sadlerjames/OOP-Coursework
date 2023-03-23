@@ -1,10 +1,10 @@
 package socialmedia;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable; //Needed? 
 
 /**
  * SocialMedia is an implementor of the SocialMediaPlatform interface.
@@ -64,14 +64,15 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	public Account reloadAccount(String handle) throws HandleNotRecognisedException {
 
+		
+
 		//Check if handle is legal (not pre-existing)
 		if (socialPlatform.checkHandleLegal(handle) == true) {
 			throw new HandleNotRecognisedException("This handle does not exist in the system, so the account cannot be re-loaded");   
 		}
 
 		for (int i=0; i < socialPlatform.getAccounts().size(); i++) {    
-            if (socialPlatform.getAccounts().get(i).getHandle() == handle) { //Matching id (located account)
-				
+            if (socialPlatform.getAccounts().get(i).getHandle().equals(handle)) { //Matching id (located account)
 				Account reloadedAccount = socialPlatform.getAccounts().get(i);
 				return reloadedAccount;
 				
@@ -101,7 +102,6 @@ public class SocialMedia implements SocialMediaPlatform {
 		return null;
 	}
 
-
 	@Override
 	public void removeAccount(int id) throws AccountIDNotRecognisedException {
 
@@ -111,7 +111,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
         for (int j=0; j < socialPlatform.getPosts().size(); j++) { //loop through posts
 
-            if (socialPlatform.getPosts().get(j).getAuthor() == reloadedAccount.getHandle()) { //Account to delete authors post
+            if (socialPlatform.getPosts().get(j).getAuthor().equals(reloadedAccount.getHandle())) { //Account to delete authors post
                 int postID = socialPlatform.getPosts().get(j).getID(); //Get ID of post to delete
                 delPostIDs.add(postID); //Add to list of ID's to delete
 
@@ -138,7 +138,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
         for (int j=0; j < socialPlatform.getPosts().size(); j++) { //loop through posts
 
-            if (socialPlatform.getPosts().get(j).getAuthor() == handle) { //Account to delete authors post
+            if (socialPlatform.getPosts().get(j).getAuthor().equals(handle)) { //Account to delete authors post
                 int postID = socialPlatform.getPosts().get(j).getID(); //Get ID of post to delete
                 delPostIDs.add(postID); //Add to list of ID's to delete
 
@@ -201,7 +201,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		//Get no. of posts (authored by account)
         for (int j=0; j < socialPlatform.getPosts().size(); j++) {
-            if (socialPlatform.getPosts().get(j).getAuthor() == handle) {
+            if (socialPlatform.getPosts().get(j).getAuthor().equals(handle)) {
                 postCounter++;
                 endorsedCounter = endorsedCounter + socialPlatform.getPosts().get(j).getEndorsements().size(); //Count endorsement posts
             }
@@ -384,11 +384,9 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new PostIDNotRecognisedException("The post does not exist in the system");
         }
 
-        String message = "";
-
 		BasePost reloadedPost = reloadPost(id);
         
-		message = String.format("ID: %s \n" +
+		String message = String.format("ID: %s \n" +
 		"Account: %s \n" +
 		"No. endorsements: %s | No. comments: %s \n" +
 		"%s",
@@ -414,7 +412,22 @@ public class SocialMedia implements SocialMediaPlatform {
 
         StringBuilder postDetails = new StringBuilder(); //Create stringbuilder
 
-        //Need to get - handle, num endorsements, num comments, post message 
+
+		// BasePost reloadedPost = reloadPost(id); //Load original post 
+
+		// if (reloadedPost.getComments().size() != 0) { //Has comments (sub-children)
+		// 	postDetails.append(showIndividualPost(id) + System.lineSeparator() + "|"); //Add details of original post to string output
+			
+		// 	for (int i = 0; i < reloadedPost.getComments().size(); i++) {
+		// 		String childPost = reloadedPost.getChildrenDetails(reloadedPost.getComments().get(i), socialPlatform);
+		// 	}			
+
+
+		// } else { //No children 
+		// 	postDetails.append(showIndividualPost(id)); //Add details of original post to string output
+		// }
+
+		// return postDetails;
 
         for (int i=0; i < socialPlatform.getPosts().size(); i++) {    
             if (socialPlatform.getPosts().get(i).getID() == id) { //Locate original post ID 
@@ -424,7 +437,7 @@ public class SocialMedia implements SocialMediaPlatform {
                     
                     for (int j=0; j < socialPlatform.getPosts().get(i).getComments().size(); j++) { //Loop through comments, calling on each  
                         
-                        String childString = showPostChildrenDetails(socialPlatform.getPosts().get(i).getComments().get(j)).indent(1);  //Indent() indents recursive return (each below parent)
+                        String childString = showPostChildrenDetails(socialPlatform.getPosts().get(i).getComments().get(j)).toString().indent(1);  //Indent() indents recursive return (each below parent)
 
                         String preIDChildString = childString.substring(0, childString.indexOf(System.getProperty("line.separator"))); //Get string before first 'line.separator' which will be the ID
                         String afterIDChildString = childString.substring(childString.indexOf(System.getProperty("line.separator"))+1); //Get string after first 'line.separator' 
@@ -440,8 +453,8 @@ public class SocialMedia implements SocialMediaPlatform {
                 }
             }
         }
-        return postDetails; //Return string
-    }		
+        return postDetails; //Return StringBuilder
+    }
 	 
 
 	@Override
@@ -451,32 +464,27 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public int getTotalOriginalPosts() {
-		// TODO Auto-generated method stub
-		return 0;
+		return socialPlatform.getTotalOriginalPosts();
 	}
 
 	@Override
 	public int getTotalEndorsmentPosts() {
-		// TODO Auto-generated method stub
-		return 0;
+		return socialPlatform.getTotalEndorsmentPost();
 	}
 
 	@Override
 	public int getTotalCommentPosts() {
-		// TODO Auto-generated method stub
-		return 0;
+		return socialPlatform.getTotalCommentPosts();
 	}
 
 	@Override
 	public int getMostEndorsedPost() {
-		// TODO Auto-generated method stub
-		return 0;
+		return socialPlatform.getMostEndorsedPost();
 	}
 
 	@Override
 	public int getMostEndorsedAccount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return socialPlatform.getMostEndorsedAccount();
 	}
 
 	@Override
@@ -492,23 +500,29 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void savePlatform(String filename) throws IOException {
-		// TODO Auto-generated method stub
 
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
 			oos.writeObject(socialPlatform); //Write platform object
-
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println(e);
+			throw new IOException("An exeception occured when attempting to save the platform"); //INCORRECT 
 		}
 
 	}
 
 	@Override
 	public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
 
-		//Overwrite socialPlatform with de-serialised object 
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+			Object obj = ois.readObject(); //Write platform object
+
+			if (obj instanceof Platform) {
+				socialPlatform = (Platform) obj; //Overwrite socialPlatform with de-serialised object 
+			}
+
+		} catch (Exception e) {
+			throw new IOException("An exeception occured when attempting to save the platform"); //INCORRECT	
+		}
 
 	}
-
 }
