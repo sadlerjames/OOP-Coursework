@@ -228,7 +228,7 @@ public class Platform implements Serializable {
                 idMaxAccountEndorsements = authorId;
             }
         }
-
+        
         return idMaxAccountEndorsements;
     }
 }

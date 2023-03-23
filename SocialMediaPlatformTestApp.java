@@ -1,9 +1,6 @@
 import socialmedia.AccountIDNotRecognisedException;
 import socialmedia.IllegalHandleException;
 import socialmedia.InvalidHandleException;
-import socialmedia.InvalidPostException;
-import socialmedia.NotActionablePostException;
-import socialmedia.PostIDNotRecognisedException;
 import socialmedia.HandleNotRecognisedException;
 import socialmedia.SocialMedia;
 import socialmedia.SocialMediaPlatform;

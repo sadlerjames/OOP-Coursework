@@ -3,7 +3,7 @@ package socialmedia;
 public class Post extends BasePost {
 
     //Create generic empty post 
-    public Post(int postType) {
+    public Post() {
 
         setID(0); //Assign ID 0 
         setPostType(3); //Set post type to 'empty post'

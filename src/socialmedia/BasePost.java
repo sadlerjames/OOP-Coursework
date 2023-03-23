@@ -6,7 +6,7 @@ public class BasePost implements Serializable {
 
     private int id;
     private int postType; //Track if post is 'normal' (0), 'comment' (1), 'endorsement' (2), 'generic empty post' (3)
-    private Integer parentID;
+    private Integer parentID; //Integer as will be 'null' if post has no parent 
     private String message; //100 character limit
     private String author; //Object account? 
 

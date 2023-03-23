@@ -9,6 +9,12 @@ public class TempTest {
         socialMediaObj.createAccount("JamesS");
         socialMediaObj.createAccount("JoelMSawyer");
 
+        socialMediaObj.createPost("JoelMSawyer", "This is a post");
+        socialMediaObj.endorsePost("JamesS", 1);
+        socialMediaObj.commentPost("JamesS", 1, "This is a comment");
+
+        System.out.println(socialMediaObj.showIndividualPost(1));
+
 
         //socialMediaObj.createAccount("JoelMSawyer");
         //socialMediaObj.createAccount("JamesS");
@@ -21,9 +27,6 @@ public class TempTest {
         //socialMediaObj.loadPlatform("testSave.ser");
 
         //System.out.println(socialMediaObj.socialPlatform.getAccounts().get(0).getHandle());
-
-        System.out.println(socialMediaObj.showAccount("JamesS"));
-        System.out.println(socialMediaObj.showAccount("JoelMSawyer"));
 
         //System.out.println(socialMediaObj.socialPlatform.getAccounts().get(0).getHandle());
 

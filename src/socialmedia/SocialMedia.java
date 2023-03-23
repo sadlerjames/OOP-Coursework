@@ -14,8 +14,13 @@ import java.io.ObjectOutputStream;
  */
 
 public class SocialMedia implements SocialMediaPlatform {
+	private Platform socialPlatform; 
 
-	private Platform socialPlatform = new Platform(); //Create platform instance 
+	public SocialMedia() {
+		socialPlatform = new Platform(); //Create platform instance
+		BasePost genericEmptyPost = new Post(); //Create generic empty post
+		socialPlatform.getPosts().add(genericEmptyPost); //Add generic empty post to array 
+	}
 
 	@Override
 	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {//CHANGE THROWS
@@ -106,7 +111,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
         ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //List of post (to be deleted) id's 
 
-        for (int j=0; j < socialPlatform.getPosts().size(); j++) { //loop through posts
+        for (int j=1; j < socialPlatform.getPosts().size(); j++) { //loop through posts
 
             if (socialPlatform.getPosts().get(j).getAuthor().equals(reloadedAccount.getHandle())) { //Account to delete authors post
                 int postID = socialPlatform.getPosts().get(j).getID(); //Get ID of post to delete
@@ -133,7 +138,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
         ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //List of post (to be deleted) id's 
 
-        for (int j=0; j < socialPlatform.getPosts().size(); j++) { //loop through posts
+        for (int j=1; j < socialPlatform.getPosts().size(); j++) { //loop through posts
 
             if (socialPlatform.getPosts().get(j).getAuthor().equals(handle)) { //Account to delete authors post
                 int postID = socialPlatform.getPosts().get(j).getID(); //Get ID of post to delete
@@ -197,7 +202,7 @@ public class SocialMedia implements SocialMediaPlatform {
         int endorsedCounter = 0;
 
 		//Get no. of posts (authored by account)
-        for (int j=0; j < socialPlatform.getPosts().size(); j++) {
+        for (int j=1; j < socialPlatform.getPosts().size(); j++) {
             if (socialPlatform.getPosts().get(j).getAuthor().equals(handle)) {
                 postCounter++;
                 endorsedCounter = endorsedCounter + socialPlatform.getPosts().get(j).getEndorsements().size(); //Count endorsement posts
@@ -236,7 +241,7 @@ public class SocialMedia implements SocialMediaPlatform {
 			throw new PostIDNotRecognisedException("This post does not exist in the system, so it cannot be re-loaded");   
 		}
 
-		for (int i=0; i < socialPlatform.getPosts().size(); i++) {    
+		for (int i=1; i < socialPlatform.getPosts().size(); i++) {    
             if (socialPlatform.getPosts().get(i).getID() == id) { //Matching id (located post)
 				
 				BasePost reloadedPost = socialPlatform.getPosts().get(i);
@@ -262,9 +267,9 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new PostIDNotRecognisedException("The parent post does not exist in the system");
         }
 
-        //Check parent actionable (not endorsement)
+        //Check parent actionable (not endorsement/empty)
         if (socialPlatform.checkPostActionable(id) == false) {
-            throw new NotActionablePostException("The parent post is an endorsement, and cannot be endorsed");
+            throw new NotActionablePostException("The parent post not actionable (it may be an endorsement), and so cannot be endorsed");
         }
 
 		String parentHandle = null;
@@ -273,7 +278,7 @@ public class SocialMedia implements SocialMediaPlatform {
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
 
 		//Get parent handle and parent message
-        for (int i=0; i < socialPlatform.getPosts().size(); i++) {    
+        for (int i=1; i < socialPlatform.getPosts().size(); i++) {    
             if (socialPlatform.getPosts().get(i).getID() == id) { 
                 parentHandle = socialPlatform.getPosts().get(i).getAuthor();
                 parentMessage = socialPlatform.getPosts().get(i).getMessage();
@@ -306,9 +311,9 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new PostIDNotRecognisedException("The parent post does not exist in the system");
         }
 
-        //Check parent actionable (not endorsement, can comment)
+        //Check parent actionable (not endorsement/empty, can comment)
         if (socialPlatform.checkPostActionable(id) == false) {
-            throw new NotActionablePostException("The parent post is an endorsement, and cannot be commented");
+            throw new NotActionablePostException("The parent post not actionable (it may be an endorsement), and cannot be commented");
         }
 
         //Check post is valid (less than 30 characters and not empty)
@@ -338,7 +343,7 @@ public class SocialMedia implements SocialMediaPlatform {
         }
 
 		//Locate Endorsement post to delete and comments to update parent id attribute
-        for (int i=0; i < socialPlatform.getPosts().size(); i++) {    
+        for (int i=1; i < socialPlatform.getPosts().size(); i++) {    
             if (socialPlatform.getPosts().get(i).getID() == id) {
 
                 //delete the endorsement post of the post to be deleted
@@ -357,7 +362,7 @@ public class SocialMedia implements SocialMediaPlatform {
                 
                 //update the parent ID attribute of the comments of the post to be deleted
                 if (socialPlatform.getPosts().get(i).getComments().size() != 0) {
-                    for (int l=0; l < socialPlatform.getPosts().get(i).getComments().size(); l++) {
+                    for (int l=1; l < socialPlatform.getPosts().get(i).getComments().size(); l++) {
                         int orphanCommentID = socialPlatform.getPosts().get(i).getComments().get(l);
                         
                         for (int m=0; m < socialPlatform.getPosts().size(); m++) {    
@@ -426,7 +431,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		// return postDetails;
 
-        for (int i=0; i < socialPlatform.getPosts().size(); i++) {    
+        for (int i=1; i < socialPlatform.getPosts().size(); i++) {    
             if (socialPlatform.getPosts().get(i).getID() == id) { //Locate original post ID 
                 
                 if (socialPlatform.getPosts().get(i).getComments().size() != 0) { //Check if original post has comments
