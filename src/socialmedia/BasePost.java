@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class BasePost implements Serializable {
 
-    //Instance attributes 
     private int id;
     private int postType; //Track if post is 'normal' (0), 'comment' (1), 'endorsement' (2), 'generic empty post' (3)
     private Integer parentID;
@@ -14,9 +13,8 @@ public class BasePost implements Serializable {
     private ArrayList<Integer> endorsements = new ArrayList<Integer>();
     private ArrayList<Integer> comments = new ArrayList<Integer>();
 
-    //Instance methods
         
-    //Getter methods
+    //BasePost Getter methods
 
     public ArrayList<Integer> getComments() {
         return comments; //Implement safety checks?
@@ -46,7 +44,8 @@ public class BasePost implements Serializable {
         return postType;
     }
 
-    //Setter methods
+    //BasePost Setter methods
+
     public void setID(int id) {
         this.id = id;
     }

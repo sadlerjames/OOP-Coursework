@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Platform implements Serializable {
 
-    //Platform instance attributes
     //Accounts
     private ArrayList<Account> accounts = new ArrayList<Account>(); //Create accounts list
     private int accountIDCounter = 0;
@@ -14,23 +13,14 @@ public class Platform implements Serializable {
     private int postIDCounter = 1; //Generic empty post has ID 0 
 
 
-    // Getter Method for Accounts data 
+    //Getter methods for Platform 
+
     public ArrayList<Account> getAccounts() {
         return accounts; //Implement safety checks?
     }
 
     public int getAccountIDCounter() {
         return accountIDCounter;
-    }
-    
-    //Setter method for accountIDCounter
-    public void setAccountIDCounter(int ID){
-        accountIDCounter = ID;
-    }
-
-    //Setter method for postIDCounter
-    public void setPostIDCounter(int ID){
-        postIDCounter = ID;
     }
 
 
@@ -47,6 +37,18 @@ public class Platform implements Serializable {
         return postIDCounter;
     }
 
+    //Platform setter methods
+
+    //Setter method for accountIDCounter
+    public void setAccountIDCounter(int ID){
+        accountIDCounter = ID;
+    }
+
+    //Setter method for postIDCounter
+    public void setPostIDCounter(int ID){
+        postIDCounter = ID;
+    }
+
 
     //Platform check methods 
 
@@ -59,7 +61,6 @@ public class Platform implements Serializable {
 		}
 		return true; //ID does not already exist
 	}
-
 
     public boolean checkHandleLegal(String handle) {
         //Check if handle is an attribute in ArrayList of objects

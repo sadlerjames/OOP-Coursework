@@ -33,10 +33,15 @@ TODO:
 - Change all ==, !=
 - Move showIndividualPost to Post class
 - Check through all 'for' loops, are they necessary? 
+- What version of java will execute? Aim to remove '.indent' as is a workaround 
+- Does showPostChildrenDetails always return in correct order 
+- Correctly handle serialisation exceptions 
+- Check all imports are needed in all files
 
 Question list:
 - showIndividualPost - should it show only the number of direct comments on that post? 
 - showIndividualPost - how to deal with message = "" being needed, however redundant 
 - Check type in showPostChildrenDetails
+- Does our test file get marked? Do we need assertions in the code aswell as test file? 
 
 

@@ -15,8 +15,7 @@ import java.io.ObjectOutputStream;
 
 public class SocialMedia implements SocialMediaPlatform {
 
-	Platform socialPlatform = new Platform(); //Create platform instance 
-
+	private Platform socialPlatform = new Platform(); //Create platform instance 
 
 	@Override
 	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {//CHANGE THROWS
@@ -500,29 +499,18 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void savePlatform(String filename) throws IOException {
-
-		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-			oos.writeObject(socialPlatform); //Write platform object
-		} catch (Exception e) {
-			System.out.println(e);
-			throw new IOException("An exeception occured when attempting to save the platform"); //INCORRECT 
-		}
-
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename));
+		oos.writeObject(socialPlatform);
+		oos.close();
 	}
 
 	@Override
 	public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
+		Object obj = ois.readObject(); //Write platform object
 
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-			Object obj = ois.readObject(); //Write platform object
-
-			if (obj instanceof Platform) {
-				socialPlatform = (Platform) obj; //Overwrite socialPlatform with de-serialised object 
-			}
-
-		} catch (Exception e) {
-			throw new IOException("An exeception occured when attempting to save the platform"); //INCORRECT	
+		if (obj instanceof Platform) {
+			socialPlatform = (Platform) obj; //Overwrite socialPlatform with de-serialised object 
 		}
-
 	}
 }

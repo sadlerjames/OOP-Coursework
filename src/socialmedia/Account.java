@@ -9,8 +9,8 @@ public class Account implements Serializable {
     private String handle;
     private String description;
 
+    //Account getters
 
-    //Getter method for id
     public int getID() {
         return id;
     }
@@ -19,12 +19,12 @@ public class Account implements Serializable {
         return handle;
     }
 
-    //REMOVE - TEMP
     public String getDescription() {
         return description;
     }
 
-    //TEMP - SETTER
+    //Account setters
+
     public void setHandle(String handle) {
         this.handle = handle;
     }
@@ -37,12 +37,21 @@ public class Account implements Serializable {
 
     //Constructor using Handle and Description
     public Account(String handle, int id, String description){
-
         this.id = id; //Assign ID
         this.handle = handle; //Assign handle    
         this.description = description; //Assign description
     }
 
+    public void changeAccountHandle(String newHandle) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException {        
+        //update the object's handle attribute 
+        this.handle = newHandle;
+        
+    }
+
+    public void updateAccountDescription(String description) {
+        //update the object's description attribute
+        this.description = description;
+    }
  
     public String showAccount(int noPosts, int noEndorsements) {
 
@@ -54,18 +63,5 @@ public class Account implements Serializable {
         id, handle, description, noPosts, noEndorsements);
 
         return accountSummary;
-    }
-
-
-    public void changeAccountHandle(String newHandle) throws IllegalHandleException, InvalidHandleException, HandleNotRecognisedException {        
-        //update the object's handle attribute 
-        this.handle = newHandle;
-        
-    }
-
-    public void updateAccountDescription(String description) {
-        //update the object's description attribute
-
-        this.description = description;
     }
 }
