@@ -20,7 +20,6 @@ TODO:
 - Improve removeAccount methods
 - May be posible to optimise OO nature of some Account methods after modifying posts
 - Check whether need to validate account description 
-- Update deletePost to use new method 
 - Move methods back out to classes where possible (showIndividualPost?)
 - Change all ==, !=
 - Move showIndividualPost to Post class
@@ -34,11 +33,13 @@ TODO:
 - Check all naming conventions adhered to throughout
 - Go through lecture slides/workshops, implement as many concepts as possible 
 - Should you be able to show post children details of the generic empty post? (actionable?)
+- Should description be "null" if not set? 
+- PostIDNotRecognisedException - generalise message. Does it matter where it's thrown from? 
 
 Question list:
 - showIndividualPost - should it show only the number of direct comments on that post? 
 - showIndividualPost - how to deal with message = "" being needed, however redundant 
 - Check type in showPostChildrenDetails
-- Does our test file get marked? Do we need assertions in the code aswell as test file? 
+- Does our test file get marked? Do we need assertions in the code as well as test file? 
 
 

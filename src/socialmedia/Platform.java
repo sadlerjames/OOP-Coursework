@@ -57,16 +57,6 @@ public class Platform implements Serializable {
 
     //Platform check methods 
 
-	public boolean checkIDLegal(int id) {
-		//Check if ID is an attribute in ArrayList of objects
-		for (int i=0; i < accounts.size(); i++) {    
-			if (accounts.get(i).getID() == id) { //Handle already exists
-				return false; //as id exists
-			} 
-		}
-		return true; //ID does not already exist
-	}
-
     public boolean checkHandleLegal(String handle) {
         //Check if handle is an attribute in ArrayList of objects
         for (int i=0; i < accounts.size(); i++) {    
@@ -120,7 +110,7 @@ public class Platform implements Serializable {
         }
     }
 
-
+    //Likely can be deleted when showPostChildrenDetails is updated
     // Check if postID exists (return true if post if post ID exists)
     //Returns true if post id doesn't exist (legal to create)
     public boolean checkPostIDLegal(int id) {

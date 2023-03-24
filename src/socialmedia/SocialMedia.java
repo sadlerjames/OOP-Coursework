@@ -68,40 +68,27 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	public Account reloadAccount(String handle) throws HandleNotRecognisedException {
 
-		//Check if handle is legal (not pre-existing)
-		if (socialPlatform.checkHandleLegal(handle) == true) {
-			throw new HandleNotRecognisedException("This handle does not exist in the system, so the account cannot be re-loaded");   
-		}
-
 		for (int i=0; i < socialPlatform.getAccounts().size(); i++) {    
             if (socialPlatform.getAccounts().get(i).getHandle().equals(handle)) { //Matching id (located account)
 				Account reloadedAccount = socialPlatform.getAccounts().get(i);
 				return reloadedAccount;
-				
-            }
+            } 
         }
 
-		return null;
+		throw new HandleNotRecognisedException("This handle does not exist in the system, so the account cannot be re-loaded"); //Not found, cannot exist  
 	}
 
 
 	public Account reloadAccount(int id) throws AccountIDNotRecognisedException {
 
-		//Check if handle is legal (not pre-existing)
-		if (socialPlatform.checkIDLegal(id) == true) {
-			throw new AccountIDNotRecognisedException("An account with this ID does not exist in the system, so it cannot be re-loaded");   
-		}
-
 		for (int i=0; i < socialPlatform.getAccounts().size(); i++) {    
             if (socialPlatform.getAccounts().get(i).getID() == id) { //Matching id (located account)
-				
 				Account reloadedAccount = socialPlatform.getAccounts().get(i);
 				return reloadedAccount;
-				
             }
         }
 
-		return null;
+		throw new AccountIDNotRecognisedException("An account with this ID does not exist in the system, so it cannot be re-loaded");   
 	}
 
 	@Override
@@ -235,11 +222,6 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	public BasePost reloadPost(int id) throws PostIDNotRecognisedException {
 
-		//Check if handle is legal (not pre-existing)
-		if (socialPlatform.checkPostIDLegal(id) == true) {
-			throw new PostIDNotRecognisedException("This post does not exist in the system, so it cannot be re-loaded");   
-		}
-
 		for (int i=1; i < socialPlatform.getPosts().size(); i++) {    
             if (socialPlatform.getPosts().get(i).getID() == id) { //Matching id (located post)
 				
@@ -249,7 +231,7 @@ public class SocialMedia implements SocialMediaPlatform {
             }
         }
 
-		return null;
+		throw new PostIDNotRecognisedException("This post does not exist in the system, so it cannot be re-loaded");   
 	}
 
 	@Override
@@ -261,30 +243,16 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new HandleNotRecognisedException("This handle does not exist in the system!");
         } 
 
-        //Check parent exists 
-        if (socialPlatform.checkPostIDLegal(id) == true) {
-            throw new PostIDNotRecognisedException("The parent post does not exist in the system");
-        }
-
         //Check parent actionable (not endorsement/empty)
         if (socialPlatform.checkPostActionable(id) == false) {
             throw new NotActionablePostException("The parent post not actionable (it may be an endorsement), and so cannot be endorsed");
         }
 
-		String parentHandle = null;
-		String parentMessage = null;
+		BasePost reloadedParentPost = reloadPost(id); //Reload parent 
 
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
 
-		//Get parent handle and parent message
-        for (int i=1; i < socialPlatform.getPosts().size(); i++) {    
-            if (socialPlatform.getPosts().get(i).getID() == id) { 
-                parentHandle = socialPlatform.getPosts().get(i).getAuthor();
-                parentMessage = socialPlatform.getPosts().get(i).getMessage();
-            } 
-        }
-
-		BasePost platformEndorsement = new EndorsementPost(handle, postIDCounter, id, parentHandle, parentMessage);
+		BasePost platformEndorsement = new EndorsementPost(handle, postIDCounter, id, reloadedParentPost.getAuthor(), reloadedParentPost.getMessage());
         socialPlatform.getPosts().add(platformEndorsement); //Save post
 
 		//Add comment's 'id' to parent's 'comments' arrayList
@@ -305,11 +273,6 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new HandleNotRecognisedException("This handle does not exist in the system!");
         } 
 
-        //Check parent exists 
-        if (socialPlatform.checkPostIDLegal(id) == true) {
-            throw new PostIDNotRecognisedException("The parent post does not exist in the system");
-        }
-
         //Check parent actionable (not endorsement/empty, can comment)
         if (socialPlatform.checkPostActionable(id) == false) {
             throw new NotActionablePostException("The parent post not actionable (it may be an endorsement), and cannot be commented");
@@ -320,13 +283,14 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new InvalidPostException("Please ensure your post is valid (less than 30 characters and not empty)");
         }
 
+		BasePost parentPost = reloadPost(id); //Reload parent post 
+
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
 
 		BasePost platformComment = new CommentPost(handle, postIDCounter, id, message);
         socialPlatform.getPosts().add(platformComment); //Save post
 
 		//Add comment's 'id' to parent's 'comments' arrayList
-		BasePost parentPost = reloadPost(id);
         parentPost.getComments().add(platformComment.getID());  
 
 		socialPlatform.incrementPostIDCounter(); //Increment counter
@@ -336,16 +300,10 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void deletePost(int id) throws PostIDNotRecognisedException {
-		//Check post exists
-        if (socialPlatform.checkPostIDLegal(id) == true) {
-            throw new PostIDNotRecognisedException("The post to delete does not exist in the system");
-        }
-
 
 		BasePost reloadedPost = reloadPost(id); //Load post to be deleted
 
-		//Delete dependences (endorsements and comments)
-
+		//Delete/update dependences (endorsements and comments)
 		
 		if (reloadedPost.getEndorsements().size() != 0) { //Post has endorsements
 			for (int i=0; i < reloadedPost.getEndorsements().size(); i++) { //Iterate through endorsements
@@ -366,10 +324,6 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public String showIndividualPost(int id) throws PostIDNotRecognisedException {
-		//Check parent exists 
-        if (socialPlatform.checkPostIDLegal(id) == true) {
-            throw new PostIDNotRecognisedException("The post does not exist in the system");
-        }
 
 		BasePost reloadedPost = reloadPost(id); //Load post
         
@@ -387,7 +341,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
         //Check parent actionable (not endorsement)
         if (socialPlatform.checkPostActionable(id) == false) {
-            throw new NotActionablePostException("The parent post is not actionable (likely an endorsement, so does not have children");
+            throw new NotActionablePostException("The parent post is not actionable (likely an endorsement, so does not have children)");
         }
 
         StringBuilder postDetails = new StringBuilder(); //Create stringbuilder
