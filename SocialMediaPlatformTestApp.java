@@ -1,6 +1,9 @@
 import socialmedia.AccountIDNotRecognisedException;
 import socialmedia.IllegalHandleException;
 import socialmedia.InvalidHandleException;
+import socialmedia.InvalidPostException;
+import socialmedia.NotActionablePostException;
+import socialmedia.PostIDNotRecognisedException;
 import socialmedia.HandleNotRecognisedException;
 import socialmedia.SocialMedia;
 import socialmedia.SocialMediaPlatform;
@@ -32,55 +35,94 @@ public class SocialMediaPlatformTestApp {
 		assert (platform.getTotalCommentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
 		assert (platform.getTotalEndorsmentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
 
-		Integer id;
+		Integer first_user;
 		Integer second_user;
+		Integer third_user;
+		Integer fourth_user;
 
+		//testing all functions and features to do with accounts
 		try {
 			//testing creation of an account and assigned id
-			id = platform.createAccount("my_handle");
-			assert (id == 0) : "the id of the created account does not match the supposed one of id = 0";
+			first_user = platform.createAccount("my_handle");
+			assert (first_user == 0) : "the id of the created account does not match the supposed one of id = 0";
 
-			second_user = platform.createAccount("my_handle_2");
-			System.out.println(second_user);
-			assert (second_user == 1): "the id of the created account does not match the supposed one of id = 1";
 
 			//testing getNUmberOfAccounts function
 			assert (platform.getNumberOfAccounts() == 1) : "number of accounts registered in the system does not match";
 
+
 			//testing removeAccount function
-			platform.removeAccount(id);
+			platform.removeAccount(first_user);
 			assert (platform.getNumberOfAccounts() == 0) : "number of accounts registered in the system does not match";
 
-			//testing adding description and id
-			id = platform.createAccount("my_second_handle", "this is the description");
-			assert (id == 1) : "the id of the created account does not match the supposed one of id = 1";
-
-			// String accountSummary = String.format("ID: %s \n" +
-			// "Handle: %s \n" +
-			// "Description: %s \n" +
-			// "Post count: %s \n" +
-			// "Endorse count: %s",
-			// id, handle, description, noPosts, noEndorsements);
-
-
-
-
-
-
-
-
-			System.out.println("");
-			System.out.println("Now testing to see if the description is properly added. It should be: ");
-			System.out.println("");
-			System.out.println("ID: 1");
-			System.out.println("Handle: my_second_handle");
-			System.out.println("Description: this is the description");
-			System.out.println("Post count: 0");
-			System.out.println("Endorse count: 0");
-			System.out.println("");
-			System.out.println("Now running function:");
-			System.out.println(platform.showAccount("my_second_handle"));
 			
+			//testing adding description
+			second_user = platform.createAccount("my_second_handle", "this is the description");
+			assert (second_user == 1) : "the id of the created account does not match the supposed one of id = 1";
+
+
+			//testing showAccount function
+			//expected details about the accont with handle "my_second_handle"
+			String second_user_account_description = String.format("ID: 1 \n" +
+			"Handle: my_second_handle \n" +
+			"Description: this is the description \n" +
+			"Post count: 0 \n" +
+			"Endorse count: 0");
+
+			assert (platform.showAccount("my_second_handle").equals(second_user_account_description)) : "does not return correct details about the user from the showAccount function";
+
+
+			//testing changeAccountHandle Function
+			platform.changeAccountHandle("my_second_handle", "new_second_handle");
+
+			String second_user_updated_account_description = String.format("ID: 1 \n" +
+			"Handle: new_second_handle \n" +
+			"Description: this is the description \n" +
+			"Post count: 0 \n" +
+			"Endorse count: 0");
+			assert (platform.showAccount("new_second_handle").equals(second_user_updated_account_description)) : "the accound handle has not been updated to the new one";
+
+
+			//testing removeAccount function via a id with posts as well as getTotalOriginalPosts
+			platform.createPost("new_second_handle", "This is a post"); // id = 1
+			platform.createPost("new_second_handle", "This is a second post from the same user"); // id =2
+			assert (platform.getTotalOriginalPosts() == 2): "Posts not being created correctly or getTotalOriginalPosts not detecting correct number of posts.";
+
+			platform.removeAccount(second_user);
+			assert (platform.getNumberOfAccounts() == 0) : "number of accounts registered in the system does not match";
+			assert (platform.getTotalOriginalPosts() == 0): "Posts not being deleted correctly or getTotalOriginalPosts not detecting correct number of posts.";
+
+			
+			//testing removeAccount function via a handle with posts as well as getTotalOriginalPosts
+			third_user = platform.createAccount("new_second_handle", "this is the description");
+
+			platform.createPost("new_second_handle", "This is a post"); // id = 3
+			platform.createPost("new_second_handle", "This is a second post from the same user"); // id = 4
+			platform.endorsePost("new_second_handle", 3); // id = 5
+
+			assert (platform.getTotalOriginalPosts() == 2): "Posts not being created correctly or getTotalOriginalPosts not detecting correct number of posts.";
+			assert (platform.getTotalEndorsmentPosts() == 1): "Posts not being created correctly or getTotalOriginalPosts not detecting correct number of posts.";
+
+			platform.removeAccount("new_second_handle");
+			assert (platform.getNumberOfAccounts() == 0) : "number of accounts registered in the system does not match";
+			assert (platform.getTotalOriginalPosts() == 0): "Posts not being deleted correctly or getTotalOriginalPosts not detecting correct number of posts.";
+			assert (platform.getTotalEndorsmentPosts() == 0): "Posts not being deleted correctly or getTotalOriginalPosts not detecting correct number of posts.";
+
+
+
+			//testing updateAccountDescription function
+			fourth_user = platform.createAccount("fourth_user", "this is the description for this accound");
+
+			platform.updateAccountDescription("fourth_user", "this is the new account description");
+
+			String fourth_user_updated_account_description = String.format("ID: 3 \n" +
+			"Handle: fourth_user \n" +
+			"Description: this is the new account description \n" +
+			"Post count: 0 \n" +
+			"Endorse count: 0");
+			assert (platform.showAccount("fourth_user").equals(fourth_user_updated_account_description)) : "the accound description has not been updated to the new one";
+
+
 
 		} catch (IllegalHandleException e) {
 			assert (false) : "IllegalHandleException thrown incorrectly";
@@ -90,35 +132,15 @@ public class SocialMediaPlatformTestApp {
 			assert (false) : "AccountIDNotRecognizedException thrown incorrectly";
 		} catch (HandleNotRecognisedException e) {
 			assert (false) : "HandleNotRecognisedException thrown incorrectly";
+		} catch (InvalidPostException e) {
+			assert (false) : "InvalidPostException thrown incorrectly"; 
+		} catch (NotActionablePostException e) {
+			assert (false) : "NotActionablePostException thrown incorrectly";
+		} catch (PostIDNotRecognisedException e) {
+			assert (false) : "PostIDNotRecognisedException thrown incorrectly";
 		}
 
-		try {
-			id = platform.createAccount("my_handle", "this is the description of the handle");
-			
-
-			// Should print the following in the terminal
-
-			// ID: 0
-			// Handle: my_handle
-			// Description: this is the description of the handle
-			// Post count: 0
-			// Endorse count: 0
-
-
-
-			
-			
-			
-
-
-
-		} catch (IllegalHandleException e) {
-			assert (false) : "IllegalHandleException thrown incorrectly";
-		} catch (InvalidHandleException e) {
-			assert (false) : "InvalidHandleException thrown incorrectly";
-		} 
-
-
+		System.out.println("The system ran all tests and didn't find any errors. Yayy you have no bugs!");
 
 	}
 
