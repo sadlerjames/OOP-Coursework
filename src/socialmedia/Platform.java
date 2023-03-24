@@ -28,16 +28,16 @@ public class Platform implements Serializable {
     public ArrayList<BasePost> getPosts() {
         return posts; //Implement safety checks?
     }
-    
-    public void incrementPostIDCounter() {
-        postIDCounter++;
-    }
 
     public int getPostIDCounter() {
         return postIDCounter;
     }
 
     //Platform setter methods
+
+    public void incrementPostIDCounter() {
+        postIDCounter++;
+    }
 
     //Increment method for accountIDCounter
     public void incrementAccountIDCounter() {
@@ -49,9 +49,9 @@ public class Platform implements Serializable {
         accountIDCounter = 0;
     }
 
-    //Setter method for postIDCounter
-    public void setPostIDCounter(int ID){
-        postIDCounter = ID;
+    //Reset posts counter to 0
+    public void resetPostIDCounter(){
+        postIDCounter = 0;
     }
 
 

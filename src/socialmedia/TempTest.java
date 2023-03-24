@@ -13,7 +13,14 @@ public class TempTest {
         socialMediaObj.endorsePost("JamesS", 1);
         socialMediaObj.commentPost("JamesS", 1, "This is a comment");
 
-        System.out.println(socialMediaObj.showIndividualPost(1));
+
+
+        //socialMediaObj.deletePost(1);
+
+        System.out.println(socialMediaObj.showPostChildrenDetails(0));
+
+
+        //System.out.println(socialMediaObj.showAccount("JoelMSawyer"));
 
 
         //socialMediaObj.createAccount("JoelMSawyer");

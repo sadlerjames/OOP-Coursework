@@ -65,4 +65,18 @@ public class BasePost implements Serializable {
     public void setPostType(int postType){
         this.postType = postType;
     } 
+
+    @Override
+    public String toString() {
+
+        String message = String.format("ID: %s \n" +
+		"Account: %s \n" +
+		"No. endorsements: %s | No. comments: %s \n" +
+		"%s",
+		id, author, endorsements.size(), 
+		comments.size(), this.message);
+        
+        return message;
+    }
+
 }

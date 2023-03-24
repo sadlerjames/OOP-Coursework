@@ -17,12 +17,9 @@ TODO:
 - ShowIndividualPost on an endorsement? Can be shown, just no comments or endorsements (0). 
 - getMostEndorsedPost sometimes set to empty post? Correct behaviour? Some for getMostEndorsedAccount. Sometimes returns null?
 - fix showIndividualPost formatting 
-- Possibility of reducing the number of static objects? Reloading saved objects to enable?
 - Improve removeAccount methods
 - May be posible to optimise OO nature of some Account methods after modifying posts
-- Create the empty post when platform initialised 
 - Check whether need to validate account description 
-- Intead of using for loops to access object variables, reload the object itself
 - Update deletePost to use new method 
 - Move methods back out to classes where possible (showIndividualPost?)
 - Change all ==, !=
@@ -30,10 +27,13 @@ TODO:
 - Check through all 'for' loops, are they necessary? 
 - What version of java will execute? Aim to remove '.indent' as is a workaround 
 - Does showPostChildrenDetails always return in correct order 
-- Correctly handle serialisation exceptions 
+- Correctly handle serialisation exceptions/test
 - Delete 1st account in platform, should next account be allocated ID of prev (0)? 
 - Modify showPostChildrenDetails to have helper function/use new method
 - Where is correct location for the testapp? In src folder? 
+- Check all naming conventions adhered to throughout
+- Go through lecture slides/workshops, implement as many concepts as possible 
+- Should you be able to show post children details of the generic empty post? (actionable?)
 
 Question list:
 - showIndividualPost - should it show only the number of direct comments on that post? 
