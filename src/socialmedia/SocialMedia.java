@@ -75,7 +75,7 @@ public class SocialMedia implements SocialMediaPlatform {
             } 
         }
 
-		throw new HandleNotRecognisedException("This handle does not exist in the system, so the account cannot be re-loaded"); //Not found, cannot exist  
+		throw new HandleNotRecognisedException("An account with this handle does not exist in the system."); //Not found, cannot exist  
 	}
 
 
@@ -88,7 +88,7 @@ public class SocialMedia implements SocialMediaPlatform {
             }
         }
 
-		throw new AccountIDNotRecognisedException("An account with this ID does not exist in the system, so it cannot be re-loaded");   
+		throw new AccountIDNotRecognisedException("An account with this ID does not exist in the system.");   
 	}
 
 	@Override
@@ -147,11 +147,6 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void changeAccountHandle(String oldHandle, String newHandle)
 			throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
-
-		//Check if handle is legal (not pre-existing)
-		if (socialPlatform.checkHandleLegal(oldHandle) == true) {
-			throw new HandleNotRecognisedException("This handle does not exist in the system, so the account cannot be re-loaded");   
-		}
 		
 		if (socialPlatform.checkHandleLegal(newHandle) == false) {
             throw new IllegalHandleException("This handle already exists in the system, please choose another.");
@@ -168,11 +163,6 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
-		
-		//Check if handle is legal (not pre-existing)
-		if (socialPlatform.checkHandleLegal(handle) == true) {
-			throw new HandleNotRecognisedException("This handle does not exist in the system, so the description cannot be updated");   
-		}
 		
 		Account platformUserReload = reloadAccount(handle); //Reload account
 		platformUserReload.updateAccountDescription(description); //Change description
@@ -231,16 +221,16 @@ public class SocialMedia implements SocialMediaPlatform {
             }
         }
 
-		throw new PostIDNotRecognisedException("This post does not exist in the system, so it cannot be re-loaded");   
+		throw new PostIDNotRecognisedException("A post with this ID does not exist in the system");   
 	}
 
 	@Override
 	public int endorsePost(String handle, int id)
 			throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException {
 
-		//Check author's handle exists
+		//Check endorsement author's handle exists
         if (socialPlatform.checkHandleLegal(handle) == true) {
-            throw new HandleNotRecognisedException("This handle does not exist in the system!");
+            throw new HandleNotRecognisedException("This handle does not exist in the system.");
         } 
 
         //Check parent actionable (not endorsement/empty)
@@ -256,8 +246,7 @@ public class SocialMedia implements SocialMediaPlatform {
         socialPlatform.getPosts().add(platformEndorsement); //Save post
 
 		//Add comment's 'id' to parent's 'comments' arrayList
-		BasePost parentPost = reloadPost(id);
-        parentPost.getEndorsements().add(platformEndorsement.getID());  
+        reloadedParentPost.getEndorsements().add(platformEndorsement.getID());  
 		
 		socialPlatform.incrementPostIDCounter(); //Increment counter
 
@@ -268,7 +257,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	public int commentPost(String handle, int id, String message) throws HandleNotRecognisedException,
 			PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
 		
-		//Check author's handle exists
+		//Check comment author's handle exists
         if (socialPlatform.checkHandleLegal(handle) == true) {
             throw new HandleNotRecognisedException("This handle does not exist in the system!");
         } 

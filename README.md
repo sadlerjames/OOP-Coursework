@@ -25,7 +25,7 @@ TODO:
 - Move showIndividualPost to Post class
 - Check through all 'for' loops, are they necessary? 
 - What version of java will execute? Aim to remove '.indent' as is a workaround 
-- Does showPostChildrenDetails always return in correct order 
+- Does showPostChildrenDetails always return in correct order? Guarrantee? 
 - Correctly handle serialisation exceptions/test
 - Delete 1st account in platform, should next account be allocated ID of prev (0)? 
 - Modify showPostChildrenDetails to have helper function/use new method
@@ -34,7 +34,7 @@ TODO:
 - Go through lecture slides/workshops, implement as many concepts as possible 
 - Should you be able to show post children details of the generic empty post? (actionable?)
 - Should description be "null" if not set? 
-- PostIDNotRecognisedException - generalise message. Does it matter where it's thrown from? 
+- Do we need separate comment/endorsement/normal post classes? 
 
 Question list:
 - showIndividualPost - should it show only the number of direct comments on that post? 
