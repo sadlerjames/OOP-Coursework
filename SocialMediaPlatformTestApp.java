@@ -39,6 +39,8 @@ public class SocialMediaPlatformTestApp {
 		Integer second_user;
 		Integer third_user;
 		Integer fourth_user;
+		Integer fith_user;
+		Integer sixth_user;
 
 		//testing all functions and features to do with accounts
 		try {
@@ -138,6 +140,80 @@ public class SocialMediaPlatformTestApp {
 			assert (false) : "NotActionablePostException thrown incorrectly";
 		} catch (PostIDNotRecognisedException e) {
 			assert (false) : "PostIDNotRecognisedException thrown incorrectly";
+		}
+
+		Integer sixth_post;
+		Integer seventh_post;
+		Integer eigth_post;
+		Integer ninth_post;
+
+		//testing all functions and features to do with posts
+		try {
+			//creating users to test the post functions on
+			fith_user = platform.createAccount("fith_user");
+			sixth_user = platform.createAccount("sixth_user");
+
+
+			//creating a post and testing if it has the correct ID
+			sixth_post = platform.createPost("fith_user", "This is a post message");
+			assert (sixth_post == 6): "the created post has been set the wrong ID";
+
+
+			//endorsing a post and testing if it has correct ID and has been given the correct details (e.g. description)
+			seventh_post = platform.endorsePost("fith_user", 6);
+			assert (seventh_post == 7): "the created endorsement has been set the wrong ID";
+			assert (platform.getTotalEndorsmentPosts() == 1): "The system has calculated the wrong number of endorsements";
+
+			String endorsed_post_details = String.format("ID: 7 \n" +
+			"Account: fith_user \n" +
+			"No. endorsements: 0 | No. comments: 0 \n" +
+			"EP@fith_user: This is a post message");
+			
+			assert (platform.showIndividualPost(7).equals(endorsed_post_details)): "The endorsed post does not have the right details or in the correct format";
+
+
+			//testing comments to see if given correct ID
+			eigth_post = platform.commentPost("sixth_user", 6, "This is a commend on ID Post 6");
+
+			assert (eigth_post == 8): "The comment has been assigned the wrong ID";
+
+
+			//testing comments of comments and show post children details
+			ninth_post = platform.commentPost("fith_user", 8, "This is a comment on a comment, yayyy exciting");
+			assert (ninth_post == 9): "The comment has been assigned the wrong ID";
+
+
+			String post_children_details = String.format("ID: 6 \n" +
+			"Account: fith_user \n" +
+			"No. endorsements: 1 | No. comments: 1 \n" +
+			"| \n" +
+			"| > ID: 8 \n" +
+			"    Account: sixth_user \n" +
+			"    No. endorsements: 0 | No. comments: 1 \n" +
+			"    This is a commend on ID Post 6 \n" +
+			"    | \n" +
+			"    | > ID: 9 \n" +
+			"        Account: fith_user \n" +
+			"        No. endorsements: 0 | No. comments: 0 \n" +
+			"        This is a comment on a comment, yayyy exciting \n"			
+			);
+
+			assert (platform.showPostChildrenDetails(6).equals(post_children_details)): "PostChildrenDetails have not been displayed in the correct format";
+
+	
+
+		} catch (IllegalHandleException e) {
+			assert (false) : "IllegalHandleException thrown incorrectly";
+		} catch (InvalidHandleException e) {
+			assert (false) : "InvalidHandleException thrown incorrectly";
+		} catch (HandleNotRecognisedException e) {
+			assert (false) : "HandleNotRecognisedException thrown incorrectly";
+		} catch (InvalidPostException e) {
+			assert (false) : "InvalidPostException thrown incorrectly"; 
+		} catch (PostIDNotRecognisedException e) {
+			assert (false) : "PostIDNotRecognisedException thrown incorrectly";
+		} catch (NotActionablePostException e) {
+			assert (false) : "NotActionablePostException thrown incorrectly";
 		}
 
 		System.out.println("The system ran all tests and didn't find any errors. Yayy you have no bugs!");
