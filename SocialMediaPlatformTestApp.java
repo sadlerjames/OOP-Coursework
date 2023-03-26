@@ -247,7 +247,7 @@ public class SocialMediaPlatformTestApp {
 			assert (platform.getMostEndorsedPost() == 11): "Does not get the ID of the most endorsed post";
 
 
-			//testing getMostEndorsedAccount 
+			//testing getMostEndorsedAccount
 			assert (platform.getMostEndorsedAccount() == 5): "Does not get the ID of the account with the most number of endorsements";
 
 

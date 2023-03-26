@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 /**
  * SocialMedia is an implementor of the SocialMediaPlatform interface.
  * 
- * @author James Sadler, Joel Sawyer
+ * @author Students: 720014004, 720033851
  * @version 1.0 
  */
 
@@ -110,7 +110,7 @@ public class SocialMedia implements SocialMediaPlatform {
             try {
                 deletePost(delPostIDs.get(j)); //Attempt to delete post 
         
-            } catch (Exception e) { //Post has already been deleted as a child 
+            } catch (PostIDNotRecognisedException e) { //Post has already been deleted as a child
             }
         }   
 
@@ -137,7 +137,7 @@ public class SocialMedia implements SocialMediaPlatform {
             try {
                 deletePost(delPostIDs.get(j)); //Attempt to delete post 
         
-            } catch (Exception e) { //Post has already been deleted as a child 
+            } catch (PostIDNotRecognisedException e) { //Post has already been deleted as a child 
             }
         }   
 
@@ -158,14 +158,14 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		
 		Account platformUserReload = reloadAccount(oldHandle); //Reload account
-		platformUserReload.changeAccountHandle(newHandle); //Change handle
+		platformUserReload.setHandle(newHandle); //Change handle
 	}
 
 	@Override
 	public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
 		
 		Account platformUserReload = reloadAccount(handle); //Reload account
-		platformUserReload.updateAccountDescription(description); //Change description
+		platformUserReload.setDescription(description); //Change description
 	} 
 
 	@Override
@@ -181,11 +181,11 @@ public class SocialMedia implements SocialMediaPlatform {
         for (int j=1; j < socialPlatform.getPosts().size(); j++) {
             if (socialPlatform.getPosts().get(j).getAuthor().equals(handle)) {
                 postCounter++;
-                endorsedCounter = endorsedCounter + socialPlatform.getPosts().get(j).getEndorsements().size(); //Count endorsement posts
+                endorsedCounter = endorsedCounter + socialPlatform.getPosts().get(j).getEndorsements(socialPlatform).size(); //Count endorsement posts
             }
         }
 
-		return reloadedAccount.showAccount(postCounter, endorsedCounter);
+		return reloadedAccount.generateAccountDetails(postCounter, endorsedCounter);
 	}
 
 	@Override
@@ -244,9 +244,6 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		BasePost platformEndorsement = new EndorsementPost(handle, postIDCounter, id, reloadedParentPost.getAuthor(), reloadedParentPost.getMessage());
         socialPlatform.getPosts().add(platformEndorsement); //Save post
-
-		//Add comment's 'id' to parent's 'comments' arrayList
-        reloadedParentPost.getEndorsements().add(platformEndorsement.getID());  
 		
 		socialPlatform.incrementPostIDCounter(); //Increment counter
 
@@ -272,15 +269,10 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new InvalidPostException("Please ensure your post is valid (less than 30 characters and not empty)");
         }
 
-		BasePost parentPost = reloadPost(id); //Reload parent post 
-
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
 
 		BasePost platformComment = new CommentPost(handle, postIDCounter, id, message);
         socialPlatform.getPosts().add(platformComment); //Save post
-
-		//Add comment's 'id' to parent's 'comments' arrayList
-        parentPost.getComments().add(platformComment.getID());  
 
 		socialPlatform.incrementPostIDCounter(); //Increment counter
 
@@ -294,17 +286,21 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		//Delete/update dependences (endorsements and comments)
 		
-		if (reloadedPost.getEndorsements().size() != 0) { //Post has endorsements
-			for (int i=0; i < reloadedPost.getEndorsements().size(); i++) { //Iterate through endorsements
-				BasePost reloadedOrphanEndorsement = reloadPost(reloadedPost.getEndorsements().get(i)); //Get orphan endorsement
+		if (reloadedPost.getEndorsements(socialPlatform).size() != 0) { //Post has endorsements
+			for (int i=0; i < reloadedPost.getEndorsements(socialPlatform).size(); i++) { //Iterate through endorsements
+				BasePost reloadedOrphanEndorsement = reloadedPost.getEndorsements(socialPlatform).get(i); //Get orphan endorsement obj
 				socialPlatform.getPosts().remove(reloadedOrphanEndorsement); //Remove endorsement
 			}
 		}
 
-		if (reloadedPost.getComments().size() != 0) { //Post has comments
-			for (int i=0; i < reloadedPost.getComments().size(); i++) { //Iterate through comments
-				BasePost reloadedOrphanComment = reloadPost(reloadedPost.getComments().get(i)); //Get orphan endorsement
-				reloadedOrphanComment.setParentID(0); //Update comment parentID to generic empty post's ID (0)
+		if (reloadedPost.getComments(socialPlatform).size() != 0) { //Post has comments
+			for (int i=0; i < reloadedPost.getComments(socialPlatform).size(); i++) { //Iterate through comments
+				BasePost reloadedOrphanComment = reloadedPost.getComments(socialPlatform).get(i); //Get orphan comment obj
+
+				if (reloadedOrphanComment instanceof CommentPost) {
+					CommentPost relComment = (CommentPost)reloadedOrphanComment;
+					relComment.setParentID(0); //Update comment parentID to generic empty post's ID (0)
+				}
 			}
 		}
 
@@ -316,7 +312,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		BasePost reloadedPost = reloadPost(id); //Load post
         
-        return reloadedPost.toString();  //Use toString overriden in BasePost
+        return reloadedPost.genPostDetails(socialPlatform);
 	}
 
 	@Override
@@ -333,26 +329,36 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new NotActionablePostException("The parent post is not actionable (likely an endorsement, so does not have children)");
         }
 
-        StringBuilder postDetails = new StringBuilder(); //Create stringbuilder
+		StringBuilder returnedPostDetails = helpShowPostChildrenDetails(id);
+        
+        return returnedPostDetails; //Return StringBuilder
+    }
 
+	private StringBuilder helpShowPostChildrenDetails(int id) throws PostIDNotRecognisedException {
+
+		StringBuilder postDetails = new StringBuilder(); //Create stringbuilder
 
         for (int i=1; i < socialPlatform.getPosts().size(); i++) {    
-            if (socialPlatform.getPosts().get(i).getID() == id) { //Locate original post ID 
+            if (socialPlatform.getPosts().get(i).getID() == id) { //Locate post with matching ID 
                 
-                if (socialPlatform.getPosts().get(i).getComments().size() != 0) { //Check if original post has comments
-                    postDetails.append(showIndividualPost(id) + System.lineSeparator() + "|"); //Add details of original post to string output
+                if (socialPlatform.getPosts().get(i).getComments(socialPlatform).size() != 0) { //Check if post has comments
+                    postDetails.append(showIndividualPost(id) + System.lineSeparator() + "|"); //Add post details to string output
                     
-                    for (int j=0; j < socialPlatform.getPosts().get(i).getComments().size(); j++) { //Loop through comments, calling on each  
+                    for (int j=0; j < socialPlatform.getPosts().get(i).getComments(socialPlatform).size(); j++) { //Loop through comments, calling on each  
                         
-                        String childString = showPostChildrenDetails(socialPlatform.getPosts().get(i).getComments().get(j)).toString().indent(1);  //Indent() indents recursive return (each below parent)
+                        String childString = helpShowPostChildrenDetails(socialPlatform.getPosts().get(i).getComments(socialPlatform).get(j).getID()).toString(); //Recursive call, convert returned stringbuilder to string 
 
-                        String preIDChildString = childString.substring(0, childString.indexOf(System.getProperty("line.separator"))); //Get string before first 'line.separator' which will be the ID
-                        String afterIDChildString = childString.substring(childString.indexOf(System.getProperty("line.separator"))+1); //Get string after first 'line.separator' 
+						String linesSplit[] = childString.split(System.lineSeparator()); //Split return into lines
 
-            
-                        postDetails.append(System.lineSeparator() + "| >" + preIDChildString + System.lineSeparator()); //Adds the | > ID to the StringBuilder postDetails
-                        postDetails.append(afterIDChildString.indent(3)); //Indent() indents recursive return 
-
+						boolean firstLine = true;
+						for (int k=0; k < linesSplit.length; k++) { //Iterate through 
+							if (firstLine == true) {
+								postDetails.append(System.lineSeparator() + "| > " + linesSplit[k] + System.lineSeparator()); //Add correct formatting to first lines
+								firstLine = false; //First line formatting completed, do not re-run
+							} else {
+								postDetails.append("    " + linesSplit[k] + System.lineSeparator()); //Pad all other lines with whitespace 
+							}
+						}
                     }
                     
                 } else {
@@ -360,9 +366,8 @@ public class SocialMedia implements SocialMediaPlatform {
                 }
             }
         }
-        return postDetails; //Return StringBuilder
-    }
-	 
+		return postDetails;
+	}  
 
 	@Override
 	public int getNumberOfAccounts() {
@@ -386,12 +391,12 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public int getMostEndorsedPost() {
-		return socialPlatform.getMostEndorsedPost();
+		return socialPlatform.getMostEndorsedPost(socialPlatform);
 	}
 
 	@Override
 	public int getMostEndorsedAccount() {
-		return socialPlatform.getMostEndorsedAccount();
+		return socialPlatform.getMostEndorsedAccount(socialPlatform);
 	}
 
 	@Override
@@ -418,8 +423,8 @@ public class SocialMedia implements SocialMediaPlatform {
 		Object obj = ois.readObject(); //Write platform object
 		ois.close();
 
-		if (obj instanceof Platform) {
-			socialPlatform = (Platform) obj; //Overwrite socialPlatform with de-serialised object 
+		if (obj instanceof Platform) { //Safely downcast (if deserialised obj is a 'Platform' instance)
+			socialPlatform = (Platform) obj; //Overwrite socialPlatform with deserialised object 
 		}
 	}
 }

@@ -12,7 +12,6 @@ public class Platform implements Serializable {
     private ArrayList<BasePost> posts = new ArrayList<BasePost>(); //Create list of posts 
     private int postIDCounter = 1; //Generic empty post has ID 0 
 
-
     //Getter methods for Platform 
 
     public ArrayList<Account> getAccounts() {
@@ -180,12 +179,12 @@ public class Platform implements Serializable {
         return numComments;
     }
 
-    public int getMostEndorsedPost() {
+    public int getMostEndorsedPost(Platform socialPlatform) {
         int maxNumEndorsements = 0; //Counter for number of original posts
         int idMaxPost = 0; //ID. of the post with max no. of endorsements 
 
         for (int i=0; i < posts.size(); i++) {   
-            int numEndorsements = posts.get(i).getEndorsements().size();
+            int numEndorsements = posts.get(i).getEndorsements(socialPlatform).size();
             
             if (numEndorsements >= maxNumEndorsements) { //Endorsements posts have type '2'
             maxNumEndorsements = numEndorsements;
@@ -195,7 +194,7 @@ public class Platform implements Serializable {
         return idMaxPost;
     }
 
-    public int getMostEndorsedAccount() {
+    public int getMostEndorsedAccount(Platform socialPlatform) {
         int idMaxAccountEndorsements = 0; //ID of account with most endorsements
         int maxNumEndorsements = 0; //Counter 
 
@@ -205,10 +204,11 @@ public class Platform implements Serializable {
             int authorId = accounts.get(i).getID(); //Get id of current obj
 
             int accountEndorsements = 0; //Counter - counts account's number of endorsements 
-            for (int j=0; j < posts.size(); j++) { //Iterate through posts (with matching author/handle)
 
-                if (posts.get(j).getAuthor().equals(authorHandle) && posts.get(j).getPostType() == 2) { //Only count endorsements 
-                    accountEndorsements++; //Increment account's endorsements total
+            for (int j=1; j < posts.size(); j++) { //Iterate through posts (with matching author/handle)
+
+                if (posts.get(j).getAuthor().equals(authorHandle)) { //Only count endorsements
+                    accountEndorsements = accountEndorsements + posts.get(j).getEndorsements(socialPlatform).size(); //Increment account's endorsements total
                 }
             }
             
