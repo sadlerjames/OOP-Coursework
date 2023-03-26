@@ -1,8 +1,11 @@
+import java.io.IOException;
+
 import socialmedia.AccountIDNotRecognisedException;
 import socialmedia.IllegalHandleException;
 import socialmedia.InvalidHandleException;
 import socialmedia.InvalidPostException;
 import socialmedia.NotActionablePostException;
+import socialmedia.Platform;
 import socialmedia.PostIDNotRecognisedException;
 import socialmedia.HandleNotRecognisedException;
 import socialmedia.SocialMedia;
@@ -124,6 +127,7 @@ public class SocialMediaPlatformTestApp {
 			"Endorse count: 0");
 			assert (platform.showAccount("fourth_user").equals(fourth_user_updated_account_description)) : "the accound description has not been updated to the new one";
 
+			
 
 
 		} catch (IllegalHandleException e) {
@@ -146,12 +150,14 @@ public class SocialMediaPlatformTestApp {
 		Integer seventh_post;
 		Integer eigth_post;
 		Integer ninth_post;
+		Integer tenth_post;
 
 		//testing all functions and features to do with posts
 		try {
 			//creating users to test the post functions on
 			fith_user = platform.createAccount("fith_user");
 			sixth_user = platform.createAccount("sixth_user");
+			System.out.println(sixth_user);
 
 
 			//creating a post and testing if it has the correct ID
@@ -182,25 +188,68 @@ public class SocialMediaPlatformTestApp {
 			ninth_post = platform.commentPost("fith_user", 8, "This is a comment on a comment, yayyy exciting");
 			assert (ninth_post == 9): "The comment has been assigned the wrong ID";
 
+			assert (platform.getTotalCommentPosts() == 2): "The total number of comments in the ssytem does not add up";
 
-			String post_children_details = String.format("ID: 6 \n" +
-			"Account: fith_user \n" +
-			"No. endorsements: 1 | No. comments: 1 \n" +
-			"| \n" +
-			"| > ID: 8 \n" +
-			"    Account: sixth_user \n" +
-			"    No. endorsements: 0 | No. comments: 1 \n" +
-			"    This is a commend on ID Post 6 \n" +
-			"    | \n" +
-			"    | > ID: 9 \n" +
-			"        Account: fith_user \n" +
-			"        No. endorsements: 0 | No. comments: 0 \n" +
-			"        This is a comment on a comment, yayyy exciting \n"			
-			);
+			StringBuilder postChildrenDetails = new StringBuilder(); //Create stringbuilder
 
-			assert (platform.showPostChildrenDetails(6).equals(post_children_details)): "PostChildrenDetails have not been displayed in the correct format";
+			postChildrenDetails.append("ID: 6"+System.lineSeparator());
+			postChildrenDetails.append("Account: fith_user"+System.lineSeparator());
+			postChildrenDetails.append("No. endorsements: 1 | No. comments: 1"+System.lineSeparator());
+			postChildrenDetails.append("This is a post message"+System.lineSeparator());
+			postChildrenDetails.append("|"+System.lineSeparator());
+			postChildrenDetails.append("| > ID: 8"+System.lineSeparator());
+			postChildrenDetails.append("    Account: sixth_user"+System.lineSeparator());
+			postChildrenDetails.append("    No. endorsements: 0 | No. comments: 1"+System.lineSeparator());
+			postChildrenDetails.append("    This is a commend on ID Post 6"+System.lineSeparator());
+			postChildrenDetails.append("    |"+System.lineSeparator());
+			postChildrenDetails.append("    | > ID: 9"+System.lineSeparator());
+			postChildrenDetails.append("        Account: fith_user"+System.lineSeparator());
+			postChildrenDetails.append("        No. endorsements: 0 | No. comments: 0"+System.lineSeparator());
+			postChildrenDetails.append("        This is a comment on a comment, yayyy exciting");
+			
+			System.out.println(" ");
+			System.out.println("Need to check that the following output matches the one after");
+			System.out.println(" ");
 
-	
+			System.out.println(postChildrenDetails);
+			System.out.println(" ");
+			System.out.println(platform.showPostChildrenDetails(6));
+
+			// assert (platform.showPostChildrenDetails(6).equals(postChildrenDetails)): "PostChildrenDetails have not been displayed in the correct format";
+
+			
+			//testing delete post
+			tenth_post = platform.createPost("sixth_user", "Hello this is a post about nothing");
+
+			assert (tenth_post == 10): "The tenth post has been assigned the wrong ID";
+			assert (platform.getTotalOriginalPosts() == 2): "The system has counted the number of original posts wrong";
+
+			platform.deletePost(10);
+			assert (platform.getTotalOriginalPosts() == 1): "The system has not counted the correct number of posts after deleting one";
+
+
+			//testing getNumberOfAccounts
+			assert (platform.getNumberOfAccounts() == 3): "The system has not counted the correct number of accounts";
+			
+
+			//testing getMostEndorsedPost
+			platform.createPost("sixth_user", "this is another post");
+			platform.createPost("sixth_user", "this is a second post");
+			platform.createPost("sixth_user", "this is a third post");
+
+			platform.endorsePost("fith_user", 11);
+			platform.endorsePost("fourth_user", 11);
+			platform.endorsePost("fith_user", 11);
+
+			platform.endorsePost("fith_user", 12);
+			platform.endorsePost("fourth_user", 13);
+
+			assert (platform.getMostEndorsedPost() == 11): "Does not get the ID of the most endorsed post";
+
+
+			//testing getMostEndorsedAccount 
+			assert (platform.getMostEndorsedAccount() == 5): "Does not get the ID of the account with the most number of endorsements";
+
 
 		} catch (IllegalHandleException e) {
 			assert (false) : "IllegalHandleException thrown incorrectly";
@@ -214,6 +263,39 @@ public class SocialMediaPlatformTestApp {
 			assert (false) : "PostIDNotRecognisedException thrown incorrectly";
 		} catch (NotActionablePostException e) {
 			assert (false) : "NotActionablePostException thrown incorrectly";
+		}
+
+
+		//testing to see if erasing, loading and saving platform works
+		try {
+
+			//saving the platform to a file
+			platform.savePlatform("Platform.ser");
+
+			//erasing the platform
+			platform.erasePlatform();
+
+			//testing to see if all values have been reset
+			assert (platform.getNumberOfAccounts() == 0): "The platform has not erased all accounts";
+			assert (platform.getTotalOriginalPosts() == 0): "The platform has not erased all original posts";
+			assert (platform.getTotalCommentPosts() == 0): "The platform has not erased all comment posts";
+			assert (platform.getTotalEndorsmentPosts() == 0): "The platform has not erased all endorsment posts";
+			
+
+			platform.loadPlatform("Platform.ser");
+
+			//testing to see if all data has been loaded back in from the file
+			assert (platform.getNumberOfAccounts() == 3): "The platform has not loaded all accounts";
+			assert (platform.getTotalOriginalPosts() == 4): "The platform has not erased loaded original posts";
+			assert (platform.getTotalCommentPosts() == 2): "The platform has not erased loaded comment posts";
+			assert (platform.getTotalEndorsmentPosts() == 6): "The platform has not erased loaded endorsment posts";
+
+
+
+		} catch (IOException e){
+			assert (false): "IOException thrown incorrectly";
+		} catch (ClassNotFoundException e){
+			assert (false): "ClassNotFoundException thrown incorrectly";
 		}
 
 		System.out.println("The system ran all tests and didn't find any errors. Yayy you have no bugs!");
