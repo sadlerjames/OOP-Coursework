@@ -228,6 +228,8 @@ public class SocialMedia implements SocialMediaPlatform {
 	public int endorsePost(String handle, int id)
 			throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException {
 
+		BasePost reloadedParentPost = reloadPost(id); //Reload parent
+		
 		//Check endorsement author's handle exists
         if (socialPlatform.checkHandleLegal(handle) == true) {
             throw new HandleNotRecognisedException("This handle does not exist in the system.");
@@ -238,7 +240,6 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new NotActionablePostException("The parent post not actionable (it may be an endorsement), and so cannot be endorsed");
         }
 
-		BasePost reloadedParentPost = reloadPost(id); //Reload parent 
 
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
 
@@ -408,6 +409,9 @@ public class SocialMedia implements SocialMediaPlatform {
         //Posts arrayList/counters
         socialPlatform.getPosts().clear();
         socialPlatform.resetPostIDCounter();
+
+		BasePost genericEmptyPost = new Post(); //Recreate generic empty post
+		socialPlatform.getPosts().add(genericEmptyPost); //Add generic empty post to array 
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import socialmedia.InvalidHandleException;
 import socialmedia.InvalidPostException;
 import socialmedia.NotActionablePostException;
 import socialmedia.Platform;
+import socialmedia.Post;
 import socialmedia.PostIDNotRecognisedException;
 import socialmedia.HandleNotRecognisedException;
 import socialmedia.SocialMedia;
@@ -109,9 +110,10 @@ public class SocialMediaPlatformTestApp {
 			assert (platform.getTotalEndorsmentPosts() == 1): "Posts not being created correctly or getTotalOriginalPosts not detecting correct number of posts.";
 
 			platform.removeAccount("new_second_handle");
+			System.out.println(platform.getTotalOriginalPosts());
 			assert (platform.getNumberOfAccounts() == 0) : "number of accounts registered in the system does not match";
-			assert (platform.getTotalOriginalPosts() == 0): "Posts not being deleted correctly or getTotalOriginalPosts not detecting correct number of posts.";
-			assert (platform.getTotalEndorsmentPosts() == 0): "Posts not being deleted correctly or getTotalOriginalPosts not detecting correct number of posts.";
+			assert (platform.getTotalOriginalPosts() == 0): "Posts not being deleted correctly or getTotalOriginalPosts not detecting correct number of posts. For original posts.";
+			assert (platform.getTotalEndorsmentPosts() == 0): "Posts not being deleted correctly or getTotalOriginalPosts not detecting correct number of posts. For endorsement post";
 
 
 
@@ -157,7 +159,6 @@ public class SocialMediaPlatformTestApp {
 			//creating users to test the post functions on
 			fith_user = platform.createAccount("fith_user");
 			sixth_user = platform.createAccount("sixth_user");
-			System.out.println(sixth_user);
 
 
 			//creating a post and testing if it has the correct ID
@@ -297,6 +298,112 @@ public class SocialMediaPlatformTestApp {
 		} catch (ClassNotFoundException e){
 			assert (false): "ClassNotFoundException thrown incorrectly";
 		}
+
+		platform.erasePlatform();
+		System.out.println("Testing errors:");
+		
+		//testing to see if invalid handle exception and illegal handle exception 
+		// try {
+			
+		// 	//testing to see if an invalid handle is entered into create account it throws an error
+		// 	platform.createAccount("hellosdf ");
+
+		// 	//testing to see if an invalid handle is entered into create account it throws an error
+		// 	platform.createAccount("first_user");
+		// 	platform.createAccount("first_user");
+
+		// } catch (IllegalHandleException e) {
+		// 	assert (false): "Illegal Handle Excpetion";
+		// } catch (InvalidHandleException e) {
+		// 	assert (false): "Invalid Handle Exception";
+		// }
+
+		
+
+		//testing to see if AccountIDNotRecognisedException and HandleNotRecognisedException work
+		// int test_user;
+		// try {
+		// 	test_user = platform.createAccount("user");
+
+		// 	// platform.removeAccount(test_user + 1);
+
+		// 	platform.removeAccount("userr");
+
+
+
+
+		// } catch (IllegalHandleException e) {
+		// 	assert (false): "Illegal Handle Excpetion";
+		// } catch (InvalidHandleException e) {
+		// 	assert (false): "Invalid Handle Exception";
+		// }  catch (HandleNotRecognisedException e) {
+		// 	assert (false): "Handle Not Recognised Exception";
+		// }
+		// // catch (AccountIDNotRecognisedException e) {
+		// // 	assert (false): "Account ID Not Recognised Exception";
+		// // }
+
+
+
+
+
+		//testing to see if Invalid Post Exception works
+		// try {
+		// 	platform.createAccount("user");
+
+		// 	platform.createPost("user", "");
+
+		// 	platform.createPost("user", "jjdsjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+
+
+
+		// } catch (IllegalHandleException e) {
+		// 	assert (false): "Illegal Handle Excpetion";
+		// } catch (InvalidHandleException e) {
+		// 	assert (false): "Invalid Handle Exception";
+		// } catch (HandleNotRecognisedException e) {
+		// 	assert (false): "Handle Not Recognised Exception";
+		// }
+		// catch (InvalidPostException e) {
+		// 	assert (false): "Invalid Post Exception";
+		// }
+
+
+
+
+		//testing to see if PostIDNotRecognisedException and NotActionablePostException
+
+		int aPost;
+		int bPost;
+		try {
+			platform.createAccount("user");
+
+			aPost = platform.createPost("user", "Hello");
+
+			platform.endorsePost("user", 0);
+			
+			// platform.endorsePost("user", bPost);
+
+
+
+		} catch (IllegalHandleException e) {
+			assert (false): "Illegal Handle Excpetion";
+		} catch (InvalidHandleException e) {
+			assert (false): "Invalid Handle Exception";
+		} catch (HandleNotRecognisedException e) {
+			assert (false): "Handle Not Recognised Exception";
+		}
+		catch (InvalidPostException e) {
+			assert (false): "Invalid Post Exception";
+		}
+		catch (PostIDNotRecognisedException e) {
+			assert (false): "PostIDNotRecognisedException";
+		}
+		catch (NotActionablePostException e) {
+			assert (false): "NotActionablePostException";
+		}
+
+
 
 		System.out.println("The system ran all tests and didn't find any errors. Yayy you have no bugs!");
 

@@ -48,9 +48,9 @@ public class Platform implements Serializable {
         accountIDCounter = 0;
     }
 
-    //Reset posts counter to 0
+    //Reset posts counter to 1
     public void resetPostIDCounter(){
-        postIDCounter = 0;
+        postIDCounter = 1;
     }
 
 
