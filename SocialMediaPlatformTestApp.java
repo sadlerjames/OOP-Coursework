@@ -371,7 +371,7 @@ public class SocialMediaPlatformTestApp {
 
 
 
-		//testing to see if PostIDNotRecognisedException and NotActionablePostException
+		//testing to see if PostIDNotRecognisedException and NotActionablePostException and Invalid Post Exception
 
 		int aPost;
 		int bPost;
@@ -380,9 +380,11 @@ public class SocialMediaPlatformTestApp {
 
 			aPost = platform.createPost("user", "Hello");
 
-			platform.endorsePost("user", 0);
+			bPost = platform.endorsePost("user", aPost); //tests post id not recognised exception
 			
-			// platform.endorsePost("user", bPost);
+			// platform.endorsePost("user", bPost); //tests not actionable post exception
+
+			platform.commentPost("user", aPost, "sdnjkfdsuhfkudshfukdshufhdsuifhuidshfuidshfuidsfdsfdsfdsfdfsdfdsfdhsduihfiudshfiusdhiufhsduihfiusdhfius"); //tests invalid post exception
 
 
 
