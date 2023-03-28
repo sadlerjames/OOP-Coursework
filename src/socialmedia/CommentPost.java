@@ -1,7 +1,14 @@
 package socialmedia;
 
+/**
+ * CommentPost provides attributes and methods to permit the creation of comment posts on the platform.
+ * 
+ * @author Students: 720014004, 720033851
+ * @version 1.0 
+ */
+
 public class CommentPost extends BasePost {
-    private Integer parentID; //ID of parent (for endorsements or comments). Integer type, enables 'null' value if post has no parent 
+    private int parentID; //ID of parent
 
     public CommentPost(String handle, int ID, Integer parentID, String message) {
         setID(ID); //Assign ID
