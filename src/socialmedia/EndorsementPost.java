@@ -1,7 +1,7 @@
 package socialmedia;
 
 public class EndorsementPost extends BasePost {
-    private Integer parentID; //ID of parent (for endorsements or comments). Integer type, enables 'null' value if post has no parent 
+    private int parentID; //ID of parent post
 
     public EndorsementPost(String handle, int ID, Integer parentID, String parentHandle, String parentMessage) {
         setID(ID); //Assign ID 

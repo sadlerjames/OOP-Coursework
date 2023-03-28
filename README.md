@@ -41,6 +41,7 @@ TODO:
 - Shoudld we be adding comments to the 
 - showAccount formatting is different to ours? 
 - showAccount doesn't load in objects
+- Should BasePost be an abstract class? 
 
 
 Question list:
