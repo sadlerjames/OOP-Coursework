@@ -24,7 +24,10 @@ public class SocialMedia implements SocialMediaPlatform {
 	public SocialMedia() {
 		socialPlatform = new Platform(); //Create platform instance
 		BasePost genericEmptyPost = new Post(); //Create generic empty post
-		socialPlatform.getPosts().add(genericEmptyPost); //Add generic empty post to array 
+		socialPlatform.getPosts().add(genericEmptyPost); //Add generic empty post to array
+
+		assert(socialPlatform.getPosts().size() == 1):
+		"The generic empty post was not correctly created";
 	}
 
 	@Override
@@ -47,6 +50,9 @@ public class SocialMedia implements SocialMediaPlatform {
 		socialPlatform.getAccounts().add(platformUser); //Store Account object
 		socialPlatform.incrementAccountIDCounter(); //Increment counter
 
+		assert(socialPlatform.getAccounts().size() != 0):
+		 "An account has been created but not stored";
+		 
 		return platformUser.getID(); //Return ID of generated account
 	}
 
@@ -61,7 +67,8 @@ public class SocialMedia implements SocialMediaPlatform {
 
         // Check if handle is valid (less than 30 characters, no whitespace and not empty)
         if (socialPlatform.checkHandleValid(handle) == false) {
-            throw new InvalidHandleException("Please ensure your handle is valid (less than 30 characters, no whitespace and not empty).");
+            throw new InvalidHandleException
+				("Your handle must be valid (less than 30 characters, 0 whitespace, not empty).");
         }
 
 		int accountIDCounter = socialPlatform.getAccountIDCounter(); //Get account ID counter
@@ -69,6 +76,9 @@ public class SocialMedia implements SocialMediaPlatform {
 		Account platformUser = new Account(handle, accountIDCounter, description); 
 		socialPlatform.getAccounts().add(platformUser); //Store account object
 		socialPlatform.incrementAccountIDCounter(); //Increment counter
+
+		assert(socialPlatform.getAccounts().size() != 0):
+		 "An account has been created but not stored";
 
 		return platformUser.getID(); //Return 'id' of generated account
 	}
@@ -92,8 +102,9 @@ public class SocialMedia implements SocialMediaPlatform {
             } 
         }
 
+		//Account with matching handle not found, cannot exist
 		throw new HandleNotRecognisedException
-		("An account with this handle does not exist in the system."); //Not found, cannot exist  
+		("An account with this handle does not exist in the system.");   
 	}
 
 	/**
@@ -193,6 +204,11 @@ public class SocialMedia implements SocialMediaPlatform {
 		
 		Account platformUserReload = reloadAccount(oldHandle); //Reload account (to be deleted)
 		platformUserReload.setHandle(newHandle); //Change the handle to the new specified one
+
+
+		assert(platformUserReload.getHandle()!= oldHandle && platformUserReload.getHandle() == newHandle):
+		"The account handle was not correctly changed";
+		
 	}
 
 	@Override
@@ -360,7 +376,7 @@ public class SocialMedia implements SocialMediaPlatform {
 					//Update comment parentID to generic empty post's ID (0)
 					relComment.setParentID(0);
 					
-					assert(relComment.getParentID() == 0): "The parent ID was not set to 0";
+					assert(relComment.getParentID() == 0): "The orphan parentID was not set to 0";
 				}
 			}
 		}
@@ -487,6 +503,11 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		BasePost genericEmptyPost = new Post(); //Recreate generic empty post
 		socialPlatform.getPosts().add(genericEmptyPost); //Add generic empty post to array 
+
+		assert(socialPlatform.getAccounts().size() == 0 && 
+			socialPlatform.getAccountIDCounter() == 0 && socialPlatform.getPosts().size() == 1
+			&& socialPlatform.getPostIDCounter() == 1): "The platform contents/counters were not correctly reset";
+
 	}
 
 	@Override

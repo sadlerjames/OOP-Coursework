@@ -11,6 +11,7 @@ Everything we write (e.g. classes) will be called from the `SocialMedia.java` fi
 TODO: 
  
 - Safety checks in getters/setters? 
+- Check socialMedia line 209
 - Add assertions throughout codebase 
 - getMostEndorsedPost sometimes set to empty post? Correct behaviour? Some for getMostEndorsedAccount. Sometimes returns null?
 - ...and getMostEndorsedPost returns 0 in case no accounts in system
