@@ -9,47 +9,18 @@ SocialMedia.java is the code for the methods in the interface files.
 Everything we write (e.g. classes) will be called from the `SocialMedia.java` file.
 
 TODO: 
-- Should numComments be double or int type?
-- Audit use of getter and setter methods? 
-- Add assertions throughout codebase
-- Correctly handling deleting comments vs normal posts? Should comments be set to the generic empty post
-- ShowIndividualPost on an endorsement? Can be shown, just no comments or endorsements (0). 
-- getMostEndorsedPost sometimes set to empty post? Correct behaviour? Some for getMostEndorsedAccount. Sometimes returns null?
-- fix showIndividualPost formatting 
-- Improve removeAccount methods (exception handling)
-- May be posible to optimise OO nature of some Account methods after modifying posts
-- Check whether need to validate account description 
-- Move methods back out to classes where possible (showIndividualPost?)/have objects do more of the computational load
-- Change all ==, !=
-- Move showIndividualPost to Post class
-- Check through all 'for' loops, are they necessary? 
-- Does showPostChildrenDetails always return in correct order? Guarrantee? 
-- Correctly handle serialisation exceptions/test
-- Delete 1st account in platform, should next account be allocated ID of prev (0)? 
-- Modify showPostChildrenDetails to have helper function/use new method
-- Check all naming conventions adhered to throughout
-- Go through lecture slides/workshops, implement as many concepts as possible 
-- Should you be able to show post children details of the generic empty post?
-- Should description be "null" if not set? 
-- Do we need separate comment/endorsement/normal post classes? 
-- Coversheet vs coverpage? Also convert to PDF when done
-- Using a custom equals() override in our classes? 
-- Move parentID to comment/endorsement comments as not needed for normal posts
-- Tested posts 100chars max? 
-- Shoudld we be adding comments to the 
-- showAccount formatting is different to ours? 
-- showAccount doesn't load in objects
-- Should BasePost be an abstract class? 
-- Ensure generic empty post always throws postIDNotRecognisedException (never accessable)
-- Posts, comments, endorsements all share ID generation. Okay? 
-- Check follow all java style conventions 
+ 
 - Safety checks in getters/setters? 
-- Check if return is correct on a singular post in showPostChildrenDetails
-- Delete temptest before submission 
+- Add assertions throughout codebase 
+- getMostEndorsedPost sometimes set to empty post? Correct behaviour? Some for getMostEndorsedAccount. Sometimes returns null?
+- ...and getMostEndorsedPost returns 0 in case no accounts in system
+- Move methods back out to classes where possible (showIndividualPost?)/have objects do more of the computational load
+- Go through lecture slides/workshops, implement as many concepts as possible (Design by contract!)
+- Should BasePost be an abstract class?
+- Check follow all java style conventions (https://google.github.io/styleguide/javaguide.html - CHECK that this is correct link)
 
 
-Question list:
-- Check type in showPostChildrenDetails
-- Does our test file get marked? Do we need assertions in the code as well as test file? 
+
+
 
 

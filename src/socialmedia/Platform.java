@@ -175,7 +175,6 @@ public class Platform implements Serializable {
         return accounts.size();
     }
 
-
     /**
     * Method to determine the number of original posts in the platform.
     * Iterates over all posts, including them in the count provided they
@@ -245,6 +244,7 @@ public class Platform implements Serializable {
     public int getMostEndorsedPost(Platform socialPlatform) {
         int maxNumEndorsements = 0; //Counter for number of original posts
         int idMaxPost = 0; //ID. of the post with max no. of endorsements 
+
 
         for (int i=0; i < posts.size(); i++) {
             //For each post, get no. of endorsements

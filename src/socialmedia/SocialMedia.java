@@ -358,7 +358,9 @@ public class SocialMedia implements SocialMediaPlatform {
 					CommentPost relComment = (CommentPost)reloadOrpComment;
 					
 					//Update comment parentID to generic empty post's ID (0)
-					relComment.setParentID(0); 
+					relComment.setParentID(0);
+					
+					assert(relComment.getParentID() == 0): "The parent ID was not set to 0";
 				}
 			}
 		}

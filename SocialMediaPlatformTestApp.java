@@ -163,6 +163,8 @@ public class SocialMediaPlatformTestApp {
 
 			//creating a post and testing if it has the correct ID
 			sixth_post = platform.createPost("fith_user", "This is a post message");
+			System.out.println("testing:");
+			System.out.println(sixth_post);
 			assert (sixth_post == 6): "the created post has been set the wrong ID";
 
 
@@ -292,12 +294,17 @@ public class SocialMediaPlatformTestApp {
 			assert (platform.getTotalEndorsmentPosts() == 6): "The platform has not erased loaded endorsment posts";
 
 
-
 		} catch (IOException e){
 			assert (false): "IOException thrown incorrectly";
 		} catch (ClassNotFoundException e){
 			assert (false): "ClassNotFoundException thrown incorrectly";
 		}
+
+		platform.erasePlatform();
+
+		
+
+		
 
 		// platform.erasePlatform();
 		// System.out.println("Testing errors:");
