@@ -2,71 +2,99 @@ package socialmedia;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Platform stores all data relating to a specific social media platform instance.
+ * This includes all accounts, posts, and counters. 
+ * When the social media platform is saved, the platform class can be serialised 
+ * to allow this data to persist. 
+ * <p>
+ * The class also provides methods to retrieve platform statistics, in addition to
+ * validity checks.      
+ * @author Students: 720014004, 720033851
+ * @version 1.0 
+ */
+
 public class Platform implements Serializable {
 
     //Accounts
-    private ArrayList<Account> accounts = new ArrayList<Account>(); //Create accounts list
-    private int accountIDCounter = 0;
+    private ArrayList<Account> accounts = new ArrayList<Account>(); //Store account objects
+    private int accountIDCounter = 0; //Sequentially count accounts, provide unique ID 
 
     //Posts
-    private ArrayList<BasePost> posts = new ArrayList<BasePost>(); //Create list of posts 
-    private int postIDCounter = 1; //Generic empty post has ID 0 
+    //Store BasePost objects (normal, comment, endorsement, posts)
+    private ArrayList<BasePost> posts = new ArrayList<BasePost>();
+    
+    //Sequentially count accounts, provide unique ID.
+    private int postIDCounter = 1; //Begin at 1, generic empty post assigned ID 0 
 
-    //Getter methods for Platform 
+    //Platform private instance attribute 'getter' methods
 
     public ArrayList<Account> getAccounts() {
-        return accounts; //Implement safety checks?
+        return accounts; 
     }
 
     public int getAccountIDCounter() {
         return accountIDCounter;
     }
 
-
-    // Getter Method for Posts data 
     public ArrayList<BasePost> getPosts() {
-        return posts; //Implement safety checks?
+        return posts; 
     }
 
     public int getPostIDCounter() {
         return postIDCounter;
     }
 
-    //Platform setter methods
+    //Platform private instance attribute 'setter' methodss
 
     public void incrementPostIDCounter() {
         postIDCounter++;
     }
 
-    //Increment method for accountIDCounter
     public void incrementAccountIDCounter() {
         accountIDCounter++;
     }
 
-    //Reset accounts counter to 0
     public void resetAccountIDCounter() {
         accountIDCounter = 0;
     }
 
-    //Reset posts counter to 1
     public void resetPostIDCounter(){
         postIDCounter = 1;
     }
 
 
-    //Platform check methods 
+    //Check methods 
+
+    /**
+    * Method to check whether a handle is legal to create (does not exist) 
+    * <p>
+    * @param handle - the handle to determine the legality of 
+    * @return Returns <b>false</b> if a handle cannot be created (not unique),
+    * and <b>true</b> if it is legal to create. 
+    */ 
 
     public boolean checkHandleLegal(String handle) {
         //Check if handle is an attribute in ArrayList of objects
         for (int i=0; i < accounts.size(); i++) {    
             if (accounts.get(i).getHandle().equals(handle)) { //Handle already exists
-                return false; //as handle exists
+                return false;
             } 
         }
-        return true; //Handle does not already exist
+        return true; //Handle does not exist
     }
+
+
+    /**
+    * Method to check whether a handle is valid.
+    * A handle cannot be more than 30 characters, cannot 
+    * contain whitespace, or be empty (invalid). 
+    * <p>
+    * @param handle - the handle to determine the validity of 
+    * @return Returns <b>false</b> if the handle is invalid, 
+    * or <b>true</b> if the handle is valid.
+    */ 
  
-    // Check if string more than 30 characters, if whitespace, or if empty (invalid)
     public boolean checkHandleValid(String handle) {
 
         //Check if handle is greater than 30 characters
@@ -90,16 +118,25 @@ public class Platform implements Serializable {
         }
     }
 
-    // Check if string more than 100 characters, or if empty (invalid)
-    public boolean checkPostValid(String handle) {
+    /**
+    * Method to check whether a post message is valid.
+    * A post message cannot be more than 100 characters, and 
+    * cannot be empty (invalid). 
+    * <p>
+    * @param postMessage - the post message to determine the validity of 
+    * @return Returns <b>false</b> if the post message is invalid, 
+    * or <b>true</b> if the post message is valid.
+    */ 
 
-        //Check if post is greater than 30 characters
-        if(handle.length() > 100) {
+    public boolean checkPostValid(String postMessage) {
+
+        //Check if post is less than 100 characters
+        if(postMessage.length() > 100) {
             return false;
         }
 
         //Check if post is empty
-        else if(handle.length() == 0) {
+        else if(postMessage.length() == 0) {
             return false;
         }
 
@@ -109,27 +146,21 @@ public class Platform implements Serializable {
         }
     }
 
-    //Likely can be deleted when showPostChildrenDetails is updated
-    // Check if postID exists (return true if post if post ID exists)
-    //Returns true if post id doesn't exist (legal to create)
-    public boolean checkPostIDLegal(int id) {
+    /**
+    * Method to check whether a post is actionable.
+    * An actionable post is either a normal post or a comment post 
+    * (endorsement posts are non-actionable).
+    * <p>
+    * @param id - the ID of the post to check 
+    * @return Returns <b>false</b> if the post is non-actionable, 
+    * or <b>true</b> if the post is actionable.
+    */ 
 
-        //Check if post exists with matching 'id'attribute in ArrayList of objects
-        for (int i=0; i < posts.size(); i++) {    
-            if (posts.get(i).getID() == id) { //ID already exists
-                return false; //as ID exists
-            } 
-        }
-        //Post ID not in system
-        return true;
-    }
-
-    //Check if parent is actionable (normal or comment)
-    //Returns true if normal or comment (0 or 1 type)
     public boolean checkPostActionable(int id) {
-        //Check if post exists with matching 'id'attribute in ArrayList of objects
-        for (int i=0; i < posts.size(); i++) {    
-            if (posts.get(i).getID() == id) { //Post is desired post
+
+        for (int i=0; i < posts.size(); i++) {   
+            if (posts.get(i).getID() == id) { //Located post in list with matching ID  
+                //Normal/comment post
                 if (posts.get(i).getPostType() == 0 || posts.get(i).getPostType() == 1) {
                     return true;
                 }
@@ -141,24 +172,39 @@ public class Platform implements Serializable {
     //Platform getter methods 
     
     public int getNumberOfAccounts() {
-        int numAccounts = accounts.size();
-
-        return numAccounts;
+        return accounts.size();
     }
 
+
+    /**
+    * Method to determine the number of original posts in the platform.
+    * Iterates over all posts, including them in the count provided they
+    * have type '0' (normal/original post). 
+    * <p>
+    * @return the number of original posts in the platform
+    */ 
+
     public int getTotalOriginalPosts() {
-        int numPosts = 0; //Counter for number of original posts
+        int numPosts = 0; 
 
         for (int i=0; i < posts.size(); i++) {    
-            if (posts.get(i).getPostType() == 0) { //Oringinal posts have type '1'
+            if (posts.get(i).getPostType() == 0) { //Original posts have type '0'
                 numPosts++;
             }
         }
         return numPosts;
     }
 
+    /**
+    * Method to determine the number of endorsement posts in the platform.
+    * Iterates over all posts, including them in the count provided they
+    * have type '2' (endorsement post). 
+    * <p>
+    * @return the number of endorsement posts in the platform
+    */ 
+
     public int getTotalEndorsmentPost() {
-        int numEndorsements = 0; //Counter for number of original posts
+        int numEndorsements = 0;
 
         for (int i=0; i < posts.size(); i++) {    
             if (posts.get(i).getPostType() == 2) { //Endorsements posts have type '2'
@@ -167,58 +213,88 @@ public class Platform implements Serializable {
         }
         return numEndorsements;
     }
+
+    /**
+    * Method to determine the number of comment posts in the platform.
+    * Iterates over all posts, including them in the count provided they
+    * have type '1' (comment post). 
+    * <p>
+    * @return the number of comment posts in the platform
+    */ 
     
     public int getTotalCommentPosts() {
-        int numComments = 0; //Counter for number of original posts
+        int numComments = 0; 
 
         for (int i=0; i < posts.size(); i++) {    
-            if (posts.get(i).getPostType() == 1) { //Endorsements posts have type '2'
+            if (posts.get(i).getPostType() == 1) { //Comment posts have type '1'
             numComments++;
             }
         }
         return numComments;
     }
 
+    /**
+    * Method to determine the most endorsed post in the platform.
+    * <p>
+    * @param socialPlatform - the Platform object storing the posts, 
+    * enables retrieving a post's endorsements (getEndorsements)
+    * @return the ID of the post in the platform with the most endorsements. 
+    * In the case of a draw, the last post in the list is returned (highest ID).
+    */ 
+
     public int getMostEndorsedPost(Platform socialPlatform) {
         int maxNumEndorsements = 0; //Counter for number of original posts
         int idMaxPost = 0; //ID. of the post with max no. of endorsements 
 
-        for (int i=0; i < posts.size(); i++) {   
+        for (int i=0; i < posts.size(); i++) {
+            //For each post, get no. of endorsements
             int numEndorsements = posts.get(i).getEndorsements(socialPlatform).size();
             
-            if (numEndorsements >= maxNumEndorsements) { //Endorsements posts have type '2'
-            maxNumEndorsements = numEndorsements;
-            idMaxPost = posts.get(i).getID();
+            //Post 'i' has current highest no. of endorsements
+            if (numEndorsements >= maxNumEndorsements) {   
+            maxNumEndorsements = numEndorsements; //Update maximum recorded endorsements
+            idMaxPost = posts.get(i).getID(); //Update ID 
             }
         }
         return idMaxPost;
     }
 
+
+    /**
+    * Method to determine the most endorsed account in the platform.
+    * <p>
+    * @param socialPlatform - the Platform object storing the posts, 
+    * enables retrieving a post's endorsements (getEndorsements)
+    * @return the ID of the account in the platform with the most endorsements. 
+    * In the case of a draw, the last account in the list is returned (highest ID).
+    */ 
+
     public int getMostEndorsedAccount(Platform socialPlatform) {
         int idMaxAccountEndorsements = 0; //ID of account with most endorsements
         int maxNumEndorsements = 0; //Counter 
 
-        for (int i=0; i < accounts.size(); i++) { //Iterate through authors (accounts)
+        for (int i=0; i < accounts.size(); i++) { //Iterate through accounts
 
-            String authorHandle = accounts.get(i).getHandle(); //Get handle of current obj
-            int authorId = accounts.get(i).getID(); //Get id of current obj
+            String accountHandle = accounts.get(i).getHandle(); //Get account's handle
+            int accountID = accounts.get(i).getID(); //Get account ID 
 
-            int accountEndorsements = 0; //Counter - counts account's number of endorsements 
+            int accountEndorsements = 0; //Count an account's endorsements total 
 
-            for (int j=1; j < posts.size(); j++) { //Iterate through posts (with matching author/handle)
+            for (int j=1; j < posts.size(); j++) { //Iterate through posts 
 
-                if (posts.get(j).getAuthor().equals(authorHandle)) { //Only count endorsements
-                    accountEndorsements = accountEndorsements + posts.get(j).getEndorsements(socialPlatform).size(); //Increment account's endorsements total
+                if (posts.get(j).getAuthor().equals(accountHandle)) { //Post authored by account  
+                    //Add post's no. of endorsements to account's endorsements total
+                    accountEndorsements = accountEndorsements + 
+                        posts.get(j).getEndorsements(socialPlatform).size(); 
                 }
             }
             
-            //If the number of endorsements for the given account is greater that the current max number of endorsements then update values
+            //The current account's no. endorsements is greater than maxNumEndorsements 
             if (accountEndorsements > maxNumEndorsements) {
-                maxNumEndorsements = accountEndorsements;
-                idMaxAccountEndorsements = authorId;
+                maxNumEndorsements = accountEndorsements; //Update values
+                idMaxAccountEndorsements = accountID; 
             }
         }
-        
         return idMaxAccountEndorsements;
     }
 }

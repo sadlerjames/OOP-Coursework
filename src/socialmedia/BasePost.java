@@ -12,7 +12,8 @@ import java.util.ArrayList;
 public class BasePost implements Serializable {
 
     private int id; //Sequential unique ID
-    private int postType; //Post type - 'normal' (0), 'comment' (1), 'endorsement' (2), 'generic empty post' (3)
+    //Post type - 'normal' (0), 'comment' (1), 'endorsement' (2), 'generic empty post' (3)
+    private int postType;
     private String message;
     private String author; //Author's account handle 
 
@@ -39,7 +40,8 @@ public class BasePost implements Serializable {
  	/**
 	 * The method returns the comments of a post, when provided the platform data.
 	 * <p>
-	 * @param socialPlatform - the Platform object storing the posts, enables searching for child comments.
+	 * @param socialPlatform - the Platform object storing the posts,
+     * enables searching for child comments.
 	 * @return an arrayList containing comment BasePost objects 
 	 */   
 
@@ -51,8 +53,9 @@ public class BasePost implements Serializable {
             
             BasePost iterationPost = socialPlatform.getPosts().get(i);
 
-            if (iterationPost instanceof CommentPost) { 
-                CommentPost iterationComment = (CommentPost)iterationPost; //Safely downcast generic BasePost to CommentPost and discard endorsements
+            if (iterationPost instanceof CommentPost) {
+                //Safely downcast generic BasePost to CommentPost and discard endorsements 
+                CommentPost iterationComment = (CommentPost)iterationPost;
 
                 if (iterationComment.getParentID() == id) { //Comment is a child of this post 
                     comments.add(iterationComment); //Add comment to returned array
@@ -66,22 +69,25 @@ public class BasePost implements Serializable {
  	/**
 	 * The method returns the posts endorsing a post, when provided the platform data.
 	 * <p>
-	 * @param socialPlatform - the Platform object storing the posts, enables searching for endorsements.
+	 * @param socialPlatform - the Platform object storing the posts,
+     * enables searching for endorsements.
 	 * @return an arrayList containing endorsement BasePost objects 
 	 */   
 
     public ArrayList<BasePost> getEndorsements(Platform socialPlatform) {
 
-        ArrayList<BasePost> endorsements = new ArrayList<BasePost>(); //Hold endorsement BasePost objects
+        //Hold endorsement BasePost objects
+        ArrayList<BasePost> endorsements = new ArrayList<BasePost>(); 
 
 	    for (int i=0; i < socialPlatform.getPosts().size(); i++) { //Iterate through all posts
             
             BasePost iterationPost = socialPlatform.getPosts().get(i); 
 
             if (iterationPost instanceof EndorsementPost) {
-                EndorsementPost iterationEndorsement = (EndorsementPost)iterationPost; //Safely downcast generic BasePost to EndorsementPost and discard comments
+                //Safely downcast generic BasePost to EndorsementPost and discard comments
+                EndorsementPost iterationEndorsement = (EndorsementPost)iterationPost; 
 
-                if (iterationEndorsement.getParentID() == id) { //Endorsement is a child of this post 
+                if (iterationEndorsement.getParentID() == id) { //Endorsement is child of this post 
                     endorsements.add(iterationEndorsement); //Add endorsement to array
                 }
             }
@@ -110,10 +116,12 @@ public class BasePost implements Serializable {
 
     /**
     * Generates a formatted string displaying the details of an Post instance. 
-    * (the post's ID, it's author, the number of endorsements, the number of comments, and the post's message)
+    * (the post's ID, it's author, the number of endorsements, the number of comments,
+    * and the post's message)
     * <p>    
-    * The number of endorsements and the number of comments are determined by finding the size of the return from the  
-    * getEndorsements and getComments methods. Other post information is directly read from the instance attributes. 
+    * The number of endorsements and the number of comments are determined by finding
+    * the size of the return from the getEndorsements and getComments methods.
+    * Other post information is directly read from the instance attributes. 
     * <p>
     * @return a formatted string containing the post details.
     */ 

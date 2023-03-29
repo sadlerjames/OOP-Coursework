@@ -20,15 +20,18 @@ public class Post extends BasePost {
     public Post() {
         setID(0); //Assign ID 0 
         setPostType(3); //Set post type to 3 - 'generic empty post'
-        setMessage("The original content was removed from the system and is no longer available."); //Provided empty post message
+        
+        //Provided empty post message
+        setMessage("The original content was removed from the system and is no longer available.");
     }
 
     /**
-    * Constructor for a new standard Post in the platform, setting handle, ID, and message instance attributes. 
+    * Constructor for a new standard Post in the platform, initialising
+    * handle, ID, and message instance attributes. 
     * <p>
     * @param handle - the handle of the account authoring the post 
     * @param id - the post's sequential ID
-    * @param message - the post's message 
+    * @param message - the post's message  
     */ 
 
     public Post(String handle, int id, String message) {

@@ -16,6 +16,11 @@ import java.io.ObjectOutputStream;
 public class SocialMedia implements SocialMediaPlatform {
 	private Platform socialPlatform; 
 
+	/**
+    * Constructor for the initalisation of the whole platform,
+    * where the Platform object and generic empty post are created.
+    */ 
+
 	public SocialMedia() {
 		socialPlatform = new Platform(); //Create platform instance
 		BasePost genericEmptyPost = new Post(); //Create generic empty post
@@ -23,25 +28,26 @@ public class SocialMedia implements SocialMediaPlatform {
 	}
 
 	@Override
-	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {//CHANGE THROWS
+	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
 
 		//Check if handle is legal (not pre-existing)
         if (socialPlatform.checkHandleLegal(handle) == false) {
-            throw new IllegalHandleException("This handle already exists in the system, please choose another.");
+            throw new IllegalHandleException("This handle already exists in the system");
         }
 
         // Check if handle is valid (less than 30 characters, no whitespace and not empty)
         if (socialPlatform.checkHandleValid(handle) == false) {
-            throw new InvalidHandleException("Please ensure your handle is valid (less than 30 characters, no whitespace and not empty).");
+            throw new InvalidHandleException
+				("Your handle must be valid (less than 30 characters, 0 whitespace, not empty).");
         }
 
-		int accountIDCounter = socialPlatform.getAccountIDCounter();
+		int accountIDCounter = socialPlatform.getAccountIDCounter(); //Get account ID counter
 
-		Account platformUser = new Account(handle, accountIDCounter); //Create account object, set ID 
-		socialPlatform.getAccounts().add(platformUser); //Store account object
+		Account platformUser = new Account(handle, accountIDCounter); //Create Account, set ID 
+		socialPlatform.getAccounts().add(platformUser); //Store Account object
 		socialPlatform.incrementAccountIDCounter(); //Increment counter
 
-		return platformUser.getID(); //Return 'id' of generated account
+		return platformUser.getID(); //Return ID of generated account
 	}
 
 	@Override
@@ -49,7 +55,8 @@ public class SocialMedia implements SocialMediaPlatform {
 
         //Check if handle is legal (not pre-existing)
         if (socialPlatform.checkHandleLegal(handle) == false) {
-            throw new IllegalHandleException("This handle already exists in the system, please choose another.");
+            throw new IllegalHandleException
+			("This handle already exists in the system, please choose another.");
         }
 
         // Check if handle is valid (less than 30 characters, no whitespace and not empty)
@@ -57,60 +64,82 @@ public class SocialMedia implements SocialMediaPlatform {
             throw new InvalidHandleException("Please ensure your handle is valid (less than 30 characters, no whitespace and not empty).");
         }
 
-		int accountIDCounter = socialPlatform.getAccountIDCounter();
-		Account platformUser = new Account(handle, accountIDCounter, description); //Create account object (with decription), set ID 
+		int accountIDCounter = socialPlatform.getAccountIDCounter(); //Get account ID counter
+		//Create account (with decription), set ID 
+		Account platformUser = new Account(handle, accountIDCounter, description); 
 		socialPlatform.getAccounts().add(platformUser); //Store account object
 		socialPlatform.incrementAccountIDCounter(); //Increment counter
 
 		return platformUser.getID(); //Return 'id' of generated account
 	}
 
+	/**
+    * Method for the reloading of a specified account (via its handle), 
+	* returning the Account object.
+	* <p>
+	* @param handle - the handle of the Account to reload
+	* @return the Account object with the specified handle
+	* @throws HandleNotRecognisedException thrown when attempting to reload an account where the 
+	* provided handle does not exist
+    */ 
 
 	public Account reloadAccount(String handle) throws HandleNotRecognisedException {
 
 		for (int i=0; i < socialPlatform.getAccounts().size(); i++) {    
-            if (socialPlatform.getAccounts().get(i).getHandle().equals(handle)) { //Matching id (located account)
+            if (socialPlatform.getAccounts().get(i).getHandle().equals(handle)) { //Matching ID
 				Account reloadedAccount = socialPlatform.getAccounts().get(i);
 				return reloadedAccount;
             } 
         }
 
-		throw new HandleNotRecognisedException("An account with this handle does not exist in the system."); //Not found, cannot exist  
+		throw new HandleNotRecognisedException
+		("An account with this handle does not exist in the system."); //Not found, cannot exist  
 	}
 
+	/**
+    * Method for the reloading of a specified account (via its ID), 
+	* returning the Account object.
+	* <p>
+	* @param id - the ID of the Account to reload 
+	* @return the Account object with the specified ID
+	* @throws AccountIDNotRecognisedException thrown when attempting to reload an account where the 
+	* provided ID does not exist
+    */ 
 
 	public Account reloadAccount(int id) throws AccountIDNotRecognisedException {
 
 		for (int i=0; i < socialPlatform.getAccounts().size(); i++) {    
-            if (socialPlatform.getAccounts().get(i).getID() == id) { //Matching id (located account)
+            if (socialPlatform.getAccounts().get(i).getID() == id) { //Matching ID
 				Account reloadedAccount = socialPlatform.getAccounts().get(i);
 				return reloadedAccount;
             }
         }
 
-		throw new AccountIDNotRecognisedException("An account with this ID does not exist in the system.");   
+		throw new AccountIDNotRecognisedException
+		("An account with this ID does not exist in the system.");   
 	}
 
 	@Override
 	public void removeAccount(int id) throws AccountIDNotRecognisedException {
 
-		Account reloadedAccount = reloadAccount(id); //Load account to delete
+		Account reloadedAccount = reloadAccount(id); //Reload account (to be deleted), by ID 
 
-        ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //List of post (to be deleted) id's 
+        ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //Store ID's of posts to delete
 
-        for (int j=1; j < socialPlatform.getPosts().size(); j++) { //loop through posts
+        for (int j=1; j < socialPlatform.getPosts().size(); j++) { 
 
-            if (socialPlatform.getPosts().get(j).getAuthor().equals(reloadedAccount.getHandle())) { //Account to delete authors post
-                int postID = socialPlatform.getPosts().get(j).getID(); //Get ID of post to delete
-                delPostIDs.add(postID); //Add to list of ID's to delete
+			//Check if post authored by account being deleted
+            if (socialPlatform.getPosts().get(j).getAuthor().equals(reloadedAccount.getHandle())) { 
+                int postID = socialPlatform.getPosts().get(j).getID(); //Get ID of post (to delete)
+                delPostIDs.add(postID);
             }
         }
 
-        for (int j=0; j < delPostIDs.size(); j++) {
+        for (int j=0; j < delPostIDs.size(); j++) { 
             try {
                 deletePost(delPostIDs.get(j)); //Attempt to delete post 
         
-            } catch (PostIDNotRecognisedException e) { //Post has already been deleted as a child
+            } catch (PostIDNotRecognisedException e) { //Post deleted (as a child of a parent)
             }
         }   
 
@@ -120,14 +149,15 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void removeAccount(String handle) throws HandleNotRecognisedException {
-		Account reloadedAccount = reloadAccount(handle); //Load account to delete
+		Account reloadedAccount = reloadAccount(handle); //Reload account (to be deleted)
 
-        ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //List of post (to be deleted) id's 
+        ArrayList<Integer> delPostIDs = new ArrayList<Integer>(); //Store ID's of posts (to delete)
 
-        for (int j=1; j < socialPlatform.getPosts().size(); j++) { //loop through posts
+        for (int j=1; j < socialPlatform.getPosts().size(); j++) {
 
-            if (socialPlatform.getPosts().get(j).getAuthor().equals(handle)) { //Account to delete authors post
-                int postID = socialPlatform.getPosts().get(j).getID(); //Get ID of post to delete
+			//Check if post authored by account being deleted
+            if (socialPlatform.getPosts().get(j).getAuthor().equals(handle)) { 
+                int postID = socialPlatform.getPosts().get(j).getID(); //Get ID of post (to delete)
                 delPostIDs.add(postID); //Add to list of ID's to delete
 
             }
@@ -137,7 +167,7 @@ public class SocialMedia implements SocialMediaPlatform {
             try {
                 deletePost(delPostIDs.get(j)); //Attempt to delete post 
         
-            } catch (PostIDNotRecognisedException e) { //Post has already been deleted as a child 
+            } catch (PostIDNotRecognisedException e) { //Post already deleted (as a child)
             }
         }   
 
@@ -148,30 +178,34 @@ public class SocialMedia implements SocialMediaPlatform {
 	public void changeAccountHandle(String oldHandle, String newHandle)
 			throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
 		
+		//Check author's handle exists
 		if (socialPlatform.checkHandleLegal(newHandle) == false) {
-            throw new IllegalHandleException("This handle already exists in the system, please choose another.");
+            throw new IllegalHandleException
+			("This handle already exists in the system, please choose another.");
         }
 
+		// Check if handle is valid (less than 30 characters, no whitespace and not empty)
         if (socialPlatform.checkHandleValid(newHandle) == false) {
-            throw new InvalidHandleException("Please ensure your handle is valid (less than 30 characters, no whitespace and not empty).");
+            throw new InvalidHandleException
+			("Ensure your handle is valid (less than 30 characters, 0 whitespace, not empty).");
         } 
 
 		
-		Account platformUserReload = reloadAccount(oldHandle); //Reload account
-		platformUserReload.setHandle(newHandle); //Change handle
+		Account platformUserReload = reloadAccount(oldHandle); //Reload account (to be deleted)
+		platformUserReload.setHandle(newHandle); //Change the handle to the new specified one
 	}
 
 	@Override
 	public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
 		
-		Account platformUserReload = reloadAccount(handle); //Reload account
-		platformUserReload.setDescription(description); //Change description
+		Account platformUserReload = reloadAccount(handle); //Reload account (to be deleted)
+		platformUserReload.setDescription(description); //Update description attribute
 	} 
 
 	@Override
 	public String showAccount(String handle) throws HandleNotRecognisedException {
 	
-		Account reloadedAccount = reloadAccount(handle);
+		Account reloadedAccount = reloadAccount(handle); //Reload account (to be deleted)
 
 		//Counters for posts and endorsements
         int postCounter = 0;
@@ -180,12 +214,14 @@ public class SocialMedia implements SocialMediaPlatform {
 		//Get no. of posts (authored by account)
         for (int j=1; j < socialPlatform.getPosts().size(); j++) {
             if (socialPlatform.getPosts().get(j).getAuthor().equals(handle)) {
-                postCounter++;
-                endorsedCounter = endorsedCounter + socialPlatform.getPosts().get(j).getEndorsements(socialPlatform).size(); //Count endorsement posts
+                postCounter++; //Increment the post counter
+                endorsedCounter = endorsedCounter + socialPlatform.getPosts().get(j)
+					.getEndorsements(socialPlatform).size(); //Count endorsement posts
             }
         }
-
-		return reloadedAccount.generateAccountDetails(postCounter, endorsedCounter);
+		
+		//Call the helper function to generate account details and return
+		return reloadedAccount.generateAccountDetails(postCounter, endorsedCounter); 
 	}
 
 	@Override
@@ -194,10 +230,12 @@ public class SocialMedia implements SocialMediaPlatform {
         //Check author's handle exists
         if (socialPlatform.checkHandleLegal(handle) == true) {
             throw new HandleNotRecognisedException("This handle does not exist in the system!");
-        } 
+        }
 
+		//Check post is valid (less than 100 characters and not empty)
         if (socialPlatform.checkPostValid(message) == false) {
-            throw new InvalidPostException("Please ensure your post is valid (less than 30 characters and not empty)");
+            throw new 
+				InvalidPostException("Your post must be valid (less than 30 chars, not empty)");
         }
 
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
@@ -210,13 +248,23 @@ public class SocialMedia implements SocialMediaPlatform {
 		return platformPost.getID(); //Return ID of post
 	}
 
+	/**
+    * Method for the reloading of a specified post (via its ID), 
+	* returning the BasePost object.
+	* <p>
+	* @param id - the ID of the Post to reload
+	* @return the Post object with matching ID
+	* @throws PostIDNotRecognisedException thrown when attempting to reload an post where the 
+	* provided ID does not exist
+    */ 
+
 	public BasePost reloadPost(int id) throws PostIDNotRecognisedException {
 
 		for (int i=1; i < socialPlatform.getPosts().size(); i++) {    
-            if (socialPlatform.getPosts().get(i).getID() == id) { //Matching id (located post)
+            if (socialPlatform.getPosts().get(i).getID() == id) { //Post has matching ID
 				
-				BasePost reloadedPost = socialPlatform.getPosts().get(i);
-				return reloadedPost;
+				BasePost reloadedPost = socialPlatform.getPosts().get(i); 
+				return reloadedPost; //Return BasePost object
 				
             }
         }
@@ -237,18 +285,20 @@ public class SocialMedia implements SocialMediaPlatform {
 
         //Check parent actionable (not endorsement/empty)
         if (socialPlatform.checkPostActionable(id) == false) {
-            throw new NotActionablePostException("The parent post not actionable (it may be an endorsement), and so cannot be endorsed");
+            throw new 
+				NotActionablePostException("The parent is not actionable, so cannot be endorsed");
         }
-
 
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
 
-		BasePost platformEndorsement = new EndorsementPost(handle, postIDCounter, id, reloadedParentPost.getAuthor(), reloadedParentPost.getMessage());
+		BasePost platformEndorsement = new EndorsementPost(handle, postIDCounter, id, 
+			reloadedParentPost.getAuthor(), reloadedParentPost.getMessage()); 
+				//Construct an endorsement post object
         socialPlatform.getPosts().add(platformEndorsement); //Save post
 		
 		socialPlatform.incrementPostIDCounter(); //Increment counter
 
-		return platformEndorsement.getID();
+		return platformEndorsement.getID(); //Return the ID of the created endorsement post
 	}
  
 	@Override
@@ -262,45 +312,53 @@ public class SocialMedia implements SocialMediaPlatform {
 
         //Check parent actionable (not endorsement/empty, can comment)
         if (socialPlatform.checkPostActionable(id) == false) {
-            throw new NotActionablePostException("The parent post not actionable (it may be an endorsement), and cannot be commented");
+            throw new NotActionablePostException
+				("The parent post is not actionable, and cannot be commented");
         }
 
-        //Check post is valid (less than 30 characters and not empty)
+        //Check post is valid (less than 100 characters and not empty)
         if (socialPlatform.checkPostValid(message) == false) {
-            throw new InvalidPostException("Please ensure your post is valid (less than 30 characters and not empty)");
+            throw new 
+				InvalidPostException("Ensure our post is valid (less than 30 chars, not empty)");
         }
 
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
 
-		BasePost platformComment = new CommentPost(handle, postIDCounter, id, message);
+		//Construct a comment post object
+		BasePost platformComment = new CommentPost(handle, postIDCounter, id, message); 
         socialPlatform.getPosts().add(platformComment); //Save post
 
 		socialPlatform.incrementPostIDCounter(); //Increment counter
 
-		return platformComment.getID();
+		return platformComment.getID(); //Return the ID of the created comment post
 	}
 
 	@Override
 	public void deletePost(int id) throws PostIDNotRecognisedException {
 
-		BasePost reloadedPost = reloadPost(id); //Load post to be deleted
+		BasePost reloadedPost = reloadPost(id); //Load post (to be deleted)
 
-		//Delete/update dependences (endorsements and comments)
-		
+		//Delete endorsements
 		if (reloadedPost.getEndorsements(socialPlatform).size() != 0) { //Post has endorsements
-			for (int i=0; i < reloadedPost.getEndorsements(socialPlatform).size(); i++) { //Iterate through endorsements
-				BasePost reloadedOrphanEndorsement = reloadedPost.getEndorsements(socialPlatform).get(i); //Get orphan endorsement obj
-				socialPlatform.getPosts().remove(reloadedOrphanEndorsement); //Remove endorsement
+
+			//Iterate through endorsements
+			for (int i=0; i < reloadedPost.getEndorsements(socialPlatform).size(); i++) { 
+				//Get orphan endorsement
+				BasePost reloadOrpEndorsement = reloadedPost.getEndorsements(socialPlatform).get(i); 
+				socialPlatform.getPosts().remove(reloadOrpEndorsement); //Remove endorsement
 			}
 		}
-
+		
+		//Update commments
 		if (reloadedPost.getComments(socialPlatform).size() != 0) { //Post has comments
 			for (int i=0; i < reloadedPost.getComments(socialPlatform).size(); i++) { //Iterate through comments
-				BasePost reloadedOrphanComment = reloadedPost.getComments(socialPlatform).get(i); //Get orphan comment obj
+				BasePost reloadOrpComment = reloadedPost.getComments(socialPlatform).get(i); //Get orphan comment
 
-				if (reloadedOrphanComment instanceof CommentPost) {
-					CommentPost relComment = (CommentPost)reloadedOrphanComment;
-					relComment.setParentID(0); //Update comment parentID to generic empty post's ID (0)
+				if (reloadOrpComment instanceof CommentPost) {
+					CommentPost relComment = (CommentPost)reloadOrpComment;
+					
+					//Update comment parentID to generic empty post's ID (0)
+					relComment.setParentID(0); 
 				}
 			}
 		}
@@ -311,62 +369,77 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public String showIndividualPost(int id) throws PostIDNotRecognisedException {
 
-		BasePost reloadedPost = reloadPost(id); //Load post
-        
-        return reloadedPost.genPostDetails(socialPlatform);
+		BasePost reloadedPost = reloadPost(id); //Load post (to be deleted)
+
+		//Call the helper function to generate post details and return
+        return reloadedPost.genPostDetails(socialPlatform); 
 	}
 
 	@Override
 	public StringBuilder showPostChildrenDetails(int id)
 			throws PostIDNotRecognisedException, NotActionablePostException {
-    
-        //Check parent exists 
-        if (socialPlatform.checkPostIDLegal(id) == true) {
-            throw new PostIDNotRecognisedException("The post does not exist in the system");
-        }
 
-        //Check parent actionable (not endorsement)
+		BasePost reloadedParentPost = reloadPost(id); //Reload the parent post 
+
+        //Check if parent is actionable
         if (socialPlatform.checkPostActionable(id) == false) {
-            throw new NotActionablePostException("The parent post is not actionable (likely an endorsement, so does not have children)");
+            throw new NotActionablePostException("The parent post is not actionable");
         }
-
-		StringBuilder returnedPostDetails = helpShowPostChildrenDetails(id);
+		
+		//Execute helper function, pass in parent post 
+		StringBuilder returnedPostDetails = helpShowPostChildrenDetails(reloadedParentPost); 
         
         return returnedPostDetails; //Return StringBuilder
     }
 
-	private StringBuilder helpShowPostChildrenDetails(int id) throws PostIDNotRecognisedException {
+	/**
+    * Private helper method for showPostChildrenDetails.
+	* Removes the requirement to repeat reduntant checks (comments always actionable).
+	* <p>
+	* @param postObj - the BasePost object (for which the childen details are displayed)
+	* @return the stringBuilder containing the post details in required 'tree' format
+	* @throws PostIDNotRecognisedException thrown when attempting to reload an post that 
+	* does not exist
+    */ 
+	
+	private StringBuilder helpShowPostChildrenDetails(BasePost postObj) throws PostIDNotRecognisedException {
 
-		StringBuilder postDetails = new StringBuilder(); //Create stringbuilder
+		StringBuilder postDetails = new StringBuilder(); //Create stringBuilder
 
-        for (int i=1; i < socialPlatform.getPosts().size(); i++) {    
-            if (socialPlatform.getPosts().get(i).getID() == id) { //Locate post with matching ID 
-                
-                if (socialPlatform.getPosts().get(i).getComments(socialPlatform).size() != 0) { //Check if post has comments
-                    postDetails.append(showIndividualPost(id) + System.lineSeparator() + "|"); //Add post details to string output
-                    
-                    for (int j=0; j < socialPlatform.getPosts().get(i).getComments(socialPlatform).size(); j++) { //Loop through comments, calling on each  
-                        
-                        String childString = helpShowPostChildrenDetails(socialPlatform.getPosts().get(i).getComments(socialPlatform).get(j).getID()).toString(); //Recursive call, convert returned stringbuilder to string 
+		if (postObj.getComments(socialPlatform).size() != 0) { //Check if post has comments
 
-						String linesSplit[] = childString.split(System.lineSeparator()); //Split return into lines
+			//Add post details (with required formatting) to stringBuilder
+			postDetails.append(showIndividualPost(postObj.getID()) + System.lineSeparator() + "|"); 
 
-						boolean firstLine = true;
-						for (int k=0; k < linesSplit.length; k++) { //Iterate through 
-							if (firstLine == true) {
-								postDetails.append(System.lineSeparator() + "| > " + linesSplit[k] + System.lineSeparator()); //Add correct formatting to first lines
-								firstLine = false; //First line formatting completed, do not re-run
-							} else {
-								postDetails.append("    " + linesSplit[k] + System.lineSeparator()); //Pad all other lines with whitespace 
-							}
-						}
-                    }
-                    
-                } else {
-                    postDetails.append(showIndividualPost(id)); //Add details of original post to string output
-                }
-            }
-        }
+			//Iterate through comments, recursively calling the helper on each 
+			for (int j=0; j < postObj.getComments(socialPlatform).size(); j++) { 
+				
+				//Recursive call, convert returned stringbuilder to string 
+				String childString = helpShowPostChildrenDetails
+					(postObj.getComments(socialPlatform).get(j)).toString(); 
+
+				//Split the recursive return into lines (at newline character)
+				String linesSplit[] = childString.split(System.lineSeparator()); 
+
+				boolean firstLine = true;
+				for (int k=0; k < linesSplit.length; k++) {
+					if (firstLine == true) { 
+						//Add correct formatting to first line
+						postDetails.append(System.lineSeparator() + "| > " 
+							+ linesSplit[k] + System.lineSeparator()); 
+						firstLine = false; //First line formatting completed, do not re-run
+					} else {
+						//Pad all other lines with 4 chars of whitespace 
+						postDetails.append("    " + linesSplit[k] + System.lineSeparator());
+					}
+				}
+			}
+			
+		} else {
+			//Add details of parent post to stringBulder
+			postDetails.append(showIndividualPost(postObj.getID())); 
+		}
+
 		return postDetails;
 	}  
 
@@ -403,12 +476,12 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void erasePlatform() {
         //Accounts arrayList/counters
-        socialPlatform.getAccounts().clear(); 
+        socialPlatform.getAccounts().clear(); //Clear the accounts array
         socialPlatform.resetAccountIDCounter(); //Reset Account's ID counter
 
         //Posts arrayList/counters
-        socialPlatform.getPosts().clear();
-        socialPlatform.resetPostIDCounter();
+        socialPlatform.getPosts().clear(); //Clear the posts array
+        socialPlatform.resetPostIDCounter(); //Reset Post's ID counter
 
 		BasePost genericEmptyPost = new Post(); //Recreate generic empty post
 		socialPlatform.getPosts().add(genericEmptyPost); //Add generic empty post to array 
@@ -417,7 +490,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void savePlatform(String filename) throws IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename));
-		oos.writeObject(socialPlatform);
+		oos.writeObject(socialPlatform); //Write object to file
 		oos.close();
 	}
 
@@ -427,7 +500,8 @@ public class SocialMedia implements SocialMediaPlatform {
 		Object obj = ois.readObject(); //Write platform object
 		ois.close();
 
-		if (obj instanceof Platform) { //Safely downcast (if deserialised obj is a 'Platform' instance)
+		//Safely downcast (if deserialised obj is a 'Platform' instance)
+		if (obj instanceof Platform) { 
 			socialPlatform = (Platform) obj; //Overwrite socialPlatform with deserialised object 
 		}
 	}

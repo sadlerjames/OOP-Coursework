@@ -9,7 +9,6 @@ SocialMedia.java is the code for the methods in the interface files.
 Everything we write (e.g. classes) will be called from the `SocialMedia.java` file.
 
 TODO: 
-- Cannot access parentID attribute of comment post 
 - Should numComments be double or int type?
 - Audit use of getter and setter methods? 
 - Add assertions throughout codebase
@@ -24,7 +23,6 @@ TODO:
 - Change all ==, !=
 - Move showIndividualPost to Post class
 - Check through all 'for' loops, are they necessary? 
-- What version of java will execute? Aim to remove '.indent' as is a workaround 
 - Does showPostChildrenDetails always return in correct order? Guarrantee? 
 - Correctly handle serialisation exceptions/test
 - Delete 1st account in platform, should next account be allocated ID of prev (0)? 
@@ -42,11 +40,15 @@ TODO:
 - showAccount formatting is different to ours? 
 - showAccount doesn't load in objects
 - Should BasePost be an abstract class? 
+- Ensure generic empty post always throws postIDNotRecognisedException (never accessable)
+- Posts, comments, endorsements all share ID generation. Okay? 
+- Check follow all java style conventions 
+- Safety checks in getters/setters? 
+- Check if return is correct on a singular post in showPostChildrenDetails
+- Delete temptest before submission 
 
 
 Question list:
-- showIndividualPost - should it show only the number of direct comments on that post? 
-- showIndividualPost - how to deal with message = "" being needed, however redundant 
 - Check type in showPostChildrenDetails
 - Does our test file get marked? Do we need assertions in the code as well as test file? 
 

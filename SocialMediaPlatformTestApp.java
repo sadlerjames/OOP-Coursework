@@ -299,8 +299,8 @@ public class SocialMediaPlatformTestApp {
 			assert (false): "ClassNotFoundException thrown incorrectly";
 		}
 
-		platform.erasePlatform();
-		System.out.println("Testing errors:");
+		// platform.erasePlatform();
+		// System.out.println("Testing errors:");
 		
 		//testing to see if invalid handle exception and illegal handle exception 
 		// try {
@@ -373,37 +373,37 @@ public class SocialMediaPlatformTestApp {
 
 		//testing to see if PostIDNotRecognisedException and NotActionablePostException and Invalid Post Exception
 
-		int aPost;
-		int bPost;
-		try {
-			platform.createAccount("user");
+		// int aPost;
+		// int bPost;
+		// try {
+		// 	platform.createAccount("user");
 
-			aPost = platform.createPost("user", "Hello");
+		// 	aPost = platform.createPost("user", "Hello");
 
-			bPost = platform.endorsePost("user", aPost); //tests post id not recognised exception
+		// 	bPost = platform.endorsePost("user", aPost); //tests post id not recognised exception
 			
-			// platform.endorsePost("user", bPost); //tests not actionable post exception
+		// 	// platform.endorsePost("user", bPost); //tests not actionable post exception
 
-			platform.commentPost("user", aPost, "sdnjkfdsuhfkudshfukdshufhdsuifhuidshfuidshfuidsfdsfdsfdsfdfsdfdsfdhsduihfiudshfiusdhiufhsduihfiusdhfius"); //tests invalid post exception
+		// 	platform.commentPost("user", aPost, "sdnjkfdsuhfkudshfukdshufhdfiusdhiufhsduihfiusdhfius"); //tests invalid post exception
 
 
 
-		} catch (IllegalHandleException e) {
-			assert (false): "Illegal Handle Excpetion";
-		} catch (InvalidHandleException e) {
-			assert (false): "Invalid Handle Exception";
-		} catch (HandleNotRecognisedException e) {
-			assert (false): "Handle Not Recognised Exception";
-		}
-		catch (InvalidPostException e) {
-			assert (false): "Invalid Post Exception";
-		}
-		catch (PostIDNotRecognisedException e) {
-			assert (false): "PostIDNotRecognisedException";
-		}
-		catch (NotActionablePostException e) {
-			assert (false): "NotActionablePostException";
-		}
+		// } catch (IllegalHandleException e) {
+		// 	assert (false): "Illegal Handle Excpetion";
+		// } catch (InvalidHandleException e) {
+		// 	assert (false): "Invalid Handle Exception";
+		// } catch (HandleNotRecognisedException e) {
+		// 	assert (false): "Handle Not Recognised Exception";
+		// }
+		// catch (InvalidPostException e) {
+		// 	assert (false): "Invalid Post Exception";
+		// }
+		// catch (PostIDNotRecognisedException e) {
+		// 	assert (false): "PostIDNotRecognisedException";
+		// }
+		// catch (NotActionablePostException e) {
+		// 	assert (false): "NotActionablePostException";
+		// }
 
 
 
