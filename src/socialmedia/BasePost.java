@@ -3,7 +3,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * BasePost provides attributes and methods shared between normal, endorsement, and comment posts.
+ * BasePost represents a generic post (of any type), and provides attributes and methods shared 
+ * between normal, endorsement, and comment posts.
  * 
  * @author Students: 720014004, 720033851
  * @version 1.0 

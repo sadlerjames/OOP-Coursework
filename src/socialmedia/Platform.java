@@ -239,12 +239,16 @@ public class Platform implements Serializable {
     * enables retrieving a post's endorsements (getEndorsements)
     * @return the ID of the post in the platform with the most endorsements. 
     * In the case of a draw, the last post in the list is returned (highest ID).
+    * In the case there are no posts in the system, -1 is returned.
     */ 
 
     public int getMostEndorsedPost(Platform socialPlatform) {
         int maxNumEndorsements = 0; //Counter for number of original posts
-        int idMaxPost = 0; //ID. of the post with max no. of endorsements 
-
+        int idMaxPost = 0; //ID. of the post with max no. of endorsements
+        
+        if (posts.size() == 1) { //No posts in the system (disregarding the generic empty post)
+            return -1; //Denotes error 
+        }
 
         for (int i=0; i < posts.size(); i++) {
             //For each post, get no. of endorsements
@@ -256,6 +260,9 @@ public class Platform implements Serializable {
             idMaxPost = posts.get(i).getID(); //Update ID 
             }
         }
+
+        assert(idMaxPost != 0): "0 is never a valid return (ID of generic empty post)";
+
         return idMaxPost;
     }
 
@@ -267,11 +274,16 @@ public class Platform implements Serializable {
     * enables retrieving a post's endorsements (getEndorsements)
     * @return the ID of the account in the platform with the most endorsements. 
     * In the case of a draw, the last account in the list is returned (highest ID).
+    * In the case there are no accounts in the system, -1 is returned.
     */ 
 
     public int getMostEndorsedAccount(Platform socialPlatform) {
         int idMaxAccountEndorsements = 0; //ID of account with most endorsements
         int maxNumEndorsements = 0; //Counter 
+
+        if (accounts.size() == 0) { //No accounts in the system
+            return -1; //Denotes error 
+        }
 
         for (int i=0; i < accounts.size(); i++) { //Iterate through accounts
 

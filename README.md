@@ -11,14 +11,16 @@ Everything we write (e.g. classes) will be called from the `SocialMedia.java` fi
 TODO: 
  
 - Safety checks in getters/setters? 
-- Check socialMedia line 209
-- Add assertions throughout codebase 
-- getMostEndorsedPost sometimes set to empty post? Correct behaviour? Some for getMostEndorsedAccount. Sometimes returns null?
-- ...and getMostEndorsedPost returns 0 in case no accounts in system
+
+
 - Move methods back out to classes where possible (showIndividualPost?)/have objects do more of the computational load
 - Go through lecture slides/workshops, implement as many concepts as possible (Design by contract!)
 - Should BasePost be an abstract class?
 - Check follow all java style conventions (https://google.github.io/styleguide/javaguide.html - CHECK that this is correct link)
+- Check interface/method declarations unchanged from provided
+- Check through all assertions!
+- Generate printout, extract jar and check, etc 
+
 
 
 

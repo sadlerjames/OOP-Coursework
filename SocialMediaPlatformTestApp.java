@@ -413,6 +413,72 @@ public class SocialMediaPlatformTestApp {
 		// }
 
 
+		platform.erasePlatform();
+
+		try {
+
+			platform.savePlatform("TestFile.ser");
+
+			platform.loadPlatform("testFile.ser");
+
+			System.out.println(platform.getMostEndorsedAccount());
+			
+
+		} catch (IOException e){
+			assert (false): "IOException thrown incorrectly";
+		} catch (ClassNotFoundException e){
+			assert (false): "ClassNotFoundException thrown incorrectly";
+		}
+
+
+		platform.erasePlatform();
+
+		int theFirst;
+		int theSecond;
+		int theThird;
+		int theFourth;
+		int theFith;
+
+		try {
+			platform.createAccount("user");
+
+			theFirst = platform.createPost("user", "Hi there");
+
+			theSecond = platform.commentPost("user", theFirst, "this is a comment");
+
+			
+
+			theFourth = platform.commentPost("user", theFirst, "this is a third comment post");
+
+			System.out.println(theFourth);
+
+			theFith = platform.commentPost("user", theFourth, "this is a third comment post");
+
+			theThird = platform.commentPost("user", theFourth, "this is a second comment post");
+
+			platform.deletePost(theFirst);
+
+			System.out.println(platform.showIndividualPost(theSecond));
+			System.out.println(platform.showIndividualPost(theThird));
+			System.out.println(platform.showIndividualPost(theFourth));
+			System.out.println(platform.showIndividualPost(theFith));
+
+		} catch (IllegalHandleException e) {
+			assert (false) : "IllegalHandleException thrown incorrectly";
+		} catch (InvalidHandleException e) {
+			assert (false) : "InvalidHandleException thrown incorrectly";
+		} catch (HandleNotRecognisedException e) {
+			assert (false) : "HandleNotRecognisedException thrown incorrectly";
+		} catch (InvalidPostException e) {
+			assert (false) : "InvalidPostException thrown incorrectly"; 
+		} catch (PostIDNotRecognisedException e) {
+			assert (false) : "PostIDNotRecognisedException thrown incorrectly";
+		} catch (NotActionablePostException e) {
+			assert (false) : "NotActionablePostException thrown incorrectly";
+		}
+
+		
+
 
 		System.out.println("The system ran all tests and didn't find any errors. Yayy you have no bugs!");
 

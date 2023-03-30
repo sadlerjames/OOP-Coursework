@@ -17,8 +17,8 @@ public class SocialMedia implements SocialMediaPlatform {
 	private Platform socialPlatform; 
 
 	/**
-    * Constructor for the initalisation of the whole platform,
-    * where the Platform object and generic empty post are created.
+    * No-arg constructor for the initialisation of an empty platform,
+    * where the Platform object 'socialPlatform' and generic empty post are created.
     */ 
 
 	public SocialMedia() {
@@ -50,8 +50,8 @@ public class SocialMedia implements SocialMediaPlatform {
 		socialPlatform.getAccounts().add(platformUser); //Store Account object
 		socialPlatform.incrementAccountIDCounter(); //Increment counter
 
-		assert(socialPlatform.getAccounts().size() != 0):
-		 "An account has been created but not stored";
+		assert(socialPlatform.getAccounts().size() != 0 && socialPlatform.getAccountIDCounter() > 0):
+		 "An account has been created but not stored or the accounts counter was not incremented";
 		 
 		return platformUser.getID(); //Return ID of generated account
 	}
@@ -77,8 +77,8 @@ public class SocialMedia implements SocialMediaPlatform {
 		socialPlatform.getAccounts().add(platformUser); //Store account object
 		socialPlatform.incrementAccountIDCounter(); //Increment counter
 
-		assert(socialPlatform.getAccounts().size() != 0):
-		 "An account has been created but not stored";
+		assert(socialPlatform.getAccounts().size() != 0 && socialPlatform.getAccountIDCounter() > 0):
+		 "An account has been created but not stored or the accounts counter was not incremented";
 
 		return platformUser.getID(); //Return 'id' of generated account
 	}
@@ -205,9 +205,9 @@ public class SocialMedia implements SocialMediaPlatform {
 		Account platformUserReload = reloadAccount(oldHandle); //Reload account (to be deleted)
 		platformUserReload.setHandle(newHandle); //Change the handle to the new specified one
 
-
-		assert(platformUserReload.getHandle()!= oldHandle && platformUserReload.getHandle() == newHandle):
-		"The account handle was not correctly changed";
+		//Assert handle not identical to previous, and equal to newHandle when retrieved
+		assert(platformUserReload.getHandle() != oldHandle && platformUserReload.getHandle() == newHandle):
+		"The account handle was not correctly changed"; 
 		
 	}
 
@@ -216,7 +216,10 @@ public class SocialMedia implements SocialMediaPlatform {
 		
 		Account platformUserReload = reloadAccount(handle); //Reload account (to be deleted)
 		platformUserReload.setDescription(description); //Update description attribute
-	} 
+
+		assert(platformUserReload.getDescription() == description): 
+			"The description was not correctly changed";
+ 	} 
 
 	@Override
 	public String showAccount(String handle) throws HandleNotRecognisedException {
@@ -260,6 +263,9 @@ public class SocialMedia implements SocialMediaPlatform {
         socialPlatform.getPosts().add(platformPost); //Save post
 
 		socialPlatform.incrementPostIDCounter(); //Increment counter
+
+		assert(socialPlatform.getPosts().size() > 1 && socialPlatform.getPostIDCounter() > 1):
+		"An post has been created but not stored or the posts counter was not incremented";
 		 
 		return platformPost.getID(); //Return ID of post
 	}
@@ -314,6 +320,9 @@ public class SocialMedia implements SocialMediaPlatform {
 		
 		socialPlatform.incrementPostIDCounter(); //Increment counter
 
+		assert(socialPlatform.getPosts().size() > 2 && socialPlatform.getPostIDCounter() > 2):
+		"An endorsement has been created but not stored or the post counter was not incremented";
+
 		return platformEndorsement.getID(); //Return the ID of the created endorsement post
 	}
  
@@ -345,6 +354,9 @@ public class SocialMedia implements SocialMediaPlatform {
         socialPlatform.getPosts().add(platformComment); //Save post
 
 		socialPlatform.incrementPostIDCounter(); //Increment counter
+
+		assert(socialPlatform.getPosts().size() > 2 && socialPlatform.getPostIDCounter() > 2):
+		"An comment has been created but not stored or the post counter was not incremented";
 
 		return platformComment.getID(); //Return the ID of the created comment post
 	}
@@ -506,7 +518,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		assert(socialPlatform.getAccounts().size() == 0 && 
 			socialPlatform.getAccountIDCounter() == 0 && socialPlatform.getPosts().size() == 1
-			&& socialPlatform.getPostIDCounter() == 1): "The platform contents/counters were not correctly reset";
+				&& socialPlatform.getPostIDCounter() == 1): "The platform contents/counters were not correctly reset";
 
 	}
 
@@ -526,6 +538,9 @@ public class SocialMedia implements SocialMediaPlatform {
 		//Safely downcast (if deserialised obj is a 'Platform' instance)
 		if (obj instanceof Platform) { 
 			socialPlatform = (Platform) obj; //Overwrite socialPlatform with deserialised object 
+
+			assert(socialPlatform.getPosts().size() > 0):
+			"The re-loaded platform does not contain expected data"; //Generic empty post missing
 		}
 	}
 }
