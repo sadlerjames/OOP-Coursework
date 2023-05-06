@@ -25,13 +25,11 @@ public class SocialMediaTest {
         SocialMediaPlatform platform = new SocialMedia();
 
 
+
         try {
-            platform.createAccount("User");
-
-            platform.createAccount("secondUser");
-
+            platform.loadPlatform("testing123");
+            System.out.println(platform.showAccount("User"));
             
-
             
 
             

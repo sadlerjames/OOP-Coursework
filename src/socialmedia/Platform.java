@@ -29,6 +29,13 @@ public class Platform implements Serializable {
 
     //Platform private instance attribute 'getter' methods
 
+
+    /**
+    * Getter method, returns the list of accounts in the platform. 
+    * <p>
+    * @return Returns the arrayList containing the Account objects
+    */ 
+
     public ArrayList<Account> getAccounts() {
         return accounts; 
     }
@@ -36,6 +43,12 @@ public class Platform implements Serializable {
     public int getAccountIDCounter() {
         return accountIDCounter;
     }
+
+    /**
+    * Getter method, returns the list of posts (of all types) in the platform. 
+    * <p>
+    * @return Returns the arrayList containing the BasePost objects
+    */ 
 
     public ArrayList<BasePost> getPosts() {
         return posts; 
@@ -45,19 +58,37 @@ public class Platform implements Serializable {
         return postIDCounter;
     }
 
-    //Platform private instance attribute 'setter' methodss
+    //Platform private instance attribute 'setter' methods
+
+
+    /**
+    * Setter method, increments the postIDCounter by 1.
+    */ 
 
     public void incrementPostIDCounter() {
         postIDCounter++;
     }
 
+    /**
+    * Setter method, increments the accountIDCounter by 1.
+    */ 
+
     public void incrementAccountIDCounter() {
         accountIDCounter++;
     }
 
+    /**
+    * Setter method, resets the accountIDCounter to 0.
+    */ 
+
     public void resetAccountIDCounter() {
         accountIDCounter = 0;
     }
+
+
+    /**
+    * Setter method, resets the postIDCounter to 1.
+    */
 
     public void resetPostIDCounter(){
         postIDCounter = 1;
@@ -169,6 +200,27 @@ public class Platform implements Serializable {
         return false;
     }
 
+
+    /**
+    * Method to check whether a post ID exists in the system.
+    * <p>
+    * @param id - the ID of the post to check 
+    * @return Returns <b>false</b> if the ID exists in the system, 
+    * or <b>true</b> if the ID does not exist in the system.
+    */ 
+
+    public boolean checkPostIDLegal(int id) {
+
+        //Check if post exists with matching 'id'attribute in ArrayList of objects
+        for (int i=0; i < posts.size(); i++) {    
+            if (posts.get(i).getID() == id) { //ID already exists
+                return false; //as ID exists
+            } 
+        }
+        //Post ID not in system
+        return true;
+    }
+
     //Platform getter methods 
     
     public int getNumberOfAccounts() {
@@ -240,6 +292,7 @@ public class Platform implements Serializable {
     * @return the ID of the post in the platform with the most endorsements. 
     * In the case of a draw, the last post in the list is returned (highest ID).
     * In the case there are no posts in the system, -1 is returned.
+    * In the case there are no endorsed posts, the most recent post (highest ID) is returned.
     */ 
 
     public int getMostEndorsedPost(Platform socialPlatform) {
@@ -275,6 +328,7 @@ public class Platform implements Serializable {
     * @return the ID of the account in the platform with the most endorsements. 
     * In the case of a draw, the last account in the list is returned (highest ID).
     * In the case there are no accounts in the system, -1 is returned.
+    * In the case there are no accounts with endorsements in the system, 0 is returned.
     */ 
 
     public int getMostEndorsedAccount(Platform socialPlatform) {

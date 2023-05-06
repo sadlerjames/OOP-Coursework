@@ -14,6 +14,8 @@ import java.io.ObjectOutputStream;
  */
 
 public class SocialMedia implements SocialMediaPlatform {
+
+	//Hold platform instance
 	private Platform socialPlatform; 
 
 	/**
@@ -150,7 +152,11 @@ public class SocialMedia implements SocialMediaPlatform {
             try {
                 deletePost(delPostIDs.get(j)); //Attempt to delete post 
         
-            } catch (PostIDNotRecognisedException e) { //Post deleted (as a child of a parent)
+            } catch (PostIDNotRecognisedException e) { 
+				/* Fine to ignore this exception. In this case, it is acceptable to throw a 
+				 * PostIDNotRecognisedException as it is being thrown due to the post already
+				 * having been deleted as a child of another post in delPostIDs.
+				 * The post ID is certain to be valid as it was retrieved within the method.*/
             }
         }   
 
@@ -254,7 +260,7 @@ public class SocialMedia implements SocialMediaPlatform {
 		//Check post is valid (less than 100 characters and not empty)
         if (socialPlatform.checkPostValid(message) == false) {
             throw new 
-				InvalidPostException("Your post must be valid (less than 30 chars, not empty)");
+				InvalidPostException("Your post must be valid (less than 100 chars, not empty)");
         }
 
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
@@ -333,7 +339,12 @@ public class SocialMedia implements SocialMediaPlatform {
 		//Check comment author's handle exists
         if (socialPlatform.checkHandleLegal(handle) == true) {
             throw new HandleNotRecognisedException("This handle does not exist in the system!");
-        } 
+        }
+		
+		//Check parent exists 
+        if (socialPlatform.checkPostIDLegal(id) == true) {
+            throw new PostIDNotRecognisedException("The parent post does not exist in the system");
+        }
 
         //Check parent actionable (not endorsement/empty, can comment)
         if (socialPlatform.checkPostActionable(id) == false) {
@@ -344,7 +355,7 @@ public class SocialMedia implements SocialMediaPlatform {
         //Check post is valid (less than 100 characters and not empty)
         if (socialPlatform.checkPostValid(message) == false) {
             throw new 
-				InvalidPostException("Ensure our post is valid (less than 30 chars, not empty)");
+				InvalidPostException("Ensure our post is valid (less than 100 chars, not empty)");
         }
 
 		int postIDCounter = socialPlatform.getPostIDCounter(); //Get the Post ID Counter
